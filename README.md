@@ -1,6 +1,6 @@
-# MERN-boilerplate
+# Long Night Of Museums
 
-This is a boilerplate project using the following technologies:
+This is an Web Application for an event called Long Night Of Museums using the following technologies:
 - [React](https://facebook.github.io/react/) and [React Router](https://reacttraining.com/react-router/) for the frontend
 - [Express](http://expressjs.com/) and [Mongoose](http://mongoosejs.com/) for the backend
 - [Sass](http://sass-lang.com/) for styles (using the SCSS syntax)
@@ -18,7 +18,6 @@ npm install
 
 ## Running
 
-Make sure to add a `config.js` file in the `config` folder. See the example there for more details.
 
 Production mode:
 
@@ -29,5 +28,5 @@ npm start
 Development (Webpack dev server) mode:
 
 ```shell
-npm run start:dev
+npm run dev
 ```

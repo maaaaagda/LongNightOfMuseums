@@ -1,17 +1,17 @@
 {
-  "name": "MERN-boilerplate",
+  "name": "LongNightOfMuseums",
   "version": "1.0.0",
-  "description": "MERN stack project boilerplate",
-  "author": "Eugene Cheung",
+  "description": "Application for event called Long Night Of Museums",
+  "author": "Magdalena Polak",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/arkon/MERN-boilerplate.git"
+    "url": "git+https://magdas-projects.visualstudio.com/_git/LongNightOfMuseums"
   },
   "license": "MIT",
   "private": true,
   "scripts": {
     "start": "webpack -p --progress --profile --colors && node server",
-    "start:dev": "node server"
+    "dev": "node server"
   },
   "engines": {
     "node": ">=6"
