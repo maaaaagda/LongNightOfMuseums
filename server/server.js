@@ -10,8 +10,6 @@ const webpackHotMiddleware = require('webpack-hot-middleware');
 const config = require('../config/config');
 const webpackConfig = require('../webpack.config');
 
-console.log(process.env.NODE_ENV)
-
 const isDev = process.env.NODE_ENV !== 'production';
 const port  = process.env.PORT || 8080;
 
@@ -47,10 +45,19 @@ if (isDev) {
       chunks: false,
       chunkModules: false,
       modules: false
-    }
+    },
+    watchOptions: {
+      aggregateTimeout: 300,
+      poll: true
+}
   }));
 
-  app.use(webpackHotMiddleware(compiler));
+  //app.use(webpackHotMiddleware(compiler));
+  app.use(webpackHotMiddleware(compiler, {
+    'log': false, 
+    'path': '/__webpack_hmr', 
+    'heartbeat': 10 * 1000
+  }));
   app.use(express.static(path.resolve(__dirname, '../dist')));
 } else {
   app.use(express.static(path.resolve(__dirname, '../dist')));

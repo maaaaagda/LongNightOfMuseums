@@ -10,16 +10,18 @@ module.exports = merge(commonConfig, {
 
   entry: {
     'app': [
-      'webpack-hot-middleware/client?reload=true'
+      'webpack-hot-middleware/client?reload=true',
+      './client/app/index.js'
     ]
   },
-
+  
   output: {
     filename: 'js/[name].js',
     chunkFilename: '[id].chunk.js'
   },
 
   devServer: {
+    inline: true,
     contentBase: './client/public',
     historyApiFallback: true,
     stats: 'minimal' // none (or false), errors-only, minimal, normal (or true) and verbose

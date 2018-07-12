@@ -1,5 +1,5 @@
 {
-  "name": "LongNightOfMuseums",
+  "name": "long_night_of_museums",
   "version": "1.0.0",
   "description": "Application for event called Long Night Of Museums",
   "author": "Magdalena Polak",
@@ -11,15 +11,20 @@
   "private": true,
   "scripts": {
     "start": "webpack -p --progress --profile --colors && node server",
-    "dev": "node server"
+    "dev": "node server",
+    "front": "webpack-dev-server --hot --inline"
   },
   "engines": {
     "node": ">=6"
   },
   "dependencies": {
-    "@babel/core": "^7.0.0-beta.42",
-    "@babel/preset-env": "^7.0.0-beta.42",
-    "@babel/preset-react": "^7.0.0-beta.42",
+    "@babel/core": "^7.0.0-beta.52",
+    "@babel/plugin-proposal-class-properties": "^7.0.0-beta.52",
+    "@babel/plugin-proposal-decorators": "7.0.0-beta.52",
+    "@babel/plugin-proposal-export-default-from": "7.0.0-beta.52",
+    "@babel/plugin-proposal-object-rest-spread": "7.0.0-beta.52",
+    "@babel/preset-env": "^7.0.0-beta.52",
+    "@babel/preset-react": "^7.0.0-beta.52",
     "autoprefixer": "^8.2.0",
     "babel-loader": "^8.0.0-beta.2",
     "connect-history-api-fallback": "^1.5.0",
@@ -27,6 +32,7 @@
     "css-loader": "^0.28.11",
     "express": "^4.16.3",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "file-loader": "^1.1.11",
     "html-webpack-plugin": "^3.1.0",
     "mongoose": "^5.0.11",
     "node-sass": "^4.7.2",
@@ -34,16 +40,23 @@
     "postcss-loader": "^2.1.3",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-hot-loader": "^4.0.0",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "sass-loader": "^6.0.7",
+    "save": "^2.3.2",
+    "semantic-ui-css": "^2.3.3",
+    "semantic-ui-react": "^0.82.0",
     "style-loader": "^0.20.3",
-    "webpack": "^4.2.0",
-    "webpack-cli": "^2.0.13",
+    "url-loader": "^1.0.1",
     "webpack-dev-middleware": "^3.0.1",
     "webpack-hot-middleware": "^2.21.2",
     "webpack-merge": "^4.1.2",
     "whatwg-fetch": "^2.0.3"
+  },
+  "devDependencies": {
+    "babel-preset-react-hmre": "^1.1.1",
+    "webpack": "^4.16.0",
+    "webpack-cli": "^2.1.5",
+    "webpack-dev-server": "^3.1.4"
   }
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
+import 'semantic-ui-css/semantic.min.css';
 
 import {
   BrowserRouter as Router,
@@ -14,7 +15,6 @@ import NotFound from './components/App/NotFound';
 import Home from './components/Home/Home';
 
 import HelloWorld from './components/HelloWorld/HelloWorld';
-
 import './styles/styles.scss';
 
 render((
