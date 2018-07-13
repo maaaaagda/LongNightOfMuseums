@@ -98,6 +98,11 @@ class Home extends Component {
             </li>
           )) }
         </ul>
+        <p>
+          regrttrh
+          jniufheru
+        </p>
+
 
         <button onClick={this.newCounter}>New counter</button>
       </>

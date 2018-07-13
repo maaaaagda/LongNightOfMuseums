@@ -1,21 +1,26 @@
 import React, { Component } from 'react'
-import { Button, Header, Icon, Image, Menu, Segment, Sidebar, Container } from 'semantic-ui-react'
+import SideBar from './Navbar/Navbar'
+import {Container, Sidebar, Menu, Icon} from "semantic-ui-react";
 
-export default class SidebarExampleSidebar extends Component {
-  state = { visible: false }
+export default class MenuExampleBorderless extends Component {
+  state = { activeItem: '1', visible: false  }
 
+  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
   handleButtonClick = () => this.setState({ visible: !this.state.visible })
-
   handleSidebarHide = () => this.setState({ visible: false })
 
   render() {
-    const { visible } = this.state
+    const activeItem = this.state.activeItem
+    const visible = this.state.visible
 
     return (
-      <div>
-        <Button onClick={this.handleButtonClick}>Toggle visilhhhhhhity</Button>
-
+      <>
         <Sidebar.Pushable as={Container}>
+          <Menu borderless>
+            <Menu.Item name='1' active={activeItem === '1'}  onClick={this.handleButtonClick} >
+              <Icon name='sidebar'/>
+            </Menu.Item>
+          </Menu>
           <Sidebar
             as={Menu}
             animation='overlay'
@@ -23,7 +28,7 @@ export default class SidebarExampleSidebar extends Component {
             onHide={this.handleSidebarHide}
             vertical
             visible={visible}
-            width='thin'
+            width='wide'
           >
             <Menu.Item as='a'>
               <Icon name='home' />
@@ -52,7 +57,7 @@ export default class SidebarExampleSidebar extends Component {
             </>
           </Sidebar.Pusher>
         </Sidebar.Pushable>
-      </div>
+      </>
     )
   }
 }
