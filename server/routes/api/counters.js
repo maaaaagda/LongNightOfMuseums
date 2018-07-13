@@ -28,7 +28,6 @@ module.exports = (app) => {
       .exec()
       .then((counter) => {
         counter.count++;
-
         counter.save()
           .then(() => res.json(counter))
           .catch((err) => next(err));

@@ -10,10 +10,11 @@ nodemon({
   watch: process.env.NODE_ENV !== 'production' ? ['server/*'] : false,
   ext: 'js'
 })
-.on('restart', function() {
-  console.log('Server restarted!');
-})
-.once('exit', function () {
-  console.log('Shutting down server');
+.on('start', function () {
+  console.log('App has started');
+}).on('quit', function () {
+  console.log('App has quit');
   process.exit();
+}).on('restart', function (files) {
+  console.log('App restarted due to: ', files);
 });
