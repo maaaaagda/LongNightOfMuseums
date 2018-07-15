@@ -3,9 +3,8 @@ const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-
 const helpers = require('./helpers');
-
+const path = require('path');
 const NODE_ENV = process.env.NODE_ENV;
 const isProd = NODE_ENV === 'production';
 
@@ -22,7 +21,8 @@ module.exports = {
   },
 
   resolve: {
-    extensions: ['.js', '.json', '.css', '.scss', '.html'],
+    extensions: ['.js', '.json', '.css', '.scss', '.html', '.less'],
+    symlinks: false,
     alias: {
       'app': 'client/app'
     }
@@ -62,23 +62,41 @@ module.exports = {
           ]
         })
       },
+      // this rule handles images
       {
-        test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
-        use: {
-          loader: 'url-loader',
-          options: {
-            limit: 100000,
-          },
-        },
+        test: /\.jpe?g$|\.gif$|\.ico$|\.png$|\.svg$/,
+        use: 'file-loader?name=[name].[ext]?[hash]'
+      },
+
+      // the following 3 rules handle font extraction
+      {
+        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: 'url-loader?limit=10000&mimetype=application/font-woff'
+      },
+
+      {
+        test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: 'file-loader'
+      },
+      {
+        test: /\.otf(\?.*)?$/,
+        use: 'file-loader?name=/fonts/[name].  [ext]&mimetype=application/font-otf'
+      },
+      {
+        test: /\.less$/,
+        include: [helpers.root('client'), /node_modules/],
+        use: ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader!less-loader' })
+        //loaders: ExtractTextPlugin.extract('style-loader', 'css-loader!less-loader', {publicPath: '../'})
       },
       {
         test: /\.css$/,
-        include: /node_modules/,
+        //include: /node_modules/,
         use: ExtractTextPlugin.extract({
           fallback: "style-loader",
           use: [
             {
               loader: 'css-loader',
+
             },
             {
               loader: 'postcss-loader',
@@ -110,6 +128,10 @@ module.exports = {
 
     new CopyWebpackPlugin([{
       from: helpers.root('client/public')
-    }])
+    }]),
+    //this handles the bundled .css output file
+    new ExtractTextPlugin({
+      filename: '[name].[hash].css'
+    })
   ]
 };
