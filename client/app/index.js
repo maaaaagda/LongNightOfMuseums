@@ -1,8 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
 import 'semantic-ui-less/semantic.less';
-//import './styles/semantic/semantic';
-
 
 import {
   BrowserRouter as Router,
@@ -30,3 +28,9 @@ render((
     </App>
   </Router>
 ), document.getElementById('app'));
+
+if (module.hot) {
+  module.hot.accept('semantic-ui-less/semantic.less', () => {
+    console.log('hotttttttttttttttttt')
+  })
+}

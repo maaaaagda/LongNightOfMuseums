@@ -85,12 +85,12 @@ module.exports = {
       {
         test: /\.less$/,
         include: [helpers.root('client'), /node_modules/],
-        use: ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader!less-loader' })
+        use: ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader?sourceMap!postcss-loader!less-loader?sourceMap' }),
         //loaders: ExtractTextPlugin.extract('style-loader', 'css-loader!less-loader', {publicPath: '../'})
       },
       {
         test: /\.css$/,
-        //include: /node_modules/,
+        include: helpers.root('client'),
         use: ExtractTextPlugin.extract({
           fallback: "style-loader",
           use: [

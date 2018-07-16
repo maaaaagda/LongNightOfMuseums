@@ -2,5 +2,5 @@
      User Global Variables
 *******************************/
 
-@importGoogleFonts : false;
-
+@fontName          : 'Cardo';
+@absoluteBorderRadius: @2px;

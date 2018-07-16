@@ -2,4 +2,43 @@
     User Variable Overrides
 *******************************/
 
-@backgroundColor: pink;
+/* Hovered */
+@hoverBackgroundColor: #CACBCD;
+@hoverBackgroundImage: @backgroundImage;
+@hoverBoxShadow: @boxShadow;
+@hoverColor: @hoveredTextColor;
+@iconHoverOpacity: 0.85;
+
+/* Focused */
+@focusBackgroundColor: @hoverBackgroundColor;
+@focusBackgroundImage: '';
+@focusBoxShadow: '';
+@focusColor: @hoveredTextColor;
+@iconFocusOpacity: 0.85;
+
+/* Disabled */
+@disabledBackgroundImage: none;
+@disabledBoxShadow: none;
+
+/* Pressed Down */
+@downBackgroundColor: #BABBBC;
+@downBackgroundImage: '';
+@downPressedShadow: none;
+@downBoxShadow:
+  @borderBoxShadow,
+  @downPressedShadow
+;
+@downColor: @pressedTextColor;
+
+/* Active */
+@activeBackgroundColor: #C0C1C2;
+@activeBackgroundImage: none;
+@activeColor: @selectedTextColor;
+@activeBoxShadow: @borderBoxShadow;
+
+/* Active + Hovered */
+@activeHoverBackgroundColor: @activeBackgroundColor;
+@activeHoverBackgroundImage: none;
+@activeHoverColor: @activeColor;
+@activeHoverBoxShadow: @activeBoxShadow;
+
