@@ -5,7 +5,6 @@ import 'semantic-ui-less/semantic.less';
 import {
   BrowserRouter as Router,
   Route,
-  Link,
   Switch
 } from 'react-router-dom'
 
@@ -15,7 +14,7 @@ import NotFound from './components/App/NotFound';
 import Home from './components/Home/Home';
 
 import HelloWorld from './components/HelloWorld/HelloWorld';
-import './styles/styles.scss';
+import './styles/styles.less';
 
 render((
   <Router>

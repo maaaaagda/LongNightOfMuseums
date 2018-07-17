@@ -1,0 +1,17 @@
+@charset "UTF-8";
+
+@import 'vendor/normalize';
+@import './styles_variables';
+
+.jumbotron {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -70%);
+}
+
+.main-container {
+  margin-top: @navBarHeight;
+  min-height: calc(~"100vh - @{navBarHeight}");
+  position: relative;
+}

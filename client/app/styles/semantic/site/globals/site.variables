@@ -4,3 +4,4 @@
 
 @fontName          : 'Cardo';
 @absoluteBorderRadius: @2px;
+@black            : #000000;
