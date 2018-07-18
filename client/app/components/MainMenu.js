@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Container, Sidebar, Menu, Icon, Transition} from "semantic-ui-react";
+import {Container, Sidebar, Menu, Icon, Transition, Header} from "semantic-ui-react";
 
 export default class MenuExampleBorderless extends Component {
   constructor (props) {
@@ -38,6 +38,10 @@ export default class MenuExampleBorderless extends Component {
           visible={this.state.visibleSideBar}
           width='wide'
         >
+          <Menu.Item inverted={'true'}>
+              Menu
+              <Icon link name={'close'} onClick={this.handleButtonClick}/>
+          </Menu.Item>
           <Menu.Item as='a' onClick={this.handleButtonClick}>
             Home
           </Menu.Item>
