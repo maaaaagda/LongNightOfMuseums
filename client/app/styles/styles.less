@@ -12,6 +12,31 @@
 
 .main-container {
   margin-top: @navBarHeight;
-  min-height: calc(~"100vh - @{navBarHeight}");
+  min-height: @contentHeight;
   position: relative;
+}
+
+.title {
+  color:  @secondaryColor;
+  font-size: 50px + 1vmin;
+}
+
+.footer-about {
+  font-size: @normalFontSize;
+  line-height: 140%;
+  padding: 10px+1vmin 10px 10+1vmin 10px;
+  overflow-y: auto;
+}
+
+.footer-photo {
+  font-size: @normalFontSize;
+  line-height: 140%;
+  padding: 10px+1vmin 10px 10+1vmin 10px;
+}
+
+.footer-info {
+  padding: 10px + 1vw;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
 }
