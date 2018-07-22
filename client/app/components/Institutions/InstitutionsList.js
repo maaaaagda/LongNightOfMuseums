@@ -23,7 +23,7 @@ class Institutions extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className={'main-container'}>
         <button onClick={this.onClickSave}>
           Save institution
         </button>

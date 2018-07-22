@@ -1,112 +1,35 @@
-import React, { Component } from 'react';
-import 'whatwg-fetch';
+import {Container, Icon, Sidebar, Transition} from "semantic-ui-react";
+import React from "react";
 
-class Home extends Component {
-  constructor(props) {
+class Home extends React.Component {
+  constructor (props) {
     super(props);
-
     this.state = {
-      counters: []
-    };
-
-    this.newCounter = this.newCounter.bind(this);
-    this.incrementCounter = this.incrementCounter.bind(this);
-    this.decrementCounter = this.decrementCounter.bind(this);
-    this.deleteCounter = this.deleteCounter.bind(this);
-
-    this._modifyCounter = this._modifyCounter.bind(this);
-  }
-
-  componentDidMount() {
-    fetch('/api/counters')
-      .then(res => res.json())
-      .then(json => {
-        this.setState({
-          counters: json
-        });
-      });
-  }
-
-  newCounter() {
-    fetch('/api/counters', { method: 'POST' })
-      .then(res => res.json())
-      .then(json => {
-        let data = this.state.counters;
-        data.push(json);
-
-        this.setState({
-          counters: data
-        });
-      });
-  }
-
-  incrementCounter(index) {
-    const id = this.state.counters[index]._id;
-
-    fetch(`/api/counters/${id}/increment`, { method: 'PUT' })
-      .then(res => res.json())
-      .then(json => {
-        this._modifyCounter(index, json);
-      });
-  }
-
-  decrementCounter(index) {
-    const id = this.state.counters[index]._id;
-
-    fetch(`/api/counters/${id}/decrement`, { method: 'PUT' })
-      .then(res => res.json())
-      .then(json => {
-        this._modifyCounter(index, json);
-      });
-  }
-
-  deleteCounter(index) {
-    const id = this.state.counters[index]._id;
-
-    fetch(`/api/counters/${id}`, { method: 'DELETE' })
-      .then(_ => {
-        this._modifyCounter(index, null);
-      });
-  }
-
-  _modifyCounter(index, data) {
-    let prevData = this.state.counters;
-
-    if (data) {
-      prevData[index] = data;
-    } else {
-      prevData.splice(index, 1);
+      visibleTitle: false
     }
+  }
 
-    this.setState({
-      counters: prevData
-    });
+  componentDidMount () {
+    this.setState({visibleTitle: true});
   }
 
   render() {
     return (
-      <>
-        <p>Counters:</p>
-
-        <ul>
-          { this.state.counters.map((counter, i) => (
-            <li key={i}>
-              <span>{counter.count} </span>
-              <button onClick={() => this.incrementCounter(i)}>+</button>
-              <button onClick={() => this.decrementCounter(i)}>-</button>
-              <button onClick={() => this.deleteCounter(i)}>x</button>
-            </li>
-          )) }
-        </ul>
-        <p>
-          regrttrh
-          jniufheru
-        </p>
-
-
-        <button onClick={this.newCounter}>New counter</button>
-      </>
-    );
+      <Sidebar.Pushable as={Container}>
+        <Sidebar.Pusher>
+          <div className={'main-container'}>
+            <div className={'jumbotron'}>
+              <Transition visible={this.state.visibleTitle} animation='scale' duration={5000}>
+                <Container textAlign={'center'}>
+                  <h1 className={'title'}>Long Night Of Museums</h1>
+                  <h1><Icon name='university' size={'huge'}/></h1>
+                </Container>
+              </Transition>
+            </div>
+          </div>
+        </Sidebar.Pusher>
+      </Sidebar.Pushable>
+    )
   }
 }
 

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import {Container, Sidebar, Menu, Icon, Transition} from "semantic-ui-react";
+import { Sidebar, Menu, Icon } from "semantic-ui-react";
+import { Link } from 'react-router-dom';
 
 export default class MenuExampleBorderless extends Component {
   constructor (props) {
@@ -38,36 +39,22 @@ export default class MenuExampleBorderless extends Component {
           visible={this.state.visibleSideBar}
           width='wide'
         >
-          <Menu.Item as='a' onClick={this.handleButtonClick}>
-            Home
+          <Menu.Item as='div' onClick={this.handleButtonClick}>
+            <Link to="/">Home</Link>
           </Menu.Item>
-          <Menu.Item as='a' onClick={this.handleButtonClick}>
-            Institutions
+          <Menu.Item as='div' onClick={this.handleButtonClick}>
+            <Link to="/institutions">Institutions</Link>
           </Menu.Item>
-          <Menu.Item as='a' onClick={this.handleButtonClick}>
+          <Menu.Item as='div' onClick={this.handleButtonClick}>
             My routes
           </Menu.Item>
-          <Menu.Item as='a' onClick={this.handleButtonClick}>
+          <Menu.Item as='div' onClick={this.handleButtonClick}>
             Map
           </Menu.Item>
-          <Menu.Item as='a' onClick={this.handleButtonClick}>
+          <Menu.Item as='div' onClick={this.handleButtonClick}>
             Info
           </Menu.Item>
         </Sidebar>
-        <Sidebar.Pushable as={Container}>
-          <Sidebar.Pusher>
-              <div className={'main-container'}>
-                <div className={'jumbotron'}>
-                     <Transition visible={this.state.visibleTitle} animation='scale' duration={5000}>
-                        <Container textAlign={'center'}>
-                          <h1 className={'title'}>Long Night Of Museums</h1>
-                          <h1><Icon name='university' size={'huge'}/></h1>
-                        </Container>
-                      </Transition>
-              </div>
-                </div>
-          </Sidebar.Pusher>
-        </Sidebar.Pushable>
       </div>
     )
   }

@@ -12,9 +12,10 @@ import {
 import App from './components/App/App';
 import NotFound from './components/App/NotFound';
 
-import Home from './components/Home/Home';
+import Counter from './components/Home/Counter';
 
 import Institutions from './components/Institutions/InstitutionsList';
+import Home from './components/Home/Home'
 import './styles/styles.less';
 
 const store = configureStore();
@@ -26,6 +27,7 @@ render((
         <Switch>
           <Route exact path="/" component={Home}/>
           <Route path="/institutions" component={Institutions}/>
+          <Route path="/counter" component={Counter}/>
           <Route component={NotFound}/>
         </Switch>
       </App>
@@ -33,8 +35,3 @@ render((
   </Provider>
 ), document.getElementById('app'));
 
-if (module.hot) {
-  module.hot.accept('semantic-ui-less/semantic.less', () => {
-    console.log('hotttttttttttttttttt')
-  })
-}
