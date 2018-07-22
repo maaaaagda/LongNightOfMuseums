@@ -1,7 +1,7 @@
 import React from 'react'
 import { Grid, Image, Container} from 'semantic-ui-react'
 
-const Footer= () => (
+const Footer = () => (
   <footer className={'main-container'}>
     <Grid celled={'internally'} inverted>
       <Grid.Row stretched>
