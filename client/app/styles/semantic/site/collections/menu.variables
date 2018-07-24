@@ -3,3 +3,4 @@
 *******************************/
 
 @itemFontWeight: @bold;
+@itemHorizontalPadding: 15px;
