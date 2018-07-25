@@ -1,19 +1,31 @@
 const jwt = require('jsonwebtoken');
 const _  = require('lodash');
 
-const verifyJWTToken = function (token)
+const verifyJWTToken = function (bearer_token)
 {
   return new Promise((resolve, reject) =>
   {
-    jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) =>
-    {
-      if (err || !decodedToken)
-      {
-        return reject(err)
-      }
+    var parts = bearer_token.split(' ');
+    if (parts.length === 2) {
+      var scheme = parts[0];
+      var credentials = parts[1];
 
-      resolve(decodedToken)
-    })
+      if (/^Bearer$/i.test(scheme)) {
+        const token = credentials;
+
+        jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) =>
+        {
+          if (err || !decodedToken)
+          {
+            return reject(err)
+          }
+
+          resolve(decodedToken)
+        })
+      }
+      return reject(err);
+    }
+
   })
 }
 
@@ -40,7 +52,7 @@ const createJWToken = function (details)
 
   let token = jwt.sign({
     data: details.sessionData
-  }, 'shhhh', {
+  }, process.env.JWT_SECRET, {
     expiresIn: details.maxAge,
     algorithm: 'HS256'
   })

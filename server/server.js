@@ -6,13 +6,15 @@ const path = require('path');
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
+const morgan = require('morgan');
 
 const config = require('../config/config');
 const webpackConfig = require('../webpack.config');
+const JWTtoken = require('./libs/auth');
 
 const isDev = process.env.NODE_ENV !== 'production';
 const port  = process.env.PORT || 8080;
-
+process.env['JWT_SECRET'] = 'shhhhhhhh';
 
 // Configuration
 // ================================================================================================
@@ -24,6 +26,22 @@ mongoose.Promise = global.Promise;
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(morgan('combined'));
+
+app.all('/api/*', function(req, res, next) {
+  if (req.url === '/api/' || req.url === '/api/login') return next();
+  if (!req.headers.authorization) {
+    return res.status(403).json({ error: 'No credentials sent!' });
+  }
+  JWTtoken.verifyJWTToken(req.headers.authorization)
+    .then(() => {
+      next();
+    })
+    .catch(() => {
+      return res.status(403).json({ error: 'Wrong credentials sent!' });
+    })
+  next();
+});
 
 // API routes
 require('./routes')(app);

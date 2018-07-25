@@ -1,23 +1,13 @@
 const User = require('../../models/Admin');
 const JWTtoken = require('../../libs/auth');
-//import { paramCheck } from '../middlewares'
-
-//const router = express.Router()
-
-/*
-  ROUTES
-*/
-
-//router.post('*', paramCheck(['email', 'password']))
 
 module.exports = (app) => {
   app.post('/api/login', (req, res) => {
-    let {email, password} = req.body
+    let {email, password} = req.body;
 
-    User.findById(email)
-      .exec()
+    User.findOne({ email: email, password: password})
       .then((user) => (!user) ? Promise.reject("User not found.") : user)
-      .then((user) => user.comparePassword(password))
+      //.then((user) => user.comparePassword(password))
       //.then((user) => user.publicParse(user))
       .then((user) => {
         res.status(200)
