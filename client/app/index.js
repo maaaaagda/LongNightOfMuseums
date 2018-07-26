@@ -16,6 +16,7 @@ import Counter from './components/Home/Counter';
 
 import Institutions from './components/Institutions/InstitutionsList';
 import Home from './components/Home/Home'
+import Login from './components/Admin/Login'
 import './styles/styles.less';
 
 const store = configureStore();
@@ -28,6 +29,7 @@ render((
           <Route exact path="/" component={Home}/>
           <Route path="/institutions" component={Institutions}/>
           <Route path="/counter" component={Counter}/>
+          <Route path="/login" component={Login}/>
           <Route component={NotFound}/>
         </Switch>
       </App>

@@ -1,1 +1,5 @@
 export const CREATE_INSTITUTION = 'CREATE_INSTITUTION';
+
+
+export const LOGIN = 'LOGIN';
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';

@@ -4,7 +4,6 @@ const JWTtoken = require('../../libs/auth');
 module.exports = (app) => {
   app.post('/api/login', (req, res) => {
     let {email, password} = req.body;
-
     User.findOne({ email: email, password: password})
       .then((user) => (!user) ? Promise.reject("User not found.") : user)
       //.then((user) => user.comparePassword(password))
