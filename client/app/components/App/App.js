@@ -6,7 +6,9 @@ const App = ({ children }) => (
   <>
     <MainMenu/>
     <main>
-      {children}
+      <div className={'main-container'}>
+        {children}
+      </div>
     </main>
     <Footer />
   </>

@@ -39,11 +39,11 @@ export default class MenuExampleBorderless extends Component {
           visible={this.state.visibleSideBar}
           width='wide'
         >
-          <Menu.Item as='div' onClick={this.handleButtonClick}>
-            <Link to="/">Home</Link>
+          <Menu.Item as={Link} to="/"  onClick={this.handleButtonClick}>
+            Home
           </Menu.Item>
-          <Menu.Item as='div' onClick={this.handleButtonClick}>
-            <Link to="/institutions">Institutions</Link>
+          <Menu.Item as={Link} to="/institutions" onClick={this.handleButtonClick}>
+            Institutions
           </Menu.Item>
           <Menu.Item as='div' onClick={this.handleButtonClick}>
             My routes
@@ -53,6 +53,9 @@ export default class MenuExampleBorderless extends Component {
           </Menu.Item>
           <Menu.Item as='div' onClick={this.handleButtonClick}>
             Info
+          </Menu.Item>
+          <Menu.Item as={Link} to={"/login"} onClick={this.handleButtonClick}>
+            Login
           </Menu.Item>
         </Sidebar>
       </div>
