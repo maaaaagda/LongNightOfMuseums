@@ -57,6 +57,9 @@ export default class MenuExampleBorderless extends Component {
           <Menu.Item as={Link} to={"/login"} onClick={this.handleButtonClick}>
             Login
           </Menu.Item>
+          <Menu.Item as={Link} to={"/counter"} onClick={this.handleButtonClick}>
+            Counter
+          </Menu.Item>
         </Sidebar>
       </div>
     )

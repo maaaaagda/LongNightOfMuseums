@@ -1,4 +1,9 @@
 export default {
-  user: {},
+  admin: {
+    isLoggedIn: false,
+    name: '',
+    surname: '',
+    email: ''
+  },
   institutions: []
 }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import 'whatwg-fetch';
+import axios from 'axios';
 
 class Counter extends Component {
   constructor(props) {
@@ -18,11 +19,10 @@ class Counter extends Component {
   }
 
   componentDidMount() {
-    fetch('/api/counters')
-      .then(res => res.json())
+    axios.get('/api/counters')
       .then(json => {
-        this.setState({
-          counters: json
+         this.setState({
+          counters: json.data
         });
       });
   }
@@ -32,7 +32,7 @@ class Counter extends Component {
       .then(res => res.json())
       .then(json => {
         let data = this.state.counters;
-        data.push(json);
+        data.push(json.data);
 
         this.setState({
           counters: data

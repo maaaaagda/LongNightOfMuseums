@@ -1,22 +1,29 @@
 import * as types from './actionsTypes';
-import 'whatwg-fetch';
+import axios from 'axios';
 
-export function loginSuccess(user) {
-  return {type:  types.LOGIN_SUCCESS, user}
+
+export function loginSuccess(admin) {
+   if(admin.token) {
+     console.log('setting ax')
+      axios.defaults.headers.common['Authorization'] = `Bearer ${admin.token}`;
+     console.log(axios.defaults.headers)
+    } else {
+      delete axios.defaults.headers.common['authorization'];
+    }
+  return {type:  types.LOGIN_SUCCESS, admin}
 }
 
 export function login(loginData) {
   return dispatch => {
-    return fetch('/api/login', {
-      method: 'POST',
-      body: JSON.stringify(loginData),
-      headers: {
-        "Content-Type": "application/json"
-      },
-      credentials: "same-origin"})
-      .then(res => res.json())
-      .then(json => dispatch(loginSuccess(json)))
-      .catch(err => {
+    return axios.post('/api/login', loginData)
+      .then(res => {
+        dispatch(loginSuccess(res.data))
+        return res;
+      })
+      .then((res) => {
+        localStorage.setItem('token', res.data.token)
+      })
+     .catch(err => {
         throw err;
       })
   }

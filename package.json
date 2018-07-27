@@ -31,6 +31,7 @@
     "@babel/preset-react": "^7.0.0-beta.52",
     "@babel/register": "^7.0.0-beta.52",
     "autoprefixer": "^8.2.0",
+    "axios": "^0.18.0",
     "babel-loader": "^8.0.0-beta.2",
     "babel-preset-env": "^1.7.0",
     "connect-history-api-fallback": "^1.5.0",

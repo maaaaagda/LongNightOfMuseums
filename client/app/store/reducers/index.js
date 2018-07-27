@@ -3,8 +3,8 @@ import institutions from './institutionReducer';
 import login from './loginReducer';
 
 const rootReducer = combineReducers({
-  institutions,
-  login
+  institutions: institutions,
+  admin: login
 });
 
 export default rootReducer;
