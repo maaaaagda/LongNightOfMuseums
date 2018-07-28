@@ -3,3 +3,7 @@ export const CREATE_INSTITUTION = 'CREATE_INSTITUTION';
 
 export const LOGIN = 'LOGIN';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+
+export const LOAD_ADMINS = 'LOAD_ADMINS';
+export const LOAD_ADMINS_SUCCESS = 'LOAD_ADMINS_SUCCESS';
+export const LOAD_ADMIN = 'LOAD_ADMIN';

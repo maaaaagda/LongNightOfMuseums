@@ -5,5 +5,6 @@ export default {
     surname: '',
     email: ''
   },
-  institutions: []
+  institutions: [],
+  admins: []
 }
