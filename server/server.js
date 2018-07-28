@@ -26,7 +26,7 @@ mongoose.Promise = global.Promise;
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(morgan('combined'));
+app.use(morgan('dev'));
 
 app.all('/api/*', function(req, res, next) {
   if (req.url === '/api/' || req.url === '/api/login') return next();

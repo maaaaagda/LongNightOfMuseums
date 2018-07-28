@@ -5,10 +5,8 @@ export default function loginReducer(state = initialState.admin, action) {
   switch (action.type) {
     case types.LOGIN_SUCCESS:
       let admin = {
-        isLoggedIn: action.admin.success,
-        name: 'Joe',
-        surname: 'Doe',
-        email: ''
+        isLoggedIn: action.payload,
+        email: action.payload
       }
       return Object.assign({}, admin);
     default:

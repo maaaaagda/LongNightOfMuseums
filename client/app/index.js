@@ -4,7 +4,7 @@ import 'semantic-ui-less/semantic.less';
 import configureStore from './store/store/configureStore';
 import { Provider } from 'react-redux';
 import {
-  BrowserRouter as Router,
+  Router,
   Route,
   Switch
 } from 'react-router-dom';
@@ -18,12 +18,16 @@ import Home from './components/Home/Home'
 import Login from './components/Admin/Login'
 import './styles/styles.less';
 import './helpers/delayPromise'
+import history from './helpers/history';
+import {restoreUserIfLogged} from "./store/actions/loginActions";
 
 const store = configureStore();
 
+store.dispatch(restoreUserIfLogged())
+
 render((
   <Provider store={store}>
-    <Router>
+    <Router history={history}>
       <App>
         <Switch>
           <Route exact path="/" component={Home}/>

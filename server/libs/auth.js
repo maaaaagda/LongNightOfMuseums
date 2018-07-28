@@ -41,17 +41,8 @@ const createJWToken = function (details)
     details.maxAge = 3600
   }
 
-  details.sessionData = _.reduce(details.sessionData || {}, (memo, val, key) =>
-  {
-    if (typeof val !== "function" && key !== "password")
-    {
-      memo[key] = val
-    }
-    return memo
-  }, {})
-
   let token = jwt.sign({
-    data: details.sessionData
+    sub: details.sessionData.email
   }, process.env.JWT_SECRET, {
     expiresIn: details.maxAge,
     algorithm: 'HS256'
