@@ -2,7 +2,7 @@ const User = require('../../models/Admin');
 const JWTtoken = require('../../libs/auth');
 const moment = require('moment');
 
-const maxAge = 3600;
+const maxAge = 36000;
 
 module.exports = (app) => {
   app.post('/api/login', (req, res) => {
@@ -29,6 +29,6 @@ module.exports = (app) => {
           })
       })
   })
-}
+};
 
 //export default router
