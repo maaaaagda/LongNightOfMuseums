@@ -34,6 +34,7 @@
     "axios": "^0.18.0",
     "babel-loader": "^8.0.0-beta.2",
     "babel-preset-env": "^1.7.0",
+    "bcrypt": "^3.0.0",
     "connect-history-api-fallback": "^1.5.0",
     "copy-webpack-plugin": "^4.5.1",
     "css-loader": "^0.28.11",

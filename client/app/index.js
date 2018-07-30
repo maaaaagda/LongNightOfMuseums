@@ -19,12 +19,10 @@ import './styles/styles.less';
 import './helpers/delayPromise'
 import history from './helpers/history';
 import {restoreUserIfLogged} from "./store/actions/loginActions";
-import {load_admins} from "./store/actions/adminActions";
 
 const store = configureStore();
 
 store.dispatch(restoreUserIfLogged());
-store.dispatch(load_admins());
 
 render((
   <Provider store={store}>

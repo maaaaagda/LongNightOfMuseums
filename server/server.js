@@ -40,11 +40,10 @@ app.all('/api/*', function(req, res, next) {
     .catch(() => {
       return res.status(403).json({ error: 'Wrong credentials sent!' });
     })
-  next();
 });
 
 // API routes
-require('./routes')(app);
+require('./routes/index')(app);
 
 if (isDev) {
   const compiler = webpack(webpackConfig);
@@ -70,7 +69,6 @@ if (isDev) {
 }
   }));
 
-  //app.use(webpackHotMiddleware(compiler));
   app.use(webpackHotMiddleware(compiler, {
     'log': false, 
     'path': '/__webpack_hmr', 

@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {Table, Button} from 'semantic-ui-react';
+import {load_admins} from "../../store/actions/adminActions";
 
 
 class AdminsList extends React.Component
@@ -9,6 +10,11 @@ class AdminsList extends React.Component
     {
         super(props);
     }
+
+    componentDidMount() {
+      this.props.dispatch(load_admins());
+    }
+
     renderAdminsList () {
       let adminsList = [];
       this.props.admins.map((admin, i) => {
@@ -33,7 +39,7 @@ class AdminsList extends React.Component
     renderAdminTable () {
       let adminTable = this.props.admins.length !== 0 ?
         (
-          <div>
+          <div className={'table-container'}>
             <Table selectable size='large'>
               <Table.Header>
                 <Table.Row>
