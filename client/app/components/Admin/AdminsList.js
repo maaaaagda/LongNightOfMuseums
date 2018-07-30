@@ -16,7 +16,7 @@ class AdminsList extends React.Component
           <Table.Row key={i}>
             <Table.Cell>{admin.name}</Table.Cell>
             <Table.Cell>{admin.last_name}</Table.Cell>
-            <Table.Cell>{admin.createdAt}</Table.Cell>
+            <Table.Cell>{admin.created_at}</Table.Cell>
             <Table.Cell>{admin.email}</Table.Cell>
             <Table.Cell>
               <Button inverted color='red'>

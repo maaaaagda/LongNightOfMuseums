@@ -15,18 +15,16 @@ class Home extends React.Component {
 
   render() {
     return (
-      <Sidebar.Pushable as={Container}>
-        <Sidebar.Pusher>
+      <div className='container-black'>
           <div className={'jumbotron'}>
             <Transition visible={this.state.visibleTitle} animation='scale' duration={5000}>
               <Container textAlign={'center'}>
                 <h1 className={'title'}>Long Night Of Museums</h1>
-                <h1><Icon name='university' size={'huge'}/></h1>
+                <h1><Icon inverted name='university' size={'huge'}/></h1>
               </Container>
             </Transition>
           </div>
-        </Sidebar.Pusher>
-      </Sidebar.Pushable>
+      </div>
     )
   }
 }
