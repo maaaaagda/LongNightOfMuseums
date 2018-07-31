@@ -9,18 +9,14 @@ module.exports = (app) => {
     let {email, password} = req.body;
     Admin.findOne({ email: email})
       .then((admin) => (!admin) ? Promise.reject("Admininstrator not found.") : admin)
-      .then((admin) => {
-        let is_password_valid = compare_password(password, admin.password);
-        return (!is_password_valid) ? Promise.reject() : admin;
-
-      })
+      .then((admin) => bcrypt.compare(password, admin.password))
       //.then((admin) => { sendPublicAdminData } )
-      .then((admin) => {
+      .then(() => {
         res.status(200)
           .json({
             success: true,
             token: JWTtoken.createJWToken({
-              sessionData: admin,
+              sessionData: '',
               maxAge: maxAge
             }),
             expirationTime: moment().add(maxAge, 'ms')
@@ -34,11 +30,3 @@ module.exports = (app) => {
       })
   });
 };
-
-
-function compare_password(password, password_to_compare) {
-  bcrypt.compare(password, password_to_compare)
-    .then((is_password_valid) => {
-      return is_password_valid;
-    })
-}

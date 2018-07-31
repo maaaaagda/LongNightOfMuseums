@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Button, Checkbox, Form, Container, Message, Transition } from 'semantic-ui-react';
+import { Button, Form, Container, Message, Transition } from 'semantic-ui-react';
 import { login } from '../../store/actions/loginActions';
 
 class Login extends React.Component {
@@ -25,16 +25,16 @@ class Login extends React.Component {
     })
   }
   handleSubmit () {
-    this.setState({isFormLoading: true})
+    this.setState({isFormLoading: true});
     let loginData = {
       email: this.state.email,
       password: this.state.password
-    }
+    };
     this.props.dispatch(login(loginData))
       .then(() => {
         this.setState({isFormLoading: false})
       })
-      .catch((err) => {
+      .catch(() => {
         this.setState({isFormLoading: false, isLoginError: true})
       })
 
@@ -44,7 +44,7 @@ class Login extends React.Component {
       <div className={'jumbotron-top'}>
         <div className={'login'}>
           <Form
-            size={'big'}
+            size='large'
             loading={this.state.isFormLoading}
             onSubmit={this.handleSubmit}
             error={this.state.isLoginError}>

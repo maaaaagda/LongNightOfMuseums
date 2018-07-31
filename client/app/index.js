@@ -15,6 +15,7 @@ import Institutions from './components/Institutions/InstitutionsList';
 import Home from './components/Home/Home'
 import Login from './components/Admin/Login'
 import Admins from './components/Admin/AdminsList'
+import NewAdmin from './components/Admin/NewAdmin'
 import './styles/styles.less';
 import './helpers/delayPromise'
 import history from './helpers/history';
@@ -33,6 +34,7 @@ render((
           <Route path="/institutions" component={Institutions}/>
           <Route path="/counter" component={Counter}/>
           <Route path="/login" component={Login}/>
+          <Route path="/admins/new" component={NewAdmin}/>
           <Route path="/admins" component={Admins}/>
           <Route component={NotFound}/>
         </Switch>

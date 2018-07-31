@@ -1,7 +1,8 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {Table, Button} from 'semantic-ui-react';
+import {Table, Button, Segment} from 'semantic-ui-react';
 import {load_admins} from "../../store/actions/adminActions";
+import {Link} from "react-router-dom";
 
 
 class AdminsList extends React.Component
@@ -66,7 +67,15 @@ class AdminsList extends React.Component
     {
         return (
           <div className='jumbotron-top-small'>
-            <h1> List of all administrators </h1>
+            <Segment.Group horizontal>
+              <Segment textAlign='left'><h1> List of all administrators </h1></Segment>
+              <Segment textAlign='right' as={Link} to={"/admins/new"}>
+                <Button color='black'>
+                  Add new administrator
+                </Button>
+              </Segment>
+            </Segment.Group>
+            <br/>
             { this.renderAdminTable() }
           </div>
 
