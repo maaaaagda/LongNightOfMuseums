@@ -4,6 +4,8 @@ import {Form, Input, Button, Segment, Modal} from 'semantic-ui-react';
 import {Link} from "react-router-dom";
 import {create_admin} from "../../store/actions/adminActions";
 import history from '../../helpers/history';
+import {ValidationForm, ValidationInput} from "./FormElementsWithValidation";
+import {required, email} from './FormValidationRules';
 
 class NewAdmin extends React.Component {
     constructor(props) {
@@ -35,8 +37,23 @@ class NewAdmin extends React.Component {
           history.push('/admins')
         })
     }
-    ensureSavingAdmin() {
-      this.showModal()
+    ensureSavingAdmin(e) {
+      e.preventDefault();
+      this.form.validateAll();
+      if(this.isFormValid(this.form)) {
+        this.showModal()
+      }
+    }
+
+    isFormValid(form) {
+      let isFormValid = true;
+      let form_elems = form.state.byId;
+      Object.keys(form_elems).every(i => {
+        if (form_elems[i].error) {
+          isFormValid = false;
+          return false;
+        }})
+      return isFormValid;
     }
 
     showModal() {
@@ -64,9 +81,10 @@ class NewAdmin extends React.Component {
               </Segment>
             </Segment.Group>
             <br/>
-            <Form size='large' onSubmit={this.ensureSavingAdmin}>
+            <ValidationForm
+              ref={form => { this.form = form }}>
               <Form.Group widths='equal'>
-                <Form.Field
+                <ValidationInput
                   id='form-input-first-name'
                   name='name'
                   control={Input}
@@ -74,8 +92,9 @@ class NewAdmin extends React.Component {
                   required
                   onChange={this.handleChange}
                   value={this.state.name}
+                  validations={[required]}
                 />
-                <Form.Field
+                <ValidationInput
                   id='form-input-last-name'
                   name='last_name'
                   control={Input}
@@ -83,10 +102,11 @@ class NewAdmin extends React.Component {
                   required
                   onChange={this.handleChange}
                   value={this.state.last_name}
+                  validations={[required]}
                 />
               </Form.Group>
               <Form.Group widths='equal'>
-                <Form.Field
+                <ValidationInput
                   id='form-input-email'
                   name='email'
                   control={Input}
@@ -94,8 +114,9 @@ class NewAdmin extends React.Component {
                   required
                   onChange={this.handleChange}
                   value={this.state.email}
+                  validations={[required, email]}
                 />
-                <Form.Field
+                <ValidationInput
                   id='form-input-address'
                   name='address'
                   control={Input}
@@ -109,9 +130,10 @@ class NewAdmin extends React.Component {
                   id='form-button-control-public'
                   control={Button}
                   content='Confirm'
+                  onClick={this.ensureSavingAdmin}
                 />
               </div>
-            </Form>
+            </ValidationForm>
             <Modal size='small' open={this.state.opened_modal} onClose={this.hideModal}>
               <Modal.Header>New administrator</Modal.Header>
               <Modal.Content>

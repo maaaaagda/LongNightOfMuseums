@@ -54,6 +54,7 @@
     "react-redux": "^5.0.7",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
+    "react-validation": "^3.0.7",
     "redux": "^4.0.0",
     "redux-form": "^7.4.2",
     "redux-immutable-state-invariant": "^2.1.0",
@@ -78,6 +79,7 @@
     "morgan": "^1.9.0",
     "resolve-url-loader": "^2.3.0",
     "style-resources-loader": "^1.1.0",
+    "validator": "^10.4.0",
     "webpack": "^4.16.0",
     "webpack-cli": "^2.1.5",
     "webpack-dev-server": "^3.1.4"
