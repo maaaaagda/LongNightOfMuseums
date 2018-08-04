@@ -48,11 +48,10 @@ class NewAdmin extends React.Component {
     isFormValid(form) {
       let isFormValid = true;
       let form_elems = form.state.byId;
-      Object.keys(form_elems).every(i => {
+      Object.keys(form_elems).forEach(i => {
         if (form_elems[i].error) {
           isFormValid = false;
-          return false;
-        }})
+        }});
       return isFormValid;
     }
 
@@ -130,6 +129,7 @@ class NewAdmin extends React.Component {
                   id='form-button-control-public'
                   control={Button}
                   content='Confirm'
+                  secondary
                   onClick={this.ensureSavingAdmin}
                 />
               </div>

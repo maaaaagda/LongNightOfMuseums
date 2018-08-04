@@ -29,7 +29,7 @@ app.use(express.json());
 app.use(morgan('dev'));
 
 app.all('/api/*', function(req, res, next) {
-  if (req.url === '/api/' || req.url === '/api/login') return next();
+  if (req.url === '/api/' || req.url === '/api/login' || req.url === '/api/remindpassword') return next();
   if (!req.headers.authorization) {
     return res.status(403).json({ error: 'No credentials sent!' });
   }

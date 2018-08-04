@@ -14,6 +14,8 @@ import Counter from './components/Home/Counter';
 import Institutions from './components/Institutions/InstitutionsList';
 import Home from './components/Home/Home'
 import Login from './components/Admin/Login'
+import RemindPassword from './components/Admin/RemindPassword';
+import ResetPassword from './components/Admin/ResetPassword';
 import Admins from './components/Admin/AdminsList'
 import NewAdmin from './components/Admin/NewAdmin'
 import './styles/styles.less';
@@ -34,6 +36,8 @@ render((
           <Route path="/institutions" component={Institutions}/>
           <Route path="/counter" component={Counter}/>
           <Route path="/login" component={Login}/>
+          <Route path="/remindpassword" component={RemindPassword}/>
+          <Route path="/resetpassword" component={ResetPassword}/>
           <Route path="/admins/new" component={NewAdmin}/>
           <Route path="/admins" component={Admins}/>
           <Route component={NotFound}/>

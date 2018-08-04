@@ -1,6 +1,7 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { Button, Form, Container, Message, Transition } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import {connect} from 'react-redux';
+import {Button, Form, Container, Message, Transition, Segment} from 'semantic-ui-react';
 import { login } from '../../store/actions/loginActions';
 
 class Login extends React.Component {
@@ -41,7 +42,11 @@ class Login extends React.Component {
   };
   render() {
     return (
-      <div className={'jumbotron-top'}>
+      <div className={'jumbotron-top-small'}>
+        <Segment textAlign='center'>
+          <h1>Login</h1>
+        </Segment>
+        <br/>
         <div className={'login'}>
           <Form
             size='large'
@@ -68,6 +73,13 @@ class Login extends React.Component {
             </Form.Field>
             <Container textAlign={'center'}>
               <Button secondary type='submit' disabled={this.state.isButtonSubmitDisabled}>Submit</Button>
+            </Container>
+            <br/>
+            <br/>
+            <Container textAlign={'center'}>
+              <Link to={'/remindpassword'}>
+                Remind me password
+              </Link>
             </Container>
             <br/>
             <Transition visible={this.state.isLoginError} animation='fade' duration={500}>
