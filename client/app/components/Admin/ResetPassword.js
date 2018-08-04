@@ -78,8 +78,8 @@ class ResetPassword extends React.Component {
   hideModal() {
     this.setState({ opened_modal: false })
   }
-  redirectToHomepage () {
-    history.push('/');
+  redirectToLogin () {
+    history.push('/login');
   }
   render() {
     return (
@@ -141,7 +141,7 @@ class ResetPassword extends React.Component {
               <p>Password was successfully changed.</p>
             </Modal.Content>
             <Modal.Actions>
-              <Button onClick={this.redirectToHomepage.bind(this)} color='black'>Go to login page</Button>
+              <Button onClick={this.redirectToLogin.bind(this)} color='black'>Go to login page</Button>
             </Modal.Actions>
           </Modal>
         </div>

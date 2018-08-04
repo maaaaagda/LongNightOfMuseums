@@ -104,7 +104,7 @@ class RemindPassword extends React.Component {
                   size={'small'}
                   error
                   header='Reminding password failed'
-                  content='No user with given email address'
+                  content='Something went wrong'
                 />
               </Transition>
               <Modal size='small' open={this.state.opened_modal} onClose={this.hideModal}>
