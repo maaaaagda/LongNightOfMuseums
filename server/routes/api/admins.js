@@ -1,8 +1,6 @@
 const Admin = require('../../models/Admin');
 const bcrypt = require('bcrypt');
-
-var BCRYPT_SALT = 12;
-
+const config = require('../../libs/config');
 
 module.exports = (app) => {
 
@@ -24,7 +22,7 @@ module.exports = (app) => {
 
     let password = req.body.password;
 
-    bcrypt.hash(password, BCRYPT_SALT)
+    bcrypt.hash(password, config.BCRYPT_SALT)
       .then(function(hashedPassword) {
         let admin_data = {
           email: req.body.email,
@@ -51,4 +49,4 @@ module.exports = (app) => {
           })
       });
   });
-}
+};

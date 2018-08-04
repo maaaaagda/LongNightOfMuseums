@@ -4,7 +4,7 @@ import {Button, Form, Input, Message, Modal, Segment, Transition} from "semantic
 import {ValidationForm, ValidationInput} from "./FormElementsWithValidation";
 import {password, required, min_length} from "./FormValidationRules";
 import {login} from "../../store/actions/loginActions";
-//import {reset_password} from "../../store/actions/resetPasswordActions";
+import {reset_password} from "../../store/actions/resetPasswordActions";
 import history from '../../helpers/history'
 
 class ResetPassword extends React.Component {
@@ -16,12 +16,21 @@ class ResetPassword extends React.Component {
       opened_modal: false,
       isFormLoading: false,
       isError: false,
-      passwordMinLength: 7
+      passwordMinLength: 7,
+      adminId: '',
+      recoveryString: ''
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
+  }
+
+  componentDidMount () {
+    this.setState({
+      adminId: this.props.match.params.adminId,
+      recoveryString: this.props.match.params.recoveryString
+    });
   }
 
   handleChange (e){
@@ -34,13 +43,17 @@ class ResetPassword extends React.Component {
     e.preventDefault();
     this.form.validateAll();
     if(this.isFormValid(this.form)) {
-      //this.resetPassword()
+      this.resetPassword({
+        password: this.state.password,
+        adminId: this.state.adminId,
+        recoveryString: this.state.recoveryString
+      })
     }
   };
 
-  resetPassword() {
+  resetPassword(recoveryData) {
     this.setState({isFormLoading: true});
-    this.props.dispatch(reset_password({email: this.state.email}))
+    this.props.dispatch(reset_password(recoveryData))
       .then(() => {
         this.setState({isFormLoading: false, opened_modal: true})
       })
@@ -119,7 +132,7 @@ class ResetPassword extends React.Component {
               size={'small'}
               error
               header='Reseting password failed'
-              content='Something went wrong.'
+              content='Something went wrong. Probably link has expired'
             />
           </Transition>
           <Modal size='small' open={this.state.opened_modal} onClose={this.hideModal}>

@@ -37,7 +37,7 @@ render((
           <Route path="/counter" component={Counter}/>
           <Route path="/login" component={Login}/>
           <Route path="/remindpassword" component={RemindPassword}/>
-          <Route path="/resetpassword" component={ResetPassword}/>
+          <Route path="/resetpassword/:adminId/:recoveryString/" component={ResetPassword}/>
           <Route path="/admins/new" component={NewAdmin}/>
           <Route path="/admins" component={Admins}/>
           <Route component={NotFound}/>
