@@ -9,12 +9,13 @@ const webpackHotMiddleware = require('webpack-hot-middleware');
 const morgan = require('morgan');
 
 const config = require('../config/config');
+const server_config = require('./libs/config')
 const webpackConfig = require('../webpack.config');
 const JWTtoken = require('./libs/auth');
 
 const isDev = process.env.NODE_ENV !== 'production';
-const port  = process.env.PORT || 8080;
-process.env['JWT_SECRET'] = 'shhhhhhhh';
+const port  = process.env.PORT || server_config.PORT;
+process.env['JWT_SECRET'] = 'shhhuwebubifoewjnfiqio789715';
 
 // Configuration
 // ================================================================================================
@@ -29,7 +30,7 @@ app.use(express.json());
 app.use(morgan('dev'));
 
 app.all('/api/*', function(req, res, next) {
-  if (req.url === '/api/' || req.url === '/api/login' || req.url === '/api/remindpassword') return next();
+  if (req.url === '/api/' || req.url === '/api/login' || req.url === '/api/remindpassword' || '/api/resetpassword') return next();
   if (!req.headers.authorization) {
     return res.status(403).json({ error: 'No credentials sent!' });
   }
@@ -83,12 +84,12 @@ if (isDev) {
   });
 }
 
-app.listen(port, '0.0.0.0', (err) => {
+app.listen(port, server_config.HOST, (err) => {
   if (err) {
     console.log(err);
   }
 
-  console.info('>>> 🌎 Open http://0.0.0.0:%s/ in your browser.', port);
+  console.info('>>> 🌎 Open '+ server_config.APP_URL + ' in your browser.');
 });
 
 module.exports = app;

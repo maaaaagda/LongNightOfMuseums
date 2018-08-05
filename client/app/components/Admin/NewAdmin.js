@@ -29,8 +29,7 @@ class NewAdmin extends React.Component {
         name: this.state.name,
         last_name: this.state.last_name,
         email: this.state.email,
-        address: this.state.address,
-        password: 'pass'
+        address: this.state.address
       };
       this.props.dispatch(create_admin(admin_data))
         .then(() => {

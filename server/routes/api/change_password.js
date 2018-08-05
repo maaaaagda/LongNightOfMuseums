@@ -1,6 +1,8 @@
 const Admin = require('../../models/Admin');
 const JWTtoken = require('../../libs/auth');
-const mail = require('../../libs/send_email')
+const mail = require('../../libs/send_email');
+const config = require('../../libs/config');
+
 const maxAge = 300;
 const maxAgeInMinutes  = maxAge/60;
 
@@ -15,10 +17,10 @@ module.exports = (app) => {
           secret: secret,
           maxAge: maxAge
         });
-        let link = `http://localhost:8080/resetpassword/${admin._id}/${token}/`;
+        let link = `${config.APP_URL}resetpassword/${admin._id}/${token}/`;
         return mail.sendEmail(email,
           'Password recovery',
-          `<p>Click <a href="${link}">here</a> to recover your password.<br/>It will expire in ${maxAgeInMinutes} minutes</p>`)
+          `<p>Click <a href="${link}">here</a> to recover your password.<br/>Link will expire in ${maxAgeInMinutes} minutes</p>`)
 
       })
       .then(() => {

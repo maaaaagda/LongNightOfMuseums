@@ -132,7 +132,7 @@ class ResetPassword extends React.Component {
               size={'small'}
               error
               header='Reseting password failed'
-              content='Something went wrong. Probably link has expired'
+              content='Something went wrong. Probably link is not active'
             />
           </Transition>
           <Modal size='small' open={this.state.opened_modal} onClose={this.hideModal}>
