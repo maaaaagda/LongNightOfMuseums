@@ -24,6 +24,15 @@ module.exports = (app) => {
       .catch((err) => next(err));
   });
 
+  app.delete('/api/admins/:id', function (req, res, next) {
+    Admin.findOneAndRemove({ _id: req.params.id })
+      .exec()
+      .then(() => res.status(200)
+        .json({
+          success: true}))
+      .catch((err) => next(err));
+  });
+
   app.post('/api/admins', (req, res) => {
     Admin.findOne({ email: req.body.email})
       .then((admin) => {

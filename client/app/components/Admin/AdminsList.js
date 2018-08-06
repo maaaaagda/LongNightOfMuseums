@@ -1,19 +1,67 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {Table, Button, Segment} from 'semantic-ui-react';
-import {load_admins} from "../../store/actions/adminActions";
+import {delete_admin, load_admins} from "../../store/actions/adminActions";
 import {Link} from "react-router-dom";
-
+import CustomModal from '../Helpers/Modals';
+import history from "../../helpers/history";
 
 class AdminsList extends React.Component
 {
     constructor(props)
     {
-        super(props);
+      super(props);
+      this.state = {
+        isFormLoading: false,
+        modal: ''
+      };
+      this.hideModal = this.hideModal.bind(this);
     }
 
     componentDidMount() {
       this.props.dispatch(load_admins());
+    }
+    ensureDeletingUser(id) {
+     let confirmModal = (
+       <CustomModal
+        modalType='confirm'
+        header='New administrator'
+        content='Are you sure you want to delete administrator?'
+        hideModal={this.hideModal}
+        performAction={() => {this.deleteUser(id)}}
+      />
+    );
+      this.showModal(confirmModal);
+    }
+    showModal(modal) {
+      this.setState({ modal: modal });
+    }
+    hideModal() {
+      this.setState({ modal: '' })
+    }
+
+    deleteUser(id) {
+      this.props.dispatch(delete_admin(id))
+        .then(() => {
+          let successModal = (
+            <CustomModal
+              modalType='simple'
+              header='Operation completed successfully'
+              content='Administrator deleted successfully.'
+              hideModal={this.hideModal}
+            />);
+          this.showModal(successModal);
+        })
+        .catch((err) => {
+          let errorModal = (
+            <CustomModal
+              modalType='simple'
+              header='Operation failed'
+              content={err.response.data.message || 'Something went wrong, unable to delete selected administrator'}
+              hideModal={this.hideModal}
+            />);
+          this.showModal(errorModal);
+        })
     }
 
     renderAdminsList () {
@@ -26,7 +74,7 @@ class AdminsList extends React.Component
             <Table.Cell>{admin.created_at}</Table.Cell>
             <Table.Cell>{admin.email}</Table.Cell>
             <Table.Cell>
-              <Button inverted color='red'>
+              <Button inverted color='red' onClick={() => this.ensureDeletingUser(admin._id)}>
                 Remove
               </Button>
             </Table.Cell>
@@ -77,6 +125,7 @@ class AdminsList extends React.Component
             </Segment.Group>
             <br/>
             { this.renderAdminTable() }
+            {this.state.modal}
           </div>
 
         )

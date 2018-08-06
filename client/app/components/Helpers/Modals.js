@@ -17,7 +17,6 @@ class CustomModal extends React.Component {
     let result;
     switch (this.props.modalType) {
       case 'confirm':
-
         result = (
           <Modal size='small' open={true} onClose={this.props.hideModal} >
             <Modal.Header>{this.props.header}</Modal.Header>

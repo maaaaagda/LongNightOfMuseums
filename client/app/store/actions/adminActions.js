@@ -36,3 +36,19 @@ export function create_admin_success(admin) {
   return {type:  types.CREATE_ADMIN_SUCCESS, payload: admin}
 }
 
+
+export function delete_admin(id) {
+  return dispatch => {
+    return axios.delete(`/api/admins/${id}`)
+      .then(() => {
+        dispatch(delete_admin_success(id))
+      })
+      .catch(err => {
+        throw err;
+      })
+  }
+}
+
+export function delete_admin_success(id) {
+  return {type:  types.DELETE_ADMIN_SUCCESS, payload: id}
+}

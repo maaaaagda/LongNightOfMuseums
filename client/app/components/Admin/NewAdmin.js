@@ -12,7 +12,6 @@ class NewAdmin extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-          opened_modal: true,
           isFormLoading: false,
           modal: '',
           name: '',
@@ -171,16 +170,6 @@ class NewAdmin extends React.Component {
               </div>
             </ValidationForm>
             {this.state.modal}
-            {/*<Modal size='small' open={this.state.opened_modal} onClose={this.hideModal}>*/}
-              {/*<Modal.Header>New administrator</Modal.Header>*/}
-              {/*<Modal.Content>*/}
-                {/*<p>Are you sure you want to create new administrator?</p>*/}
-              {/*</Modal.Content>*/}
-              {/*<Modal.Actions>*/}
-                {/*<Button color='black' onClick={this.hideModal}>No</Button>*/}
-                {/*<Button color='green' inverted onClick={this.submitForm}>Yes</Button>*/}
-              {/*</Modal.Actions>*/}
-            {/*</Modal>*/}
           </div>
 
         )
