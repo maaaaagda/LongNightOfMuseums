@@ -6,12 +6,15 @@ import {create_admin} from "../../store/actions/adminActions";
 import history from '../../helpers/history';
 import {ValidationForm, ValidationInput} from "./FormElementsWithValidation";
 import {required, email} from './FormValidationRules';
+import CustomModal from '../Helpers/Modals';
 
 class NewAdmin extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-          opened_modal: false,
+          opened_modal: true,
+          isFormLoading: false,
+          modal: '',
           name: '',
           last_name: '',
           email: '',
@@ -20,27 +23,57 @@ class NewAdmin extends React.Component {
       this.submitForm = this.submitForm.bind(this);
       this.showModal = this.showModal.bind(this);
       this.hideModal = this.hideModal.bind(this);
+      this.hideModalSuccess = this.hideModalSuccess.bind(this);
       this.handleChange = this.handleChange.bind(this);
       this.ensureSavingAdmin = this.ensureSavingAdmin.bind(this)
     }
 
     submitForm() {
+      this.setState({isFormLoading: true});
       let admin_data = {
         name: this.state.name,
         last_name: this.state.last_name,
         email: this.state.email,
         address: this.state.address
       };
-      this.props.dispatch(create_admin(admin_data))
+       this.props.dispatch(create_admin(admin_data))
         .then(() => {
-          history.push('/admins')
+          this.setState({isFormLoading: false});
+          let successModal = (
+            <CustomModal
+              modalType='simple'
+              header='Operation completed successfully'
+              content='New administrator created successfully. Message containing first steps in the application were sent on user email.'
+              hideModal={this.hideModalSuccess}
+            />);
+          this.showModal(successModal);
+        })
+        .catch((err) => {
+          this.setState({isFormLoading: false});
+          let errorModal = (
+          <CustomModal
+            modalType='simple'
+            header='Operation failed'
+            content={err.response.data.message || 'Something went wrong, unable to create new administrator'}
+            hideModal={this.hideModal}
+          />);
+          this.showModal(errorModal);
         })
     }
     ensureSavingAdmin(e) {
       e.preventDefault();
       this.form.validateAll();
       if(this.isFormValid(this.form)) {
-        this.showModal()
+        let customModal = (
+          <CustomModal
+            modalType='confirm'
+            header='New administrator'
+            content='Are you sure you want to create new administrator?'
+            hideModal={this.hideModal}
+            performAction={this.submitForm}
+          />
+        );
+        this.showModal(customModal);
       }
     }
 
@@ -54,13 +87,16 @@ class NewAdmin extends React.Component {
       return isFormValid;
     }
 
-    showModal() {
-      this.setState({ opened_modal: true })
+    showModal(modal) {
+      this.setState({ modal: modal });
     }
     hideModal() {
-      this.setState({ opened_modal: false })
+      this.setState({ modal: '' })
     }
-
+    hideModalSuccess () {
+      this.setState({ modal: '' })
+      history.push('/admins');
+    }
     handleChange (e){
       this.setState({
         [e.target.name]: e.target.value
@@ -80,7 +116,8 @@ class NewAdmin extends React.Component {
             </Segment.Group>
             <br/>
             <ValidationForm
-              ref={form => { this.form = form }}>
+              ref={form => { this.form = form }}
+              loading={this.state.isFormLoading}>
               <Form.Group widths='equal'>
                 <ValidationInput
                   id='form-input-first-name'
@@ -133,16 +170,17 @@ class NewAdmin extends React.Component {
                 />
               </div>
             </ValidationForm>
-            <Modal size='small' open={this.state.opened_modal} onClose={this.hideModal}>
-              <Modal.Header>New administrator</Modal.Header>
-              <Modal.Content>
-                <p>Are you sure you want to create new administrator?</p>
-              </Modal.Content>
-              <Modal.Actions>
-                <Button color='black' onClick={this.hideModal}>No</Button>
-                <Button color='green' inverted onClick={this.submitForm}>Yes</Button>
-              </Modal.Actions>
-            </Modal>
+            {this.state.modal}
+            {/*<Modal size='small' open={this.state.opened_modal} onClose={this.hideModal}>*/}
+              {/*<Modal.Header>New administrator</Modal.Header>*/}
+              {/*<Modal.Content>*/}
+                {/*<p>Are you sure you want to create new administrator?</p>*/}
+              {/*</Modal.Content>*/}
+              {/*<Modal.Actions>*/}
+                {/*<Button color='black' onClick={this.hideModal}>No</Button>*/}
+                {/*<Button color='green' inverted onClick={this.submitForm}>Yes</Button>*/}
+              {/*</Modal.Actions>*/}
+            {/*</Modal>*/}
           </div>
 
         )

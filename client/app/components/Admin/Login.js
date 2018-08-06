@@ -54,7 +54,7 @@ class Login extends React.Component {
             onSubmit={this.handleSubmit}
             error={this.state.isLoginError}>
             <Form.Field>
-              <label>Email</label>
+              <label>Email/Login</label>
               <input
                 value={this.state.email}
                 name="email"

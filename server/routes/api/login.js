@@ -7,11 +7,9 @@ const maxAge = 36000;
 module.exports = (app) => {
   app.post('/api/login', (req, res) => {
     let {email, password} = req.body;
-    console.log(password);
     Admin.findOne({ email: email})
       .then((admin) => (!admin) ? Promise.reject("Admininstrator not found.") : admin)
       .then((admin) => {
-        console.log(admin)
         return bcrypt.compare(password, admin.password) })
       .then((validPassword) => {
         if(validPassword){
