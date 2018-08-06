@@ -7,20 +7,27 @@ const maxAge = 36000;
 module.exports = (app) => {
   app.post('/api/login', (req, res) => {
     let {email, password} = req.body;
+    console.log(password);
     Admin.findOne({ email: email})
       .then((admin) => (!admin) ? Promise.reject("Admininstrator not found.") : admin)
-      .then((admin) => bcrypt.compare(password, admin.password))
-      //.then((admin) => { sendPublicAdminData } )
-      .then(() => {
-        res.status(200)
-          .json({
-            success: true,
-            token: JWTtoken.createJWToken({
-              sessionData: '',
-              maxAge: maxAge
-            }),
-            expirationTime: moment().add(maxAge, 'ms')
-          })
+      .then((admin) => {
+        console.log(admin)
+        return bcrypt.compare(password, admin.password) })
+      .then((validPassword) => {
+        if(validPassword){
+          res.status(200)
+            .json({
+              success: true,
+              token: JWTtoken.createJWToken({
+                sessionData: '',
+                maxAge: maxAge
+              }),
+              expirationTime: moment().add(maxAge, 'ms')
+            });
+        } else {
+          return Promise.reject('Validation failed.')
+        }
+
       })
       .catch((err) => {
         res.status(401)

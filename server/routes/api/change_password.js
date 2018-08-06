@@ -2,6 +2,7 @@ const Admin = require('../../models/Admin');
 const JWTtoken = require('../../libs/auth');
 const mail = require('../../libs/send_email');
 const config = require('../../libs/config');
+const bcrypt = require('bcrypt');
 
 const maxAge = 300;
 const maxAgeInMinutes  = maxAge/60;
@@ -45,12 +46,13 @@ module.exports = (app) => {
       .then((admin) => (!admin) ? Promise.reject("Admininstrator not found.") : admin)
       .then((admin) => {
         let secret = admin.password + admin.createdAt;
-        return Promise.all([JWTtoken.verifyPasswordChangeToken(token, secret), admin])
+        let hashedPassword = bcrypt.hash(password, config.BCRYPT_SALT)
+        return Promise.all([JWTtoken.verifyPasswordChangeToken(token, secret), admin, hashedPassword])
       })
       .then((results) => {
          let admin = results[1];
-         admin.password = password;
-         return admin.save()
+         admin.password = results[2];
+         return admin.save();
 
       })
       .then(() =>
