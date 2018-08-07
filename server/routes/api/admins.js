@@ -67,7 +67,7 @@ module.exports = (app) => {
           secret: secret,
           maxAge: maxAge
         });
-        let link = `${config.APP_URL}${admin._id}/${token}/`;
+        let link = `${config.APP_URL}resetpassword/${admin._id}/${token}/`;
         return mail.sendEmail(email,
           'Long Night Of Museums Registration',
           `<p>Click <a href="${link}">here</a> to start using your account.<br/>As a first step you will be asked to change your password</p>`)
