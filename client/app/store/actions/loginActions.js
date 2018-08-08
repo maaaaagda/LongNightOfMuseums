@@ -17,14 +17,15 @@ export function login(loginData) {
   return dispatch => {
     return axios.post('/api/login', loginData)
       .then(res => {
-        let rawToken = res.data.token
-        let decodedToken = jwtDecode(rawToken)
-        decodedToken['token'] = rawToken
-        dispatch(loginSuccess(decodedToken))
+        let rawToken = res.data.token;
+        let decodedToken = jwtDecode(rawToken);
+        decodedToken['token'] = rawToken;
+        dispatch(loginSuccess(decodedToken));
         return res;
       })
       .then((res) => {
-        localStorage.setItem('token', res.data.token)
+        localStorage.setItem('token', res.data.token);
+        history.push('/institutions')
       })
      .catch(err => {
         throw err;
@@ -34,12 +35,12 @@ export function login(loginData) {
 
 export function restoreUserIfLogged () {
   return dispatch => {
-    let rawToken = localStorage.getItem('token')
+    let rawToken = localStorage.getItem('token');
     if (rawToken) {
-      let decodedToken = jwtDecode(rawToken)
-      decodedToken['token'] = rawToken
-      let expirationTime = decodedToken['exp']
-      let timeNow = moment().format('X')
+      let decodedToken = jwtDecode(rawToken);
+      decodedToken['token'] = rawToken;
+      let expirationTime = decodedToken['exp'];
+      let timeNow = moment().format('X');
       if (timeNow <= expirationTime) {
         dispatch(loginSuccess(decodedToken))
         //history.push('/')

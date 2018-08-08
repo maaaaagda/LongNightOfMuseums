@@ -21,3 +21,19 @@ export function load_institutions() {
 export function load_institutions_success(admins) {
   return {type:  types.LOAD_INSTITUTIONS_SUCCESS, payload: admins}
 }
+
+export function delete_institution(id) {
+  return dispatch => {
+    return axios.delete(`/api/institutions/${id}`)
+      .then(() => {
+        dispatch(delete_institution_success(id))
+      })
+      .catch(err => {
+        throw err;
+      })
+  }
+}
+
+export function delete_institution_success(id) {
+  return {type:  types.DELETE_INSTITUTION_SUCCESS, payload: id}
+}

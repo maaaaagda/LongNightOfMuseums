@@ -25,7 +25,16 @@
 }
 
 .jumbotron-padding-y {
-  padding: 10% 15% 10% 15%;
+  padding: 5% 15% 10% 15%;
+}
+
+.vertical-center-outer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
 }
 
 .main-container {
@@ -73,7 +82,7 @@
 
 .table-container {
   height: @tableHeight;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .text-center {
@@ -84,9 +93,4 @@
 .error {
   color: red;
   padding-top: 2px;
-}
-
-.institution-card-content {
-  //height: 100px;
-  //overflow-y: hidden;
 }

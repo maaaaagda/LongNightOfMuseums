@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const config = require('../../libs/config');
 const generator = require('generate-password');
 const JWTtoken = require("../../libs/auth");
-const mail = require('../../libs/send_email')
+const mail = require('../../libs/send_email');
 
 const passwordLength = 7;
 const maxAge = 108000;
@@ -27,9 +27,19 @@ module.exports = (app) => {
   app.delete('/api/admins/:id', function (req, res, next) {
     Admin.findOneAndRemove({ _id: req.params.id })
       .exec()
-      .then(() => res.status(200)
-        .json({
-          success: true}))
+      .then((admin) => {
+        if (admin) {
+          res.status(200)
+            .json({
+              success: true})
+        } else {
+          res.status(401)
+            .json({
+              message: "Administrator not found"
+            })
+        }
+
+      })
       .catch((err) => next(err));
   });
 

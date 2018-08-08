@@ -9,7 +9,7 @@ const webpackHotMiddleware = require('webpack-hot-middleware');
 const morgan = require('morgan');
 
 const config = require('../config/config');
-const server_config = require('./libs/config')
+const server_config = require('./libs/config');
 const webpackConfig = require('../webpack.config');
 const JWTtoken = require('./libs/auth');
 
@@ -30,7 +30,9 @@ app.use(express.json());
 app.use(morgan('dev'));
 
 app.all('/api/*', function(req, res, next) {
-  if (req.url === '/api/' || req.url === '/api/login' || req.url === '/api/remindpassword' || '/api/resetpassword') return next();
+  if (req.url === '/api/' || req.url === '/api/login' || req.url === '/api/remindpassword' || req.url ==='/api/resetpassword') {
+    return next();
+  }
   if (!req.headers.authorization) {
     return res.status(403).json({ error: 'No credentials sent!' });
   }

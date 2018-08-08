@@ -25,7 +25,7 @@ class AdminsList extends React.Component
      let confirmModal = (
        <CustomModal
         modalType='confirm'
-        header='New administrator'
+        header='Remove administrator'
         content='Are you sure you want to delete administrator?'
         hideModal={this.hideModal}
         performAction={() => {this.deleteUser(id)}}
@@ -100,6 +100,9 @@ class AdminsList extends React.Component
                 </Table.Row>
               </Table.Header>
               <Table.Body>
+                { this.renderAdminsList() }
+                { this.renderAdminsList() }
+                { this.renderAdminsList() }
                 { this.renderAdminsList() }
               </Table.Body>
             </Table>
