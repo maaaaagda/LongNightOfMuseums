@@ -111,7 +111,7 @@ class Institutions extends React.Component {
         <div className='jumbotron-padding-y'>
           <Segment.Group horizontal>
             <Segment textAlign='left'><h1> List of all institutions </h1></Segment>
-            <Segment textAlign='right' as={Link} to={"/admins/new"}>
+            <Segment textAlign='right' as={Link} to={"/institutions/new"}>
               <Button color='black'>
                 Add new institution
               </Button>

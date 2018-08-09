@@ -22,6 +22,7 @@ import './styles/styles.less';
 import './helpers/delayPromise'
 import history from './helpers/history';
 import {restoreUserIfLogged} from "./store/actions/loginActions";
+import NewInstitution from "./components/Institutions/NewInstitution";
 
 const store = configureStore();
 
@@ -33,6 +34,7 @@ render((
       <App>
         <Switch>
           <Route exact path="/" component={Home}/>
+          <Route path="/institutions/new" component={NewInstitution}/>
           <Route path="/institutions" component={Institutions}/>
           <Route path="/counter" component={Counter}/>
           <Route path="/login" component={Login}/>
