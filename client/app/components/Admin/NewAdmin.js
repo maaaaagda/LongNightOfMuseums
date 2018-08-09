@@ -4,8 +4,8 @@ import {Form, Input, Button, Segment, Modal} from 'semantic-ui-react';
 import {Link} from "react-router-dom";
 import {create_admin} from "../../store/actions/adminActions";
 import history from '../../helpers/history';
-import {ValidationForm, ValidationInput} from "./FormElementsWithValidation";
-import {required, email} from './FormValidationRules';
+import {ValidationForm, ValidationInput} from "../Helpers/FormElementsWithValidation";
+import {required, email} from '../Helpers/FormValidationRules';
 import CustomModal from '../Helpers/Modals';
 
 class NewAdmin extends React.Component {
@@ -93,7 +93,7 @@ class NewAdmin extends React.Component {
       this.setState({ modal: '' })
     }
     hideModalSuccess () {
-      this.setState({ modal: '' })
+      this.setState({ modal: '' });
       history.push('/admins');
     }
     handleChange (e){

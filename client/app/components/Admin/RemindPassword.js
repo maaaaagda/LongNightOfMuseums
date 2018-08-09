@@ -1,8 +1,8 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {Button, Form, Input, Message, Modal, Segment, Transition} from "semantic-ui-react";
-import {ValidationForm, ValidationInput} from "./FormElementsWithValidation";
-import {email, required} from "./FormValidationRules";
+import {ValidationForm, ValidationInput} from "../Helpers/FormElementsWithValidation";
+import {email, required} from "../Helpers/FormValidationRules";
 import {login} from "../../store/actions/loginActions";
 import {remind_password} from "../../store/actions/remindPasswordActions";
 import history from '../../helpers/history'
