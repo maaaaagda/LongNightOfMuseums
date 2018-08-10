@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {Form, Input, Button, Segment, Modal, TextArea, Select, Icon} from 'semantic-ui-react';
 import {Link} from "react-router-dom";
-//import {create_institution} from "../../store/actions/institutionActions";
+import {create_institution} from "../../store/actions/institutionActions";
 import history from '../../helpers/history';
 import {ValidationForm, ValidationInput} from "../Helpers/FormElementsWithValidation";
 import {required, email} from '../Helpers/FormValidationRules';
@@ -67,29 +67,29 @@ class NewInstitution extends React.Component {
       latitude: this.state.latitude,
       longitude: this.state.longitude
     };
-    // this.props.dispatch(create_institution(institution_data))
-    //   .then(() => {
-    //     this.setState({isFormLoading: false});
-    //     let successModal = (
-    //       <CustomModal
-    //         modalType='simple'
-    //         header='Operation completed successfully'
-    //         content='New institution created successfully.'
-    //         hideModal={this.hideModalSuccess}
-    //       />);
-    //     this.showModal(successModal);
-    //   })
-    //   .catch((err) => {
-    //     this.setState({isFormLoading: false});
-    //     let errorModal = (
-    //       <CustomModal
-    //         modalType='simple'
-    //         header='Operation failed'
-    //         content={err.response.data.message || 'Something went wrong, unable to create new institution'}
-    //         hideModal={this.hideModal}
-    //       />);
-    //     this.showModal(errorModal);
-    //   })
+    this.props.dispatch(create_institution(institution_data))
+      .then(() => {
+        this.setState({isFormLoading: false});
+        let successModal = (
+          <CustomModal
+            modalType='simple'
+            header='Operation completed successfully'
+            content='New institution created successfully.'
+            hideModal={this.hideModalSuccess}
+          />);
+        this.showModal(successModal);
+      })
+      .catch((err) => {
+        this.setState({isFormLoading: false});
+        let errorModal = (
+          <CustomModal
+            modalType='simple'
+            header='Operation failed'
+            content={err.response.data.message || 'Something went wrong, unable to create new institution'}
+            hideModal={this.hideModal}
+          />);
+        this.showModal(errorModal);
+      })
   }
   ensureSavingInstitution(e) {
     e.preventDefault();
@@ -125,9 +125,11 @@ class NewInstitution extends React.Component {
     this.setState({ modal: '' })
   }
   hideModalSuccess () {
-    this.setState({ modal: '' })
-    history.push('/institutions');
+    this.setState({ modal: '' }, () => {
+      history.push('/institutions');
+    });
   }
+
   handleChange (e){
     this.setState({
       [e.target.name]: e.target.value
@@ -140,7 +142,6 @@ class NewInstitution extends React.Component {
         <ValidationInput
           id='form-input-first-name'
           name='name'
-          control={Input}
           label='Name'
           required
           onChange={this.handleChange}
@@ -151,7 +152,6 @@ class NewInstitution extends React.Component {
           <ValidationInput
             id='form-input-website'
             name='website'
-            control={Input}
             label='Website'
             onChange={this.handleChange}
             value={this.state.website}
@@ -171,7 +171,6 @@ class NewInstitution extends React.Component {
         <ValidationInput
           id='form-input-address'
           name='address'
-          control={Input}
           label='Address'
           onChange={this.handleChange}
           value={this.state.address}
@@ -182,7 +181,6 @@ class NewInstitution extends React.Component {
           <ValidationInput
             id='form-input-latitude'
             name='latitude'
-            control={Input}
             label='Latitude'
             required
             onChange={this.handleChange}
@@ -192,7 +190,6 @@ class NewInstitution extends React.Component {
           <ValidationInput
             id='form-input-longitude'
             name='longitude'
-            control={Input}
             label='Longitude'
             onChange={this.handleChange}
             value={this.state.longitude}
@@ -205,7 +202,7 @@ class NewInstitution extends React.Component {
   }
   renderDescriptionStep() {
     return (
-      <ValidationInput
+      <Form.Field
         id='form-input-description'
         name='description'
         control={TextArea}
@@ -218,7 +215,7 @@ class NewInstitution extends React.Component {
   }
   renderVisitingPlanStep() {
     return (
-       <ValidationInput
+       <Form.Field
         id='form-input-visiting-plan'
         name='visitingPlan'
         control={TextArea}

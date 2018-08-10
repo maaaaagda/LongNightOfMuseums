@@ -7,10 +7,10 @@ const CustomForm = ({ getValues, validate, validateAll, showError, hideError, ch
 );
 
 
-const CustomInput = ({ error, isChanged, isUsed, required, label, type, control=Input, ref, maxLen, minLen, ...props }) => (
+const CustomInput = ({ error, isChanged, isUsed, required=false, label, type, controlElem=Input, ref, maxLen, minLen, ...props }) => (
   <Form.Field>
     <Form.Field
-      control={control}
+      control={controlElem}
       required={required}
       label={label}
       type={type}

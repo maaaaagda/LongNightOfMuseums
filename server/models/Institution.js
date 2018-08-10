@@ -9,7 +9,8 @@ const InstitutionSchema = new mongoose.Schema({
   longitude: String,
   latitude: String,
   photos: Array,
-  website: String
+  website: String,
+  town_id: Number
 });
 
 module.exports = mongoose.model('Institution', InstitutionSchema);

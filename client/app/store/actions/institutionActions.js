@@ -2,9 +2,20 @@ import * as types from './actionsTypes';
 import axios from 'axios';
 
 export function create_institution(institution) {
-  return {type:  types.CREATE_INSTITUTION, institution}
+  return dispatch => {
+    return axios.post('/api/institutions', institution)
+      .then(() => {
+        dispatch(create_institution_success(institution))
+      })
+      .catch(err => {
+        throw err;
+      })
+  }
 }
 
+export function create_institution_success(institution) {
+  return {type:  types.CREATE_INSTITUTION_SUCCESS, payload: institution}
+}
 
 export function load_institutions() {
   return dispatch => {
@@ -18,8 +29,8 @@ export function load_institutions() {
   }
 }
 
-export function load_institutions_success(admins) {
-  return {type:  types.LOAD_INSTITUTIONS_SUCCESS, payload: admins}
+export function load_institutions_success(institutions) {
+  return {type:  types.LOAD_INSTITUTIONS_SUCCESS, payload: institutions}
 }
 
 export function delete_institution(id) {

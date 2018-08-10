@@ -14,7 +14,6 @@ class Institutions extends React.Component {
       modal: ''
     };
     this.hideModal = this.hideModal.bind(this);
-    this.onClickSave = this.onClickSave.bind(this);
   }
 
   componentDidMount() {
@@ -62,10 +61,6 @@ class Institutions extends React.Component {
         this.showModal(errorModal);
       })
   }
-  onClickSave() {
-    this.props.dispatch(create_institution(this.state.institution))
-  }
-
   renderInstitutionsList() {
     let resultList = [];
     this.props.institutions.map((institution, index) => {
