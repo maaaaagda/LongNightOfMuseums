@@ -89,7 +89,7 @@ class Institutions extends React.Component {
                 <div className='vertical-center-outer'>
                   <Button basic color='red' onClick={this.ensureDeletingInstitution.bind(this, institution._id)}> Delete </Button>
                   <br/>
-                  <Button basic color='black'> Edit </Button>
+                  <Button basic color='black' as={Link} to={`/institutions/${institution._id}`}> Edit </Button>
                 </div>
               </Grid.Column>
             </Grid.Row>

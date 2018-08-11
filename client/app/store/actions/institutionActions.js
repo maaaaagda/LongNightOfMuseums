@@ -33,6 +33,13 @@ export function load_institutions_success(institutions) {
   return {type:  types.LOAD_INSTITUTIONS_SUCCESS, payload: institutions}
 }
 
+export function load_institution(id) {
+  return dispatch => {
+    return axios.get(`/api/institutions/${id}`);
+  }
+}
+
+
 export function delete_institution(id) {
   return dispatch => {
     return axios.delete(`/api/institutions/${id}`)
@@ -47,4 +54,21 @@ export function delete_institution(id) {
 
 export function delete_institution_success(id) {
   return {type:  types.DELETE_INSTITUTION_SUCCESS, payload: id}
+}
+
+
+export function update_institution(id, institutionData) {
+  return dispatch => {
+    return axios.put(`/api/institutions/${id}`, institutionData)
+      .then((res) => {
+        dispatch(update_institution_success(res.data))
+      })
+      .catch(err => {
+        throw err;
+      })
+  }
+}
+
+export function update_institution_success(id) {
+  return {type:  types.UPDATE_INSTITUTION_SUCCESS, payload: id}
 }

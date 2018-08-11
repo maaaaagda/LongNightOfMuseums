@@ -6,6 +6,15 @@ export default function institutionReducer(state = initialState.institutions, ac
     case types.CREATE_INSTITUTION_SUCCESS:
       return [...state, Object.assign({}, action.payload)];
 
+    case types.UPDATE_INSTITUTION_SUCCESS:
+      return  state.map(institution => {
+      if (institution._id === action.payload._id) {
+        return action.payload
+      } else {
+        return institution;
+      }
+    });
+
     case types.LOAD_INSTITUTIONS_SUCCESS:
       return Object.assign([], action.payload);
 

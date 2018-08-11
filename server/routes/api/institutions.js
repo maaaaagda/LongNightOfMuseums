@@ -1,6 +1,19 @@
 const Institution = require('../../models/Institution');
 
 module.exports = (app) => {
+  app.get('/api/institutions/:id', function (req, res, next) {
+    Institution.findById(req.params.id)
+      .exec()
+      .then((institution) => {
+        res.status(200)
+          .json(institution)
+      })
+      .catch((err) => res.status(401)
+        .json({
+          message:  err || "Institution not found"
+        }));
+  });
+
   app.get('/api/institutions', (req, res, next) => {
     Institution.find()
       .exec()
@@ -8,23 +21,6 @@ module.exports = (app) => {
       .catch((err) => next(err));
   });
 
-  app.get('/api/institutions/:id', function (req, res, next) {
-    Institution.findOne({ _id: req.params.id })
-      .exec()
-      .then((institution) => {
-        if (institution) {
-          res.status(200)
-            .json(institution)
-        } else {
-          res.status(401)
-            .json({
-              message:  "Institution not found"
-            })
-        }
-
-      })
-      .catch((err) => next(err));
-  });
   app.delete('/api/institutions/:id', function (req, res, next) {
     Institution.findOneAndRemove({ _id: req.params.id })
       .exec()
@@ -69,10 +65,9 @@ module.exports = (app) => {
         institution.set(req.body);
         return institution.save();
       })
-      .then(function() {
+      .then(function(updatedInstitution) {
           res.status(200)
-            .json({
-              success: true})
+            .json(updatedInstitution )
         })
       .catch(function(err){
         res.status(401)

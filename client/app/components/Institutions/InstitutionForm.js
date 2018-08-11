@@ -49,7 +49,17 @@ class InstitutionForm extends React.Component {
     this.setState({buttonNextSave: buttonNext})
   }
   componentWillReceiveProps(nextProps) {
-      this.setState({ isFormLoading: nextProps.isFormLoading });
+      this.setState({
+        isFormLoading: nextProps.isFormLoading,
+        name: nextProps.institutionData.name || '',
+        description: nextProps.institutionData.description || '',
+        website: nextProps.institutionData.website || '',
+        address: nextProps.institutionData.address || '',
+        latitude: nextProps.institutionData.latitude || '',
+        longitude: nextProps.institutionData.longitude || '',
+        town: nextProps.institutionData.town || 1,
+        visitingPlan: nextProps.institutionData.visiting_plan || ''
+      });
     }
   ensureSavingInstitution(e) {
     e.preventDefault();

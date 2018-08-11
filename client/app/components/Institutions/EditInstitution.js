@@ -1,19 +1,20 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import {Button, Segment} from 'semantic-ui-react';
 import {Link} from "react-router-dom";
-import {create_institution} from "../../store/actions/institutionActions";
+import {load_institution, update_institution} from "../../store/actions/institutionActions";
 import history from '../../helpers/history';
 import CustomModal from '../Helpers/Modals';
+import { connect } from 'react-redux';
 import InstitutionForm from './InstitutionForm';
 
-class NewInstitution extends React.Component {
+class EditInstitution extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       modal: '',
       institutionData: {},
-      isFormLoading: false
+      isFormLoading: true,
+      institutionId: ''
     };
     this.submitForm = this.submitForm.bind(this);
     this.showModal = this.showModal.bind(this);
@@ -22,16 +23,37 @@ class NewInstitution extends React.Component {
     this.submitSaving = this.submitSaving.bind(this);
   }
 
+  componentDidMount() {
+    this.setState({institutionId: this.props.match.params.institutionId}, () => {
+      this.props.dispatch(load_institution(this.state.institutionId))
+        .then((res) => {
+          this.setState({institutionData: res.data, isFormLoading: false})
+        })
+        .catch(() => {
+          let errorModal = (
+            <CustomModal
+              modalType='simple'
+              header='Fetching data failed'
+              content={err.response.data.message || 'Something went wrong, unable to fetch institution data'}
+              hideModal={this.hideModal}
+            />);
+          this.showModal(errorModal);
+          this.setState({isFormLoading: false})
+        });
+    });
+
+  }
+
   submitForm() {
     this.setState({isFormLoading: true});
-    this.props.dispatch(create_institution(this.state.institutionData))
+    this.props.dispatch(update_institution(this.state.institutionId, this.state.institutionData))
       .then(() => {
         this.setState({isFormLoading: false});
         let successModal = (
           <CustomModal
             modalType='simple'
             header='Operation completed successfully'
-            content='New institution created successfully.'
+            content='Institution updated successfully.'
             hideModal={this.hideModalSuccess}
           />);
         this.showModal(successModal);
@@ -42,7 +64,7 @@ class NewInstitution extends React.Component {
           <CustomModal
             modalType='simple'
             header='Operation failed'
-            content={err.response.data.message || 'Something went wrong, unable to create new institution'}
+            content={err.response.data.message || 'Something went wrong, unable to update institution'}
             hideModal={this.hideModal}
           />);
         this.showModal(errorModal);
@@ -52,8 +74,8 @@ class NewInstitution extends React.Component {
     let customModal = (
       <CustomModal
         modalType='confirm'
-        header='New institution'
-        content='Are you sure you want to create new institution?'
+        header='Update institution'
+        content='Are you sure you want to update this institution?'
         hideModal={this.hideModal}
         performAction={this.submitForm}
       />
@@ -61,7 +83,7 @@ class NewInstitution extends React.Component {
     this.setState({institutionData: institutionData}, () => {
       this.showModal(customModal);
     });
-    }
+  }
 
   showModal(modal) {
     this.setState({ modal: modal });
@@ -79,7 +101,7 @@ class NewInstitution extends React.Component {
     return (
       <div className='jumbotron-top-small'>
         <Segment.Group horizontal>
-          <Segment textAlign='left'><h1> New institution </h1></Segment>
+          <Segment textAlign='left'><h1> Edit institution </h1></Segment>
           <Segment textAlign='right' as={Link} to={"/institutions"}>
             <Button color='black'>
               Go back to all institutions
@@ -100,4 +122,4 @@ class NewInstitution extends React.Component {
 }
 
 
-export default connect(null)(NewInstitution);
+export default connect(null)(EditInstitution);

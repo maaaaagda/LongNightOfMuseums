@@ -23,7 +23,7 @@ import './helpers/delayPromise'
 import history from './helpers/history';
 import {restoreUserIfLogged} from "./store/actions/loginActions";
 import NewInstitution from "./components/Institutions/NewInstitution";
-
+import EditInstitution from './components/Institutions/EditInstitution';
 const store = configureStore();
 
 store.dispatch(restoreUserIfLogged());
@@ -34,6 +34,7 @@ render((
       <App>
         <Switch>
           <Route exact path="/" component={Home}/>
+          <Route path="/institutions/:institutionId" component={EditInstitution}/>
           <Route path="/institutions/new" component={NewInstitution}/>
           <Route path="/institutions" component={Institutions}/>
           <Route path="/counter" component={Counter}/>
