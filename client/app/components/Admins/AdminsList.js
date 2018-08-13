@@ -4,7 +4,6 @@ import {Table, Button, Segment} from 'semantic-ui-react';
 import {delete_admin, load_admins} from "../../store/actions/adminActions";
 import {Link} from "react-router-dom";
 import CustomModal from '../Helpers/Modals';
-import history from "../../helpers/history";
 
 class AdminsList extends React.Component
 {
@@ -74,7 +73,7 @@ class AdminsList extends React.Component
             <Table.Cell>{admin.created_at}</Table.Cell>
             <Table.Cell>{admin.email}</Table.Cell>
             <Table.Cell>
-              <Button inverted color='red' onClick={() => this.ensureDeletingUser(admin._id)}>
+              <Button basic color='red' onClick={() => this.ensureDeletingUser(admin._id)}>
                 Remove
               </Button>
             </Table.Cell>
@@ -100,9 +99,6 @@ class AdminsList extends React.Component
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                { this.renderAdminsList() }
-                { this.renderAdminsList() }
-                { this.renderAdminsList() }
                 { this.renderAdminsList() }
               </Table.Body>
             </Table>

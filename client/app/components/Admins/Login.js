@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import {connect} from 'react-redux';
 import {Button, Form, Container, Message, Transition, Segment} from 'semantic-ui-react';
 import { login } from '../../store/actions/loginActions';
+import history from "../../helpers/history";
 
 class Login extends React.Component {
   constructor(props){
@@ -33,7 +34,9 @@ class Login extends React.Component {
     };
     this.props.dispatch(login(loginData))
       .then(() => {
-        this.setState({isFormLoading: false})
+        this.setState({isFormLoading: false}, () => {
+          history.push('/institutions')
+        })
       })
       .catch(() => {
         this.setState({isFormLoading: false, isLoginError: true})

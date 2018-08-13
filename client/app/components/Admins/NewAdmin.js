@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {Form, Input, Button, Segment, Modal} from 'semantic-ui-react';
+import {Form, Input, Button, Segment} from 'semantic-ui-react';
 import {Link} from "react-router-dom";
 import {create_admin} from "../../store/actions/adminActions";
 import history from '../../helpers/history';

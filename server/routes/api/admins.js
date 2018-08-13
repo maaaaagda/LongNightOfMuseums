@@ -89,7 +89,7 @@ module.exports = (app) => {
           .json({
             success: true})
       })
-      .catch(function(err){
+      .catch((err) => {
         res.status(401)
           .json({
             message: err || "Validation failed. Given email and password aren't matching."

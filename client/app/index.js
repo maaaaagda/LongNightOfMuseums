@@ -10,20 +10,20 @@ import {
 } from 'react-router-dom';
 import App from './components/App/App';
 import NotFound from './components/App/NotFound';
-import Counter from './components/Home/Counter';
 import Institutions from './components/Institutions/InstitutionsList';
 import Home from './components/Home/Home'
-import Login from './components/Admin/Login'
-import RemindPassword from './components/Admin/RemindPassword';
-import ResetPassword from './components/Admin/ResetPassword';
-import Admins from './components/Admin/AdminsList'
-import NewAdmin from './components/Admin/NewAdmin'
+import Login from './components/Admins/Login'
+import RemindPassword from './components/Admins/RemindPassword';
+import ResetPassword from './components/Admins/ResetPassword';
+import Admins from './components/Admins/AdminsList'
+import NewAdmin from './components/Admins/NewAdmin'
 import './styles/styles.less';
 import './helpers/delayPromise'
 import history from './helpers/history';
 import {restoreUserIfLogged} from "./store/actions/loginActions";
 import NewInstitution from "./components/Institutions/NewInstitution";
 import EditInstitution from './components/Institutions/EditInstitution';
+import CitiesList from "./components/Cities/CitiesList";
 const store = configureStore();
 
 store.dispatch(restoreUserIfLogged());
@@ -37,7 +37,7 @@ render((
           <Route path="/institutions/:institutionId" component={EditInstitution}/>
           <Route path="/institutions/new" component={NewInstitution}/>
           <Route path="/institutions" component={Institutions}/>
-          <Route path="/counter" component={Counter}/>
+          <Route path="/cities" component={CitiesList}/>
           <Route path="/login" component={Login}/>
           <Route path="/remindpassword" component={RemindPassword}/>
           <Route path="/resetpassword/:adminId/:recoveryString/" component={ResetPassword}/>

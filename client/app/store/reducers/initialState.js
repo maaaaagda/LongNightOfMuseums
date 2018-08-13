@@ -6,5 +6,6 @@ export default {
     email: ''
   },
   institutions: [],
-  admins: []
+  admins: [],
+  cities: []
 }

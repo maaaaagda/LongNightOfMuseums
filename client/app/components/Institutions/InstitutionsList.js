@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {load_institutions, create_institution, delete_institution} from "../../store/actions/institutionActions";
+import {load_institutions, delete_institution} from "../../store/actions/institutionActions";
 import {Card, Image, Grid, Button, Segment} from 'semantic-ui-react';
 import {Link} from "react-router-dom";
 import CustomModal from "../Helpers/Modals";
@@ -17,7 +17,10 @@ class Institutions extends React.Component {
   }
 
   componentDidMount() {
-    this.props.dispatch(load_institutions());
+    this.props.dispatch(load_institutions())
+      .then((res) => {
+        console.log(res)
+      });
   }
   ensureDeletingInstitution(id) {
     let confirmModal = (

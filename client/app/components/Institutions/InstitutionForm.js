@@ -17,8 +17,8 @@ class InstitutionForm extends React.Component {
       address: this.props.institutionData.address || '',
       latitude: this.props.institutionData.latitude || '',
       longitude: this.props.institutionData.longitude || '',
-      town: this.props.institutionData.town || 1,
-      towns: [
+      city: this.props.institutionData.city || 1,
+      cities: [
         { key: '1', text: 'Wrocław', value: 1 },
         { key: '2', text: 'Poznań', value: 2 },
         { key: '3', text: 'Warszawa', value: 3 }
@@ -57,7 +57,7 @@ class InstitutionForm extends React.Component {
         address: nextProps.institutionData.address || '',
         latitude: nextProps.institutionData.latitude || '',
         longitude: nextProps.institutionData.longitude || '',
-        town: nextProps.institutionData.town || 1,
+        city: nextProps.institutionData.cities || 1,
         visitingPlan: nextProps.institutionData.visiting_plan || ''
       });
     }
@@ -68,7 +68,7 @@ class InstitutionForm extends React.Component {
       let institution_data = {
         name: this.state.name,
         website: this.state.website,
-        town_id: this.state.town,
+        city_id: this.state.city,
         address: this.state.address,
         description: this.state.description,
         visiting_plan: this.state.visitingPlan,
@@ -116,14 +116,14 @@ class InstitutionForm extends React.Component {
             value={this.state.website}
           />
           <Form.Field
-            id='form-input-town'
-            name='town'
+            id='form-input-city'
+            name='city'
             control={Select}
-            label='Town'
+            label='City'
             required
             onChange={this.handleChange}
-            options={this.state.towns}
-            value={this.state.town}
+            options={this.state.cities}
+            value={this.state.city}
             validations={[required]}
           />
         </Form.Group>

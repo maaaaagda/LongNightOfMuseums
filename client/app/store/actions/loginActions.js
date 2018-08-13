@@ -1,7 +1,6 @@
 import * as types from './actionsTypes';
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
-import history from '../../helpers/history';
 import moment from  'moment';
 
 export function loginSuccess(admin) {
@@ -25,7 +24,6 @@ export function login(loginData) {
       })
       .then((res) => {
         localStorage.setItem('token', res.data.token);
-        history.push('/institutions')
       })
      .catch(err => {
         throw err;
