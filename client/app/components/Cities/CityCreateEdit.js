@@ -7,18 +7,17 @@ class CityCreateEdit extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      buttonSaveDisabled: !this.props.cityName,
+      buttonSaveDisabled: true,
       isError: false,
       cityName: this.props.cityName || '',
       cityId: this.props.cityId || ''
     };
     this.handleChange = this.handleChange.bind(this)
   }
-
   handleChange (e){
     this.setState({
       [e.target.name]: e.target.value,
-      buttonSaveDisabled: e.target.value == ''
+      buttonSaveDisabled: e.target.value === '' || e.target.value === this.props.cityName
     })
   }
 
@@ -51,7 +50,7 @@ class CityCreateEdit extends React.Component {
               color='green'
               inverted
               disabled={this.state.buttonSaveDisabled}
-              onClick={this.props.handleSubmit(this.state.cityName, this.state.cityId)}
+              onClick={() => {this.props.handleSubmit(this.state.cityName, this.state.cityId)}}
             >
               Save
             </Button>
@@ -64,7 +63,7 @@ CityCreateEdit.propTypes = {
   handleSubmit: PropTypes.func,
   headerName: PropTypes.string,
   cityName: PropTypes.string,
-  cityId: PropTypes.number
+  cityId: PropTypes.string
 };
 
 export default connect(null)(CityCreateEdit)
