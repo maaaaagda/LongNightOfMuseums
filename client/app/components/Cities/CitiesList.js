@@ -4,7 +4,6 @@ import {create_city, delete_city, load_cities, update_city} from "../../store/ac
 import {Button, Segment, Table, Popup, Icon} from "semantic-ui-react";
 import CustomModal from "../Helpers/Modals";
 import CityCreateEdit from "./CityCreateEdit";
-import PropTypes from "prop-types";
 
 class CitiesList extends React.Component {
   constructor(props) {
@@ -171,7 +170,7 @@ class CitiesList extends React.Component {
               basic
               color='red'
               onClick={() => this.ensureDeletingCity(city._id, city.name)}
-              disabled={city.institutions_count == 0}>
+              disabled={city.institutions_count != 0}>
               Remove
             </Button>
             <Button

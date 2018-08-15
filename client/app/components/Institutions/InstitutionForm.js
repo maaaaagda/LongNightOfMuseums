@@ -17,12 +17,8 @@ class InstitutionForm extends React.Component {
       address: this.props.institutionData.address || '',
       latitude: this.props.institutionData.latitude || '',
       longitude: this.props.institutionData.longitude || '',
-      city: this.props.institutionData.city || 1,
-      cities: [
-        { key: '1', text: 'Wrocław', value: 1 },
-        { key: '2', text: 'Poznań', value: 2 },
-        { key: '3', text: 'Warszawa', value: 3 }
-      ],
+      city: this.props.institutionData.city_id || '',
+      cities: [],
       visitingPlan: this.props.institutionData.visitingPlan || '',
       currentStep: 1,
       buttonPreviousDisabled: true,
@@ -32,6 +28,7 @@ class InstitutionForm extends React.Component {
     this.goToTheNextStep = this.goToTheNextStep.bind(this);
     this.goToThePreviousStep = this.goToThePreviousStep.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleCitySelectChange = this.handleCitySelectChange.bind(this);
   }
 
   componentDidMount() {
@@ -46,7 +43,7 @@ class InstitutionForm extends React.Component {
         <Icon name='right arrow' />
       </Button>
     );
-    this.setState({buttonNextSave: buttonNext})
+    this.setState({buttonNextSave: buttonNext, cities: this.manageCitiesList(this.props.cities)})
   }
   componentWillReceiveProps(nextProps) {
       this.setState({
@@ -55,12 +52,30 @@ class InstitutionForm extends React.Component {
         description: nextProps.institutionData.description || '',
         website: nextProps.institutionData.website || '',
         address: nextProps.institutionData.address || '',
+        city: nextProps.institutionData.city_id,
         latitude: nextProps.institutionData.latitude || '',
         longitude: nextProps.institutionData.longitude || '',
-        city: nextProps.institutionData.cities || 1,
         visitingPlan: nextProps.institutionData.visiting_plan || ''
+      }, () => {
+        this.setState({cities: this.manageCitiesList(nextProps.cities)})
       });
     }
+  manageCitiesList(cities) {
+    let citiesSelect = [];
+    cities.map(city => {
+      let result = {
+        key: city._id,
+        text: city.name,
+        value: city._id
+      };
+      citiesSelect.push(result);
+    });
+    if(!this.state.city) {
+      let city = citiesSelect.length > 0 ? citiesSelect[0].value : '';
+      this.setState({city: city});
+    }
+    return citiesSelect;
+  }
   ensureSavingInstitution(e) {
     e.preventDefault();
     this.form.validateAll();
@@ -82,6 +97,11 @@ class InstitutionForm extends React.Component {
   handleChange (e){
     this.setState({
       [e.target.name]: e.target.value
+    })
+  }
+  handleCitySelectChange (e, {name, value}){
+    this.setState({
+      [name]: value
     })
   }
   isFormValid(form) {
@@ -120,11 +140,9 @@ class InstitutionForm extends React.Component {
             name='city'
             control={Select}
             label='City'
-            required
-            onChange={this.handleChange}
+            onChange={this.handleCitySelectChange}
             options={this.state.cities}
             value={this.state.city}
-            validations={[required]}
           />
         </Form.Group>
         <ValidationInput
@@ -298,7 +316,7 @@ InstitutionForm.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        state: state
+        cities: state.cities
     }
 }
 

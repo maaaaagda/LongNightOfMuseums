@@ -69,6 +69,6 @@ export function update_institution(id, institutionData) {
   }
 }
 
-export function update_institution_success(id) {
-  return {type:  types.UPDATE_INSTITUTION_SUCCESS, payload: id}
+export function update_institution_success(institution) {
+  return {type:  types.UPDATE_INSTITUTION_SUCCESS, payload: institution}
 }

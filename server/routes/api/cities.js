@@ -1,18 +1,11 @@
 const City = require('../../models/City');
-const Institution = require('../../models/Institution')
 
 module.exports = (app) => {
   app.get('/api/cities', (req, res) => {
     City.find()
       .exec()
       .then((cities) => {
-        let citiesWithInstitutionsCount = cities.map((city, i) => {
-          let cityWithInstitutionCount = Object.assign(city._doc, {
-            institutions_count: i * i
-          });
-          return cityWithInstitutionCount
-        });
-        res.json(citiesWithInstitutionsCount);
+        res.json(cities);
       })
       .catch((err) => {
         res.status(401)
@@ -27,9 +20,7 @@ module.exports = (app) => {
 
     city.save()
       .then((city) => {
-        let cityWithInstitutionCount =  Object.assign(city._doc, {
-          institutions_count: 0});
-        res.json(cityWithInstitutionCount)
+        res.json(city)
       })
       .catch((err) => {
         res.status(401)
@@ -39,22 +30,31 @@ module.exports = (app) => {
       });
   });
 
-  app.delete('/api/cities/:id', function (req, res, next) {
-    City.findOneAndRemove({ _id: req.params.id })
+  app.delete('/api/cities/:id', function (req, res) {
+    City.findById(req.params.id)
       .exec()
       .then((city) => {
         if (city) {
-          res.status(200)
-            .json({
-              success: true})
+          if (city.institutions_count === 0) {
+            return City.deleteOne({_id: city._id})
+          } else {
+            return Promise.reject('Can not delete city assigned to at least one institution.')
+          }
         } else {
-          res.status(401)
-            .json({
-              message: "City not found"
-            })
+          return Promise.reject("City not found")
         }
       })
-      .catch((err) => next(err));
+      .then(() =>  {
+        res.status(200)
+          .json({
+            success: true})
+      })
+      .catch((err) => {
+        res.status(401)
+          .json({
+            message: err || "Something went wrong..."
+          })
+      });
   });
 
   app.put('/api/cities/:id', (req, res) => {
@@ -65,14 +65,7 @@ module.exports = (app) => {
         return city.save()
       })
       .then((city) => {
-        return Promise.all([city, Institution.find({city_id: city._id})]);
-      })
-      .then((results) => {
-        let city = results[0];
-        let institutionsInCity = results[1];
-        let cityWithInstitutionCount =  Object.assign(city._doc, {
-          institutions_count: institutionsInCity.length});
-        res.json(cityWithInstitutionCount);
+        res.json(city);
       })
       .catch((err) => {
         res.status(401)

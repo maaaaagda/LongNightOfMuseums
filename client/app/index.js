@@ -24,9 +24,11 @@ import {restoreUserIfLogged} from "./store/actions/loginActions";
 import NewInstitution from "./components/Institutions/NewInstitution";
 import EditInstitution from './components/Institutions/EditInstitution';
 import CitiesList from "./components/Cities/CitiesList";
+import {load_cities} from "./store/actions/cityActions";
 const store = configureStore();
 
 store.dispatch(restoreUserIfLogged());
+store.dispatch(load_cities());
 
 render((
   <Provider store={store}>
@@ -34,8 +36,8 @@ render((
       <App>
         <Switch>
           <Route exact path="/" component={Home}/>
-          <Route path="/institutions/:institutionId" component={EditInstitution}/>
           <Route path="/institutions/new" component={NewInstitution}/>
+          <Route path="/institutions/:institutionId" component={EditInstitution}/>
           <Route path="/institutions" component={Institutions}/>
           <Route path="/cities" component={CitiesList}/>
           <Route path="/login" component={Login}/>

@@ -18,8 +18,7 @@ class Institutions extends React.Component {
 
   componentDidMount() {
     this.props.dispatch(load_institutions())
-      .then((res) => {
-        console.log(res)
+      .then(() => {
       });
   }
   ensureDeletingInstitution(id) {

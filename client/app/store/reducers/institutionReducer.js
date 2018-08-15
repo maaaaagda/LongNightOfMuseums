@@ -8,7 +8,7 @@ export default function institutionReducer(state = initialState.institutions, ac
 
     case types.UPDATE_INSTITUTION_SUCCESS:
       return  state.map(institution => {
-        if (institution._id === action.payload._id) {
+        if (institution._id == action.payload._id) {
           return action.payload
         } else {
           return institution;
