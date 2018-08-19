@@ -1,7 +1,7 @@
 export const CREATE_INSTITUTION = 'CREATE_INSTITUTION';
 
 
-export const LOGIN = 'LOGIN';
+export const LOG_OUT_SUCCESS = 'LOG_OUT_SUCCESS';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 
 export const LOAD_ADMINS = 'LOAD_ADMINS';

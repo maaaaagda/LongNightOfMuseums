@@ -2,6 +2,7 @@ import * as types from './actionsTypes';
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 import moment from  'moment';
+import history from '../../helpers/history';
 
 export function loginSuccess(admin) {
    if(admin.token) {
@@ -12,6 +13,12 @@ export function loginSuccess(admin) {
   return {type:  types.LOGIN_SUCCESS, payload: admin}
 }
 
+export function logOutSuccess() {
+  localStorage.clear();
+  return dispatch => {
+    return {type: types.LOG_OUT_SUCCESS, payload: {}}
+  }
+}
 export function login(loginData) {
   return dispatch => {
     return axios.post('/api/login', loginData)
@@ -41,10 +48,10 @@ export function restoreUserIfLogged () {
       let timeNow = moment().format('X');
       if (timeNow <= expirationTime) {
         dispatch(loginSuccess(decodedToken))
-        //history.push('/')
       } else {
-        console.log('Session  expired')
-        //history.push('/login')
+        console.log('Session  expired');
+        history.push('/');
+        dispatch(logOutSuccess())
       }
     }
   }
