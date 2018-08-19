@@ -57,6 +57,30 @@ module.exports = (app) => {
       });
   });
 
+  app.put('/api/cities/namecheck', (req, res) => {
+    let cityName = req.body.name;
+    City.findOne({name: cityName})
+      .exec()
+      .then((city) => {
+        if (!city) {
+          return Promise.resolve();
+        } else {
+          return Promise.reject("City name already used")
+        }
+      })
+      .then(() =>  {
+        res.status(200)
+          .json({
+            success: true})
+      })
+      .catch((err) => {
+        res.status(401)
+          .json({
+            message: err || "Something went wrong..."
+          })
+      });
+  });
+
   app.put('/api/cities/:id', (req, res) => {
     City.findById(req.params.id)
       .exec()

@@ -2,6 +2,7 @@ import React from 'react'
 import {Button, Form, Header, Modal} from 'semantic-ui-react'
 import PropTypes from "prop-types";
 import connect from "react-redux/es/connect/connect";
+import {check_city_name} from "../../store/actions/cityActions";
 
 class CityCreateEdit extends React.Component {
   constructor(props) {
@@ -18,7 +19,14 @@ class CityCreateEdit extends React.Component {
     this.setState({
       [e.target.name]: e.target.value,
       buttonSaveDisabled: e.target.value === '' || e.target.value === this.props.cityName
-    })
+    });
+    this.props.dispatch(check_city_name(e.target.value.trim()))
+      .then(() => {
+        this.setState({isError: false, buttonSaveDisabled: false})
+      })
+      .catch(() => {
+        this.setState({isError: true, buttonSaveDisabled: true})
+      })
   }
 
   render() {

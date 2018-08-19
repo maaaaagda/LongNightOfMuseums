@@ -65,3 +65,9 @@ export function update_city(id, cityName) {
 export function update_city_success(id) {
   return {type:  types.UPDATE_CITY_SUCCESS, payload: id}
 }
+
+export function check_city_name(cityName) {
+  return dispatch => {
+    return axios.put(`/api/cities/namecheck`, {name: cityName});
+  }
+}
