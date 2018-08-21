@@ -25,6 +25,7 @@ import NewInstitution from "./components/Institutions/NewInstitution";
 import EditInstitution from './components/Institutions/EditInstitution';
 import CitiesList from "./components/Cities/CitiesList";
 import {load_cities} from "./store/actions/cityActions";
+import Redirect from "react-router-dom/es/Redirect";
 const store = configureStore();
 
 store.dispatch(restoreUserIfLogged());
@@ -36,15 +37,33 @@ render((
       <App>
         <Switch>
           <Route exact path="/" component={Home}/>
-          <Route path="/institutions/new" component={NewInstitution}/>
-          <Route path="/institutions/:institutionId" component={EditInstitution}/>
-          <Route path="/institutions" component={Institutions}/>
-          <Route path="/cities" component={CitiesList}/>
+          <Route path="/institutions/new" render={() => (
+            !store.getState().admin.isLoggedIn ? (
+              <Redirect to="/login"/> ) : (<NewInstitution />
+            ))}/>/>
+          <Route path="/institutions/:institutionId" render={() => (
+            !store.getState().admin.isLoggedIn ? (
+              <Redirect to="/login"/> ) : (<EditInstitution />
+            ))}/>
+          <Route path="/institutions" render={() => (
+            !store.getState().admin.isLoggedIn ? (
+              <Redirect to="/login"/> ) : (<Institutions />
+            ))}/>
+          <Route path="/cities" render={() => (
+            !store.getState().admin.isLoggedIn ? (
+              <Redirect to="/login"/> ) : (<CitiesList />
+            ))}/>
           <Route path="/login" component={Login}/>
           <Route path="/remindpassword" component={RemindPassword}/>
           <Route path="/resetpassword/:adminId/:recoveryString/" component={ResetPassword}/>
-          <Route path="/admins/new" component={NewAdmin}/>
-          <Route path="/admins" component={Admins}/>
+          <Route path="/admins/new" render={() => (
+            !store.getState().admin.isLoggedIn ? (
+              <Redirect to="/login"/> ) : (<NewAdmin />
+            ))}/>
+          <Route path="/admins" render={() => (
+            !store.getState().admin.isLoggedIn ? (
+              <Redirect to="/login"/> ) : (<Admins />
+            ))}/>
           <Route component={NotFound}/>
         </Switch>
       </App>

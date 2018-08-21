@@ -15,9 +15,7 @@ export function loginSuccess(admin) {
 
 export function logOutSuccess() {
   localStorage.clear();
-  return dispatch => {
-    return {type: types.LOG_OUT_SUCCESS, payload: {}}
-  }
+  return {type: types.LOG_OUT_SUCCESS, payload: {}}
 }
 export function login(loginData) {
   return dispatch => {
