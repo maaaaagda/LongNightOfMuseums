@@ -12,11 +12,13 @@ const Storage = multer.diskStorage({
 
 const upload = multer({
   storage: Storage
-})//.array("selectedFile", 10);
+})
 
 module.exports = (app) => {
-  app.post('/api/Upload', upload.array('selectedFile', 10), (req, res) => {
-    console.log(req.files, req.body);
-    res.send();
+  app.post('/api/uploadinstitutionphotos', upload.array('InstitutionPhoto', 10), (req, res) => {
+    let imagesLinks = req.files.map(image => {
+      return image.destination;
+    });
+    res.json(imagesLinks);
   });
 };

@@ -23,7 +23,8 @@ class InstitutionForm extends React.Component {
       visitingPlan: this.props.institutionData.visitingPlan || '',
       currentStep: 1,
       buttonPreviousDisabled: true,
-      buttonNextSave: ''
+      buttonNextSave: '',
+      numberOfSteps: 4
     };
     this.ensureSavingInstitution = this.ensureSavingInstitution.bind(this);
     this.goToTheNextStep = this.goToTheNextStep.bind(this);
@@ -45,7 +46,7 @@ class InstitutionForm extends React.Component {
         <Icon name='right arrow' />
       </Button>
     );
-    this.setState({buttonNextSave: buttonNext, cities: this.manageCitiesList(this.props.cities)})
+    this.setState({buttonNextSave: buttonNext, cities: this.manageCitiesList(this.props.cities)});
   }
   componentWillReceiveProps(nextProps) {
       this.setState({
@@ -79,28 +80,27 @@ class InstitutionForm extends React.Component {
     return citiesSelect;
   }
   ensureSavingInstitution(e) {
-    console.log(e.target.files);
      e.preventDefault();
-    // this.form.validateAll();
-    // if (this.isFormValid(this.form)) {
-    //   let institution_data = {
-    //     name: this.state.name,
-    //     website: this.state.website,
-    //     city_id: this.state.city,
-    //     address: this.state.address,
-    //     description: this.state.description,
-    //     visiting_plan: this.state.visitingPlan,
-    //     latitude: this.state.latitude,
-    //     longitude: this.state.longitude,
-    //     photos: this.state.photos
-    //   };
-    let formData = new FormData();
+    this.form.validateAll();
+    if (this.isFormValid(this.form)) {
+      let institution_data = {
+        name: this.state.name,
+        website: this.state.website,
+        city_id: this.state.city,
+        address: this.state.address,
+        description: this.state.description,
+        visiting_plan: this.state.visitingPlan,
+        latitude: this.state.latitude,
+        longitude: this.state.longitude,
+        photos: this.state.photos
+      };
+      let institutionPhotos = new FormData();
 
-    formData.append('description', 'heelloo');
-    this.state.photos.forEach(photo => {
-      formData.append('selectedFile', photo);
-    });
-    this.props.submitSaving(formData);
+      this.state.photos.forEach(photo => {
+        institutionPhotos.append('InstitutionPhoto', photo);
+      });
+      this.props.submitSaving(institutionPhotos, institution_data);
+    }
   }
 
   handleChange (e){
@@ -125,6 +125,7 @@ class InstitutionForm extends React.Component {
   }
 
   onDrop(picture) {
+    console.log(picture);
     this.setState({
       photos: this.state.photos.concat(picture),
     });
@@ -224,7 +225,7 @@ class InstitutionForm extends React.Component {
       withIcon={true}
       withPreview={true}
       buttonText='Choose images'
-      name='selectedFile'
+      name='InstitutionPhoto'
       onChange={this.onDrop}
       imgExtension={['.jpg', '.gif', '.png', '.gif']}
       maxFileSize={5242880}
@@ -234,7 +235,7 @@ class InstitutionForm extends React.Component {
     let step = 1;
     switch (this.state.currentStep) {
       case 1:
-        step = this.renderPhotosStep(); //this.renderGeneralInfoStep();
+        step = this.renderGeneralInfoStep();
         break;
       case 2:
         step = this.renderDescriptionStep();
@@ -242,6 +243,10 @@ class InstitutionForm extends React.Component {
       case 3:
         step = this.renderVisitingPlanStep();
         break;
+      case 4:
+        step = this.renderPhotosStep();
+        break;
+
     }
     return step;
   }
@@ -266,7 +271,7 @@ class InstitutionForm extends React.Component {
   }
 
   handleCurrentStepChange() {
-    if (this.state.currentStep !== 3) {
+    if (this.state.currentStep !== this.state.numberOfSteps) {
       let buttonNext = (
         <Button
           icon labelPosition='right'
@@ -301,13 +306,30 @@ class InstitutionForm extends React.Component {
 
   render() {
     return (
-    <div>
-
-      <form onSubmit={this.ensureSavingInstitution}>
+      <ValidationForm
+        ref={form => {
+          this.form = form
+        }}
+        loading={this.state.isFormLoading}>
         {this.renderFormStep()}
-        <button type="submit">Submit</button>
-      </form>
-      </div>
+        <div className='text-center'>
+          <br/>
+          <div className='text-center'>
+            <Button
+              icon
+              labelPosition='left'
+              secondary
+              floated='left'
+              onClick={this.goToThePreviousStep}
+              disabled={this.state.buttonPreviousDisabled}
+            >
+              Back
+              <Icon name='left arrow'/>
+            </Button>
+            {this.state.buttonNextSave}
+          </div>
+        </div>
+      </ValidationForm>
     )
   }
 
