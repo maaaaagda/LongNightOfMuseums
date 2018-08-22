@@ -7,6 +7,7 @@ const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const morgan = require('morgan');
+const bodyParser = require('body-parser');
 
 const config = require('../config/config');
 const server_config = require('./libs/config');
@@ -20,21 +21,25 @@ process.env['JWT_SECRET'] = 'shhhuwebubifoewjnfiqio789715';
 // Configuration
 // ================================================================================================
 
+
+
 // Set up Mongoose
 mongoose.connect(isDev ? config.db_dev : config.db, { useNewUrlParser: true });
 mongoose.Promise = global.Promise;
 
 const app = express();
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(bodyParser.json({limit: "50mb"}));
+app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
 app.use(morgan('dev'));
+
 
 app.all('/api/*', function(req, res, next) {
   if (req.url === '/api/'
     || req.url === '/api/login'
     || req.url === '/api/remindpassword'
     || req.url ==='/api/resetpassword'
-    || (req.url === '/api/cities' && req.method === 'GET')) {
+    || (req.url === '/api/cities' && req.method === 'GET')
+    ||  req.url === '/api/Upload/') {
     return next();
   }
   if (!req.headers.authorization) {

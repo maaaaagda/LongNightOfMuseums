@@ -1,6 +1,7 @@
 const Institution = require('../../models/Institution');
 const City = require('../../models/City');
 
+
 module.exports = (app) => {
   app.get('/api/institutions/:id', function (req, res) {
     Institution.findById(req.params.id)

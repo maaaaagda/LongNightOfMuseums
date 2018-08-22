@@ -3,13 +3,15 @@ import axios from 'axios';
 
 export function create_institution(institution) {
   return dispatch => {
-    return axios.post('/api/institutions', institution)
-      .then(() => {
-        dispatch(create_institution_success(institution))
-      })
-      .catch(err => {
-        throw err;
-      })
+    // return axios.post('/api/institutions', institution)
+    //   .then(() => {
+    //     dispatch(create_institution_success(institution))
+    //   })
+    //   .catch(err => {
+    //     throw err;
+    //   })
+
+    return axios.post('/api/Upload', institution)
   }
 }
 

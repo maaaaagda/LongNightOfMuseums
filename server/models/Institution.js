@@ -13,4 +13,5 @@ const InstitutionSchema = new mongoose.Schema({
   city_id: String
 });
 
+
 module.exports = mongoose.model('Institution', InstitutionSchema);

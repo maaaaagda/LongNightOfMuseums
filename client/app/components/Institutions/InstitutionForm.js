@@ -4,7 +4,7 @@ import {Button, Form, Icon, Select, TextArea} from "semantic-ui-react";
 import {ValidationForm, ValidationInput} from "../Helpers/FormElementsWithValidation";
 import {required} from "../Helpers/FormValidationRules";
 import PropTypes from "prop-types";
-
+import ImageUploader from 'react-images-upload';
 
 class InstitutionForm extends React.Component {
   constructor(props) {
@@ -18,6 +18,7 @@ class InstitutionForm extends React.Component {
       latitude: this.props.institutionData.latitude || '',
       longitude: this.props.institutionData.longitude || '',
       city: this.props.institutionData.city_id || '',
+      photos: [],
       cities: [],
       visitingPlan: this.props.institutionData.visitingPlan || '',
       currentStep: 1,
@@ -29,6 +30,7 @@ class InstitutionForm extends React.Component {
     this.goToThePreviousStep = this.goToThePreviousStep.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleCitySelectChange = this.handleCitySelectChange.bind(this);
+    this.onDrop = this.onDrop.bind(this);
   }
 
   componentDidMount() {
@@ -77,21 +79,28 @@ class InstitutionForm extends React.Component {
     return citiesSelect;
   }
   ensureSavingInstitution(e) {
-    e.preventDefault();
-    this.form.validateAll();
-    if (this.isFormValid(this.form)) {
-      let institution_data = {
-        name: this.state.name,
-        website: this.state.website,
-        city_id: this.state.city,
-        address: this.state.address,
-        description: this.state.description,
-        visiting_plan: this.state.visitingPlan,
-        latitude: this.state.latitude,
-        longitude: this.state.longitude
-      };
-      this.props.submitSaving(institution_data);
-    }
+    console.log(e.target.files);
+     e.preventDefault();
+    // this.form.validateAll();
+    // if (this.isFormValid(this.form)) {
+    //   let institution_data = {
+    //     name: this.state.name,
+    //     website: this.state.website,
+    //     city_id: this.state.city,
+    //     address: this.state.address,
+    //     description: this.state.description,
+    //     visiting_plan: this.state.visitingPlan,
+    //     latitude: this.state.latitude,
+    //     longitude: this.state.longitude,
+    //     photos: this.state.photos
+    //   };
+    let formData = new FormData();
+
+    formData.append('description', 'heelloo');
+    this.state.photos.forEach(photo => {
+      formData.append('selectedFile', photo);
+    });
+    this.props.submitSaving(formData);
   }
 
   handleChange (e){
@@ -115,6 +124,11 @@ class InstitutionForm extends React.Component {
     return isFormValid;
   }
 
+  onDrop(picture) {
+    this.setState({
+      photos: this.state.photos.concat(picture),
+    });
+  }
   renderGeneralInfoStep() {
     return (
       <div>
@@ -205,12 +219,22 @@ class InstitutionForm extends React.Component {
       />
     )
   }
-
+  renderPhotosStep() {
+    return <ImageUploader
+      withIcon={true}
+      withPreview={true}
+      buttonText='Choose images'
+      name='selectedFile'
+      onChange={this.onDrop}
+      imgExtension={['.jpg', '.gif', '.png', '.gif']}
+      maxFileSize={5242880}
+    />
+  }
   renderFormStep() {
     let step = 1;
     switch (this.state.currentStep) {
       case 1:
-        step = this.renderGeneralInfoStep();
+        step = this.renderPhotosStep(); //this.renderGeneralInfoStep();
         break;
       case 2:
         step = this.renderDescriptionStep();
@@ -277,30 +301,13 @@ class InstitutionForm extends React.Component {
 
   render() {
     return (
-      <ValidationForm
-        ref={form => {
-          this.form = form
-        }}
-        loading={this.state.isFormLoading}>
+    <div>
+
+      <form onSubmit={this.ensureSavingInstitution}>
         {this.renderFormStep()}
-        <div className='text-center'>
-          <br/>
-          <div className='text-center'>
-            <Button
-              icon
-              labelPosition='left'
-              secondary
-              floated='left'
-              onClick={this.goToThePreviousStep}
-              disabled={this.state.buttonPreviousDisabled}
-            >
-              Back
-              <Icon name='left arrow'/>
-            </Button>
-            {this.state.buttonNextSave}
-          </div>
-        </div>
-      </ValidationForm>
+        <button type="submit">Submit</button>
+      </form>
+      </div>
     )
   }
 
