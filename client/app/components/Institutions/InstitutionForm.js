@@ -125,7 +125,6 @@ class InstitutionForm extends React.Component {
   }
 
   onDrop(picture) {
-    console.log(picture);
     this.setState({
       photos: this.state.photos.concat(picture),
     });
@@ -227,7 +226,7 @@ class InstitutionForm extends React.Component {
       buttonText='Choose images'
       name='InstitutionPhoto'
       onChange={this.onDrop}
-      imgExtension={['.jpg', '.gif', '.png', '.gif']}
+      imgExtension={['.jpg', '.png']}
       maxFileSize={5242880}
     />
   }

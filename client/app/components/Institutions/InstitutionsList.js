@@ -4,6 +4,7 @@ import {load_institutions, delete_institution} from "../../store/actions/institu
 import {Card, Image, Grid, Button, Segment} from 'semantic-ui-react';
 import {Link} from "react-router-dom";
 import CustomModal from "../Helpers/Modals";
+import {Icon} from "semantic-ui-react";
 
 class Institutions extends React.Component {
   constructor(props) {
@@ -63,6 +64,15 @@ class Institutions extends React.Component {
         this.showModal(errorModal);
       })
   }
+  renderImage(institution) {
+    let image;
+    if(institution.photos.length > 0) {
+      image = <Image src={institution.photos[0].id} size={'huge'}/>
+    } else {
+      image = <Icon name='university' size={'massive'}/>;
+    }
+    return image;
+  }
   renderInstitutionsList() {
     let resultList = [];
     this.props.institutions.map((institution, index) => {
@@ -71,7 +81,9 @@ class Institutions extends React.Component {
           <Grid celled='internally'>
             <Grid.Row>
               <Grid.Column tablet={7} computer={5} only='computer tablet'>
-                <Image src={require('../../assets/footer_picture_2.jpg')} size={'huge'}/>
+                  <div className={"text-center"}>
+                    {this.renderImage(institution)}
+                  </div>
               </Grid.Column>
               <Grid.Column mobile={11} tablet={6} computer={7}>
                 <Card.Content>

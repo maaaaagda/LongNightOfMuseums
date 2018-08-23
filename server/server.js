@@ -39,7 +39,7 @@ app.all('/api/*', function(req, res, next) {
     || req.url === '/api/remindpassword'
     || req.url ==='/api/resetpassword'
     || (req.url === '/api/cities' && req.method === 'GET')
-    ||  req.url === '/api/Upload/') {
+    ||  req.url === '/api/deleteinstitutionphotos/') {
     return next();
   }
   if (!req.headers.authorization) {

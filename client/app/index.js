@@ -41,9 +41,9 @@ render((
             !store.getState().admin.isLoggedIn ? (
               <Redirect to="/login"/> ) : (<NewInstitution />
             ))}/>/>
-          <Route path="/institutions/:institutionId" render={() => (
+          <Route path="/institutions/:institutionId" render={(props) => (
             !store.getState().admin.isLoggedIn ? (
-              <Redirect to="/login"/> ) : (<EditInstitution />
+              <Redirect to="/login"/> ) : (<EditInstitution {...props} />
             ))}/>
           <Route path="/institutions" render={() => (
             !store.getState().admin.isLoggedIn ? (
