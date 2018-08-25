@@ -28,15 +28,51 @@ module.exports = (app) => {
   });
 
   app.put('/api/deleteinstitutionphotos', (req, res) => {
-    let photoPath = "./client/public/InstitutionsImages/" + req.body.photoId; //req.body.photoId;
-    fs.unlink(photoPath, (err) => {
-      if(err) {
-        res.status(401).json({
-          message: "Could not delete photos"
+    let photosIds = req.body.photosIds;
+    if(photosIds.length > 0) {
+      let photosExistPromises = [];
+      let photosPromises = [];
+      photosIds.forEach(id => {
+        let photoPath = "./client/public/InstitutionsImages/" + id;
+        let photoExistsPromise = new Promise((resolve, reject) => {
+          fs.access(photoPath, (err) => {
+            if(err) {
+              reject("At least on of the institution's photos does not exist")
+            } else {
+              resolve()
+            }
+          })
+        });
+        photosExistPromises.push(photoExistsPromise);
+      });
+      Promise.all(photosExistPromises)
+        .then(() => {
+          photosIds.forEach(id => {
+            let photoPath = "./client/public/InstitutionsImages/" + id;
+            let photoPromise = new Promise ((resolve, reject) => {
+              fs.unlink(photoPath, (err) => {
+                if(err) {
+                  reject("Could not delete the photo")
+                } else {
+                  resolve()
+                }
+              })
+            });
+            photosPromises.push(photoPromise);
+          });
+          return Promise.all(photosPromises);
         })
-      } else {
-        res.json({success: "true"})
-      }
-    })
+        .then(() => {
+          res.json({success: "true"})
+        })
+        .catch(err => {
+          res.status(401).json({
+            message: err || "Something went wrong"
+          })
+        })
+    } else {
+      res.json({success: "true"})
+    }
+
   })
 };

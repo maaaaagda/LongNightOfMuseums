@@ -82,3 +82,14 @@ export function upload_institution_photos(institutionPhotos) {
       })
   }
 }
+
+export function delete_institution_photos(institutionPhotosIds) {
+  return dispatch => {
+    return axios.put('/api/deleteinstitutionphotos', {photosIds: institutionPhotosIds})
+      .then()
+      .catch(err => {
+        throw err;
+      })
+  }
+}
+

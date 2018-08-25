@@ -38,8 +38,7 @@ app.all('/api/*', function(req, res, next) {
     || req.url === '/api/login'
     || req.url === '/api/remindpassword'
     || req.url ==='/api/resetpassword'
-    || (req.url === '/api/cities' && req.method === 'GET')
-    ||  req.url === '/api/deleteinstitutionphotos/') {
+    || (req.url === '/api/cities' && req.method === 'GET')) {
     return next();
   }
   if (!req.headers.authorization) {

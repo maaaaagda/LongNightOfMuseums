@@ -48,7 +48,7 @@ class NewInstitution extends React.Component {
           <CustomModal
             modalType='simple'
             header='Operation failed'
-            content={(err.response && err.response.data && err.response.data.message) || 'Something went wrong, unable to create new institution'}
+            content={(err.response && err.response.data && err.response.data.message)? err.response.data.message : 'Something went wrong, unable to create new institution'}
             hideModal={this.hideModal}
           />);
         this.showModal(errorModal);

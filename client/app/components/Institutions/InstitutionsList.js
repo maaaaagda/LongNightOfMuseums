@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {load_institutions, delete_institution} from "../../store/actions/institutionActions";
+import {load_institutions, delete_institution, delete_institution_photos} from "../../store/actions/institutionActions";
 import {Card, Image, Grid, Button, Segment} from 'semantic-ui-react';
 import {Link} from "react-router-dom";
 import CustomModal from "../Helpers/Modals";
@@ -22,14 +22,14 @@ class Institutions extends React.Component {
       .then(() => {
       });
   }
-  ensureDeletingInstitution(id) {
+  ensureDeletingInstitution(id, photosIds) {
     let confirmModal = (
       <CustomModal
         modalType='confirm'
         header='Remove institution'
         content='Are you sure you want to delete chosen institution?'
         hideModal={this.hideModal}
-        performAction={() => {this.deleteInstitution(id)}}
+        performAction={() => {this.deleteInstitution(id, photosIds)}}
       />
     );
     this.showModal(confirmModal);
@@ -41,8 +41,11 @@ class Institutions extends React.Component {
     this.setState({ modal: '' })
   }
 
-  deleteInstitution(id) {
-    this.props.dispatch(delete_institution(id))
+  deleteInstitution(id, photosIds) {
+    this.props.dispatch(delete_institution_photos(photosIds))
+      .then(() => {
+        return  this.props.dispatch(delete_institution(id));
+      })
       .then(() => {
         let successModal = (
           <CustomModal
@@ -58,7 +61,7 @@ class Institutions extends React.Component {
           <CustomModal
             modalType='simple'
             header='Operation failed'
-            content={err.response.data.message || 'Something went wrong, unable to delete selected institution'}
+            content={(err.response && err.response.data && err.response.data.message)? err.response.data.message : 'Something went wrong, unable to delete selected institution'}
             hideModal={this.hideModal}
           />);
         this.showModal(errorModal);
@@ -101,7 +104,7 @@ class Institutions extends React.Component {
               </Grid.Column>
               <Grid.Column mobile={5} tablet={3} computer={4}>
                 <div className='vertical-center-outer'>
-                  <Button basic color='red' onClick={this.ensureDeletingInstitution.bind(this, institution._id)}> Delete </Button>
+                  <Button basic color='red' onClick={this.ensureDeletingInstitution.bind(this, institution._id, institution.photos)}> Delete </Button>
                   <br/>
                   <Button basic color='black' as={Link} to={`/institutions/${institution._id}`}> Edit </Button>
                 </div>
