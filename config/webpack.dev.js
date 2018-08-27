@@ -11,7 +11,7 @@ module.exports = merge(commonConfig, {
   entry: {
     'app': [
       'webpack-hot-middleware/client?reload=true',
-      './client/app/index.js'
+      './client/app/UploadImages.js'
     ]
   },
   

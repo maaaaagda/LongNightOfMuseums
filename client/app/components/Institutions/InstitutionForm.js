@@ -4,7 +4,7 @@ import {Button, Form, Icon, Select, TextArea} from "semantic-ui-react";
 import {ValidationForm, ValidationInput} from "../Helpers/FormElementsWithValidation";
 import {required} from "../Helpers/FormValidationRules";
 import PropTypes from "prop-types";
-import ImageUploader from 'react-images-upload';
+import ImageUploader from '../ImagesUpload/UploadImages';
 
 class InstitutionForm extends React.Component {
   constructor(props) {
@@ -19,6 +19,7 @@ class InstitutionForm extends React.Component {
       longitude: this.props.institutionData.longitude || '',
       city: this.props.institutionData.city_id || '',
       photos: [],
+      photosFiles: [],
       cities: [],
       visitingPlan: this.props.institutionData.visitingPlan || '',
       currentStep: 1,
@@ -96,7 +97,7 @@ class InstitutionForm extends React.Component {
       };
       let institutionPhotos = new FormData();
 
-      this.state.photos.forEach(photo => {
+      this.state.photosFiles.forEach(photo => {
         institutionPhotos.append('InstitutionPhoto', photo);
       });
       this.props.submitSaving(institutionPhotos, institution_data);
@@ -126,7 +127,7 @@ class InstitutionForm extends React.Component {
 
   onDrop(picture) {
     this.setState({
-      photos: this.state.photos.concat(picture),
+      photosFiles: picture
     });
   }
   renderGeneralInfoStep() {
@@ -220,21 +221,25 @@ class InstitutionForm extends React.Component {
     )
   }
   renderPhotosStep() {
-    return <ImageUploader
-      withIcon={true}
-      withPreview={true}
-      buttonText='Choose images'
-      name='InstitutionPhoto'
-      onChange={this.onDrop}
-      imgExtension={['.jpg', '.png']}
-      maxFileSize={5242880}
-    />
+    return <div>
+      <ImageUploader
+        withIcon={true}
+        withPreview={true}
+        withLabel={true}
+        buttonText='Choose images'
+        name='InstitutionPhoto'
+        onChange={this.onDrop}
+        imgExtension={['.jpg', '.png']}
+        maxFileSize={5242880}
+        defaultImages={this.state.photosFiles}
+      />
+    </div>
   }
   renderFormStep() {
     let step = 1;
     switch (this.state.currentStep) {
       case 1:
-        step = this.renderGeneralInfoStep();
+        step = this.renderPhotosStep(); //this.renderGeneralInfoStep();
         break;
       case 2:
         step = this.renderDescriptionStep();
@@ -243,7 +248,7 @@ class InstitutionForm extends React.Component {
         step = this.renderVisitingPlanStep();
         break;
       case 4:
-        step = this.renderPhotosStep();
+        step = this.renderGeneralInfoStep(); //this.renderPhotosStep();
         break;
 
     }
