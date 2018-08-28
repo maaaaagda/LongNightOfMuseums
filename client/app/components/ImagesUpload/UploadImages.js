@@ -8,7 +8,8 @@ class ReactImageUploadComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      pictures: [], //props.defaultImages.length > 0 ? props.defaultImages : [],
+      pictures: [],
+      alreadySavedPictures: this.props.alreadySavedPictures,
       files: [],
       notAcceptedFileType: [],
       notAcceptedFileSize: []
@@ -28,11 +29,10 @@ class ReactImageUploadComponent extends React.Component {
     if(prevState.files !== this.state.files){
       this.props.onChange(this.state.files, this.state.pictures);
     }
+    if(prevProps.alreadySavedPictures !== this.props.alreadySavedPictures) {
+      this.setState({alreadySavedPictures: this.props.alreadySavedPictures})
+    }
   }
-
-  /*
-   Load image at the beggining if defaultImage prop exists
-   */
 
   /*
 	 Check file extension (onDropFile)
@@ -197,9 +197,21 @@ class ReactImageUploadComponent extends React.Component {
   renderPreview() {
     return (
       <div className="uploadPicturesWrapper">
+          {this.renderPreviewOfAlreadySavedPictures()}
           {this.renderPreviewPictures()}
       </div>
     );
+  }
+
+  renderPreviewOfAlreadySavedPictures() {
+    return this.state.alreadySavedPictures.map((picture, index) => {
+      return (
+        <div key={index} className="uploadPictureContainer">
+          <div className="deleteImage" onClick={() => this.props.deleteAlreadySavedPicture(picture.id)}><Icon name="x"/></div>
+          <img src={"/api/institutionsphotos/" + picture.id} className="uploadPicture" alt="preview"/>
+        </div>
+      );
+    });
   }
 
   renderPreviewPictures() {
@@ -246,7 +258,7 @@ class ReactImageUploadComponent extends React.Component {
             onClick={this.onUploadClick}
             accept={this.props.accept}
           />
-          { this.props.withPreview ? this.renderPreview() : null }
+          { this.renderPreview() }
         </div>
       </div>
     )
@@ -303,7 +315,8 @@ ReactImageUploadComponent.propTypes = {
   errorClass: PropTypes.string,
   errorStyle: PropTypes.object,
   singleImage: PropTypes.bool,
-  defaultImages: PropTypes.array
+  alreadySavedPictures: PropTypes.array,
+  deleteAlreadySavedPicture: PropTypes.func
 };
 
 export default ReactImageUploadComponent;

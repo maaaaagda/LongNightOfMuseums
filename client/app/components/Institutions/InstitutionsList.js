@@ -70,7 +70,7 @@ class Institutions extends React.Component {
   renderImage(institution) {
     let image;
     if(institution.photos.length > 0) {
-      image = <Image src={institution.photos[0].id} size={'huge'}/>
+      image = <Image src={"/api/institutionsphotos/" + institution.photos[0].id} size={'huge'}/>
     } else {
       image = <Icon name='university' size={'massive'}/>;
     }

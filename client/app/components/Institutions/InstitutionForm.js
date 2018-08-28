@@ -18,7 +18,7 @@ class InstitutionForm extends React.Component {
       latitude: this.props.institutionData.latitude || '',
       longitude: this.props.institutionData.longitude || '',
       city: this.props.institutionData.city_id || '',
-      photos: [],
+      photos: this.props.institutionData.photos || [],
       photosFiles: [],
       cities: [],
       visitingPlan: this.props.institutionData.visitingPlan || '',
@@ -33,6 +33,7 @@ class InstitutionForm extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleCitySelectChange = this.handleCitySelectChange.bind(this);
     this.onDrop = this.onDrop.bind(this);
+    this.deleteAlreadySavedPicture = this.deleteAlreadySavedPicture.bind(this);
   }
 
   componentDidMount() {
@@ -59,7 +60,8 @@ class InstitutionForm extends React.Component {
         city: nextProps.institutionData.city_id,
         latitude: nextProps.institutionData.latitude || '',
         longitude: nextProps.institutionData.longitude || '',
-        visitingPlan: nextProps.institutionData.visiting_plan || ''
+        visitingPlan: nextProps.institutionData.visiting_plan || '',
+        photos: nextProps.institutionData.photos || [],
       }, () => {
         this.setState({cities: this.manageCitiesList(nextProps.cities)})
       });
@@ -130,6 +132,14 @@ class InstitutionForm extends React.Component {
       photosFiles: picture
     });
   }
+
+  deleteAlreadySavedPicture(id) {
+    let photos = this.state.photos.filter(photo => {
+      return photo.id !== id;
+    });
+    this.setState({photos: photos})
+  }
+
   renderGeneralInfoStep() {
     return (
       <div>
@@ -220,6 +230,7 @@ class InstitutionForm extends React.Component {
       />
     )
   }
+
   renderPhotosStep() {
     return <div>
       <ImageUploader
@@ -232,9 +243,12 @@ class InstitutionForm extends React.Component {
         imgExtension={['.jpg', '.png']}
         maxFileSize={5242880}
         defaultImages={this.state.photosFiles}
+        alreadySavedPictures={this.state.photos}
+        deleteAlreadySavedPicture={this.deleteAlreadySavedPicture}
       />
     </div>
   }
+
   renderFormStep() {
     let step = 1;
     switch (this.state.currentStep) {

@@ -1,6 +1,5 @@
 const fs = require('fs');
 const multer = require('multer');
-const Institution = require('../../models/Institution');
 
 const Storage = multer.diskStorage({
   destination: function(req, file, callback) {
@@ -74,5 +73,24 @@ module.exports = (app) => {
       res.json({success: "true"})
     }
 
-  })
+  });
+
+  app.get('/api/institutionsphotos/:id', function (req, res) {
+    let photoPath = "./client/public/InstitutionsImages/" + req.params.id;
+    fs.access(photoPath, (err) => {
+      if(err) {
+        res.status(401).json({
+          message: "Institution photo does not exist"
+        })
+      } else {
+        res.sendFile(photoPath, {root: __dirname + "../../../../"}, function (err) {
+          if (err) {
+            res.status(401).json({
+              message: "Something went wrong"
+            })
+          }
+        });
+      }
+    })
+  });
 };

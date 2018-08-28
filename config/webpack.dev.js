@@ -1,4 +1,3 @@
-const webpack = require('webpack');
 const merge = require('webpack-merge');
 
 const commonConfig = require('./webpack.common');
@@ -11,7 +10,7 @@ module.exports = merge(commonConfig, {
   entry: {
     'app': [
       'webpack-hot-middleware/client?reload=true',
-      './client/app/UploadImages.js'
+      './client/app/index.js'
     ]
   },
   

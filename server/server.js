@@ -38,7 +38,8 @@ app.all('/api/*', function(req, res, next) {
     || req.url === '/api/login'
     || req.url === '/api/remindpassword'
     || req.url ==='/api/resetpassword'
-    || (req.url === '/api/cities' && req.method === 'GET')) {
+    || (req.url === '/api/cities' && req.method === 'GET')
+    || req.url.indexOf('/api/institutionsphotos/') >= 0){
     return next();
   }
   if (!req.headers.authorization) {

@@ -4,14 +4,13 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const helpers = require('./helpers');
-const path = require('path');
 const NODE_ENV = process.env.NODE_ENV;
 const isProd = NODE_ENV === 'production';
 
 module.exports = {
   entry: {
     'app': [
-      helpers.root('client/app/UploadImages.js')
+      helpers.root('client/app/index.js')
     ]
   },
 
