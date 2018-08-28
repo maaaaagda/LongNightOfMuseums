@@ -1,6 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import 'semantic-ui-less/semantic.less';
+import "react-image-gallery/styles/css/image-gallery.css";
 import configureStore from './store/store/configureStore';
 import { Provider } from 'react-redux';
 import {
@@ -23,6 +24,7 @@ import history from './helpers/history';
 import {restoreUserIfLogged} from "./store/actions/loginActions";
 import NewInstitution from "./components/Institutions/NewInstitution";
 import EditInstitution from './components/Institutions/EditInstitution';
+import InstitutionDetail from './components/Institutions/InstitutionDetail';
 import CitiesList from "./components/Cities/CitiesList";
 import {load_cities} from "./store/actions/cityActions";
 import Redirect from "react-router-dom/es/Redirect";
@@ -43,7 +45,7 @@ render((
             ))}/>/>
           <Route path="/institutions/:institutionId" render={(props) => (
             !store.getState().admin.isLoggedIn ? (
-              <Redirect to="/login"/> ) : (<EditInstitution {...props} />
+              (<InstitutionDetail/>) ) : (<EditInstitution {...props} />
             ))}/>
           <Route path="/institutions" render={() => (
             !store.getState().admin.isLoggedIn ? (

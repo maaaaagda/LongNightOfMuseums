@@ -89,7 +89,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        include: [helpers.root('client'), /node_modules\/react-images-upload/],
+        include: [helpers.root('client'), /node_modules\/react-images-upload/, /node_modules\/react-image-gallery/],
         use: ExtractTextPlugin.extract({
           fallback: "style-loader",
           use: [
