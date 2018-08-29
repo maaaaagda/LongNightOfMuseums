@@ -10,9 +10,9 @@ module.exports = (app) => {
         res.status(200)
           .json(institution)
       })
-      .catch((err) => res.status(401)
+      .catch(() => res.status(401)
         .json({
-          message:  err || "Institution not found"
+          message:  "Institution not found"
         }));
   });
 

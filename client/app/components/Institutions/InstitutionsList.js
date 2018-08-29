@@ -22,7 +22,11 @@ class Institutions extends React.Component {
       .then(() => {
       });
   }
-  ensureDeletingInstitution(id, photosIds) {
+  ensureDeletingInstitution(id, photos) {
+    let photosIds = photos.map(photo => {
+      return photo.id
+    });
+
     let confirmModal = (
       <CustomModal
         modalType='confirm'

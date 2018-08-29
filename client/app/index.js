@@ -45,7 +45,7 @@ render((
             ))}/>/>
           <Route path="/institutions/:institutionId" render={(props) => (
             !store.getState().admin.isLoggedIn ? (
-              (<InstitutionDetail/>) ) : (<EditInstitution {...props} />
+              (<InstitutionDetail {...props}/>) ) : (<EditInstitution {...props} />
             ))}/>
           <Route path="/institutions" render={() => (
             !store.getState().admin.isLoggedIn ? (

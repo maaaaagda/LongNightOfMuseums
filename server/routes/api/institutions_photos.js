@@ -18,7 +18,7 @@ module.exports = (app) => {
   app.post('/api/uploadinstitutionphotos', upload.array('InstitutionPhoto', 50), (req, res) => {
     let imagesLinks = req.files.map(image => {
       return {
-        path: image.path,
+        path: '/api/institutionsphotos/' + image.path.split('/').pop(),
         name: image.originalname,
         id: image.path.split('/').pop()
       };

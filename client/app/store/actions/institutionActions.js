@@ -35,7 +35,11 @@ export function load_institutions_success(institutions) {
 
 export function load_institution(id) {
   return dispatch => {
-    return axios.get(`/api/institutions/${id}`);
+    return axios.get(`/api/institutions/${id}`)
+      .then()
+      .catch(err => {
+        throw err;
+      })
   }
 }
 

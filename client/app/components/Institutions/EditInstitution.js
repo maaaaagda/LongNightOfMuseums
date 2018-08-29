@@ -36,19 +36,20 @@ class EditInstitution extends React.Component {
         .then((res) => {
           this.setState({institutionData: res.data, isFormLoading: false})
         })
-        .catch(() => {
+        .catch((err) => {
           let errorModal = (
             <CustomModal
               modalType='simple'
               header='Fetching data failed'
-              content={err.response.data.message || 'Something went wrong, unable to fetch institution data'}
+              content={(err.response && err.response.data && err.response.data.message)?
+                err.response.data.message
+                : 'Something went wrong, unable to fetch institution data'}
               hideModal={this.hideModal}
             />);
           this.showModal(errorModal);
           this.setState({isFormLoading: false})
         });
     });
-
   }
 
   getPhotosToDelete(newPhotos) {
