@@ -5,6 +5,7 @@ import {Card, Image, Grid, Button, Segment, Select} from 'semantic-ui-react';
 import {Link} from "react-router-dom";
 import CustomModal from "../Helpers/Modals";
 import {Icon, Form, Search} from "semantic-ui-react";
+import moment from 'moment';
 
 class Institutions extends React.Component {
   constructor(props) {
@@ -34,30 +35,92 @@ class Institutions extends React.Component {
         {
           key: 4,
           text: "Creation date descending",
-          value: "CityAsc"
+          value: "CreationDesc"
         }
     ],
-      orderBy: ''
+      orderBy: 'InstitutionNameDesc',
+      institutions: [],
+      originalInstitutions: []
     };
     this.hideModal = this.hideModal.bind(this);
     this.handleCitySelectChange = this.handleCitySelectChange.bind(this);
+    this.handleOrderBySelectChange = this.handleOrderBySelectChange.bind(this);
+    this.handleSearchByInstitutionName = this.handleSearchByInstitutionName.bind(this);
   }
 
   componentDidMount() {
     this.props.dispatch(load_institutions())
-      .then(() => {
-      });
+      .then(() => {});
     this.setState({cities: this.manageCitiesList(this.props.cities)});
   }
 
   componentDidUpdate() {
-    if(this.props.cities.length > 0 && this.state.cities.length === 0) {
+    if(this.props.cities.length > 0 && this.state.cities.length === 1) {
       this.setState({cities: this.manageCitiesList(this.props.cities)});
     }
+    if(this.props.institutions.length > 0 && this.state.originalInstitutions.length === 0) {
+      this.setState({originalInstitutions: this.props.institutions, institutions: this.props.institutions})
+    }
+  }
+  handleCitySelectChange (e, {name, value}){
+    this.setState({
+      city: value
+    }, () => {
+      if(value === 'allCities') {
+        this.setState({institutions: this.props.institutions})
+      } else {
+        let filteredInstitutions = this.state.originalInstitutions.filter(institution => {
+          return institution.city_id === value;
+        });
+        this.setState({institutions: filteredInstitutions})
+      }
+    })
   }
 
+  handleOrderBySelectChange (e, {name, value}){
+    this.setState({
+      orderBy: value
+    }, () => {
+      let orderedInstitutions;
+      switch(value) {
+        case "InstitutionNameAsc":
+          orderedInstitutions = this.state.originalInstitutions.sort((a,b) => {
+            return a.name.localeCompare(b.name)
+          });
+          break;
+        case "InstitutionNameDesc":
+          orderedInstitutions = this.state.originalInstitutions.sort((a,b) => {
+            return b.name.localeCompare(a.name)
+          });
+          break;
+        case "CreationAsc":
+          orderedInstitutions = this.state.originalInstitutions.sort((a,b) => {
+            return moment(a.created_at).diff(moment(b.created_at));
+          });
+          break;
+        case "CreationDesc":
+          orderedInstitutions = this.state.originalInstitutions.sort((a,b) => {
+            return moment(b.created_at).diff(moment(a.created_at));
+          });
+          break;
+      }
+      this.setState({institutions: orderedInstitutions})
+    })
+  }
+  handleSearchByInstitutionName(e) {
+    let filteredInstitutions = this.state.originalInstitutions.filter(institution => {
+      return institution.name.toLowerCase().indexOf(e.target.value.toLowerCase()) >= 0;
+    });
+    this.setState({institutions: filteredInstitutions})
+  }
   manageCitiesList(cities) {
     let citiesSelect = [];
+    let allCities = {
+      key: 'allCities',
+      text: 'All cities',
+      value: 'allCities'
+    };
+    citiesSelect.push(allCities);
     cities.map(city => {
       let result = {
         key: city._id,
@@ -66,6 +129,7 @@ class Institutions extends React.Component {
       };
       citiesSelect.push(result);
     });
+
     if(!this.state.city) {
       let city = citiesSelect.length > 0 ? citiesSelect[0].value : '';
       this.setState({city: city});
@@ -93,11 +157,6 @@ class Institutions extends React.Component {
   }
   hideModal() {
     this.setState({ modal: '' })
-  }
-  handleCitySelectChange (e, {name, value}){
-    this.setState({
-      [name]: value
-    })
   }
   deleteInstitution(id, photosIds) {
     this.props.dispatch(delete_institution_photos(photosIds))
@@ -136,7 +195,7 @@ class Institutions extends React.Component {
   }
   renderInstitutionsList() {
     let resultList = [];
-    this.props.institutions.map((institution, index) => {
+    this.state.institutions.map((institution, index) => {
       let result = (
         <Card fluid key={index} className='institution-card'>
           <Grid celled='internally'>
@@ -173,7 +232,7 @@ class Institutions extends React.Component {
       );
       resultList.push(result);
     });
-    return resultList;
+    return resultList.length === 0 && this.state.originalInstitutions.length > 0 ? <div className='jumbotron-fully-centered'><h3>No search results</h3></div> : resultList;
   }
   render() {
     return (
@@ -203,7 +262,7 @@ class Institutions extends React.Component {
                 id='form-order-by'
                 name='orderBy'
                 label='Order by'
-                onChange={this.handleCitySelectChange}
+                onChange={this.handleOrderBySelectChange}
                 options={this.state.orderByOptions}
                 value={this.state.orderBy}
               />
@@ -212,6 +271,7 @@ class Institutions extends React.Component {
                 id='form-search'
                 name='search'
                 label='Search by institution name'
+                onChange={this.handleSearchByInstitutionName}
                 icon='search' />
             </Form.Group>
           </Form>
