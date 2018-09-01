@@ -39,6 +39,7 @@ class Institutions extends React.Component {
         }
     ],
       orderBy: 'InstitutionNameDesc',
+      searchByName: '',
       institutions: [],
       originalInstitutions: []
     };
@@ -53,7 +54,6 @@ class Institutions extends React.Component {
       .then(() => {});
     this.setState({cities: this.manageCitiesList(this.props.cities)});
   }
-
   componentDidUpdate() {
     if(this.props.cities.length > 0 && this.state.cities.length === 1) {
       this.setState({cities: this.manageCitiesList(this.props.cities)});
@@ -62,56 +62,73 @@ class Institutions extends React.Component {
       this.setState({originalInstitutions: this.props.institutions, institutions: this.props.institutions})
     }
   }
+  filterSortInstitutions() {
+    let fromCity = this.getInstitutionsFromGivenCity(this.state.city, this.state.originalInstitutions);
+    let filteredByName = this.getInstitutionsFilteredByName(this.state.searchByName, fromCity);
+    let ordered = this.getOrderedInstitutions(this.state.orderBy, filteredByName);
+    this.setState({institutions: ordered});
+  }
+  getInstitutionsFromGivenCity(value, institutions) {
+    if(value === 'allCities') {
+      return institutions
+    } else {
+      let filteredInstitutions = institutions.filter(institution => {
+        return institution.city_id === value;
+      });
+      return filteredInstitutions
+    }
+  }
+  getInstitutionsFilteredByName(value, institutions) {
+    let filteredInstitutions = institutions.filter(institution => {
+      return institution.name.toLowerCase().indexOf(value.toLowerCase()) >= 0;
+    });
+    return filteredInstitutions;
+  }
+  getOrderedInstitutions(value, institutions) {
+    let orderedInstitutions;
+    switch(value) {
+      case "InstitutionNameAsc":
+        orderedInstitutions = institutions.sort((a,b) => {
+          return a.name.localeCompare(b.name)
+        });
+        break;
+      case "InstitutionNameDesc":
+        orderedInstitutions = institutions.sort((a,b) => {
+          return b.name.localeCompare(a.name)
+        });
+        break;
+      case "CreationAsc":
+        orderedInstitutions = institutions.sort((a,b) => {
+          return moment(a.created_at).diff(moment(b.created_at));
+        });
+        break;
+      case "CreationDesc":
+        orderedInstitutions = institutions.sort((a,b) => {
+          return moment(b.created_at).diff(moment(a.created_at));
+        });
+        break;
+    }
+    return orderedInstitutions
+  }
   handleCitySelectChange (e, {name, value}){
     this.setState({
       city: value
     }, () => {
-      if(value === 'allCities') {
-        this.setState({institutions: this.props.institutions})
-      } else {
-        let filteredInstitutions = this.state.originalInstitutions.filter(institution => {
-          return institution.city_id === value;
-        });
-        this.setState({institutions: filteredInstitutions})
-      }
+      this.filterSortInstitutions()
     })
   }
+  handleSearchByInstitutionName(e, {name, value}) {
+    this.setState({searchByName: value}, () => {
+      this.filterSortInstitutions()
+    });
 
+  }
   handleOrderBySelectChange (e, {name, value}){
     this.setState({
       orderBy: value
     }, () => {
-      let orderedInstitutions;
-      switch(value) {
-        case "InstitutionNameAsc":
-          orderedInstitutions = this.state.originalInstitutions.sort((a,b) => {
-            return a.name.localeCompare(b.name)
-          });
-          break;
-        case "InstitutionNameDesc":
-          orderedInstitutions = this.state.originalInstitutions.sort((a,b) => {
-            return b.name.localeCompare(a.name)
-          });
-          break;
-        case "CreationAsc":
-          orderedInstitutions = this.state.originalInstitutions.sort((a,b) => {
-            return moment(a.created_at).diff(moment(b.created_at));
-          });
-          break;
-        case "CreationDesc":
-          orderedInstitutions = this.state.originalInstitutions.sort((a,b) => {
-            return moment(b.created_at).diff(moment(a.created_at));
-          });
-          break;
-      }
-      this.setState({institutions: orderedInstitutions})
+      this.filterSortInstitutions()
     })
-  }
-  handleSearchByInstitutionName(e) {
-    let filteredInstitutions = this.state.originalInstitutions.filter(institution => {
-      return institution.name.toLowerCase().indexOf(e.target.value.toLowerCase()) >= 0;
-    });
-    this.setState({institutions: filteredInstitutions})
   }
   manageCitiesList(cities) {
     let citiesSelect = [];
