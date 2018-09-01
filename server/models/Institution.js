@@ -10,7 +10,7 @@ const InstitutionSchema = new mongoose.Schema({
   latitude: String,
   photos: Array,
   website: String,
-  city_id: String
+  city_id: mongoose.Schema.ObjectId
 });
 
 

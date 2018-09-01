@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {load_institutions, delete_institution, delete_institution_photos} from "../../store/actions/institutionActions";
-import {Card, Image, Grid, Button, Segment, Select} from 'semantic-ui-react';
+import {Card, Image, Grid, Button, Segment} from 'semantic-ui-react';
 import {Link} from "react-router-dom";
 import CustomModal from "../Helpers/Modals";
-import {Icon, Form, Search} from "semantic-ui-react";
+import {Icon, Form} from "semantic-ui-react";
 import moment from 'moment';
 
 class Institutions extends React.Component {
@@ -38,7 +38,7 @@ class Institutions extends React.Component {
           value: "CreationDesc"
         }
     ],
-      orderBy: 'InstitutionNameDesc',
+      orderBy: 'InstitutionNameAsc',
       searchByName: '',
       institutions: [],
       originalInstitutions: []
@@ -58,7 +58,7 @@ class Institutions extends React.Component {
     if(this.props.cities.length > 0 && this.state.cities.length === 1) {
       this.setState({cities: this.manageCitiesList(this.props.cities)});
     }
-    if(this.props.institutions.length > 0 && this.state.originalInstitutions.length === 0) {
+    if(this.props.institutions.length > 0 && this.state.originalInstitutions.length !== this.props.institutions.length ) {
       this.setState({originalInstitutions: this.props.institutions, institutions: this.props.institutions})
     }
   }

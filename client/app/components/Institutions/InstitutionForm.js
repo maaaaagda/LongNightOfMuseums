@@ -253,7 +253,7 @@ class InstitutionForm extends React.Component {
     let step = 1;
     switch (this.state.currentStep) {
       case 1:
-        step = this.renderPhotosStep(); //this.renderGeneralInfoStep();
+        step = this.renderGeneralInfoStep();
         break;
       case 2:
         step = this.renderDescriptionStep();
@@ -262,7 +262,7 @@ class InstitutionForm extends React.Component {
         step = this.renderVisitingPlanStep();
         break;
       case 4:
-        step = this.renderGeneralInfoStep(); //this.renderPhotosStep();
+        step = this.renderPhotosStep();
         break;
 
     }

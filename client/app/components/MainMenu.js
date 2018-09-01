@@ -65,7 +65,7 @@ class MainMenu extends Component {
               <Menu.Item as='div' onClick={this.handleButtonClick}>
                 Info
               </Menu.Item>
-              <Menu.Item as='div' onClick={this.handleLogout}>
+              <Menu.Item as={Link} to={"#"} onClick={this.handleLogout}>
                 Logout
               </Menu.Item>
               <Menu.Item as={Link} to={"/cities"} onClick={this.handleButtonClick}>

@@ -20,7 +20,10 @@ class InstitutionDetail extends React.Component {
         longitude: '',
         city_id: '',
         photos:  [],
-        visitingPlan: ''
+        visitingPlan: '',
+        city: {
+          name: ''
+        }
       },
       modal: ''
     };
@@ -78,8 +81,12 @@ class InstitutionDetail extends React.Component {
             {this.renderPhotoGallery()}
           </Tab.Pane>
       },
-      { menuItem: 'Map', render: () => <Tab.Pane as='div' attached='false'>Tab 2 Content</Tab.Pane> },
-      { menuItem: 'Visiting', render: () => <Tab.Pane as='div' attached='false'>Tab 3 Content</Tab.Pane> },
+      { menuItem: 'Map', render: () => <Tab.Pane as='div' attached='false'>Map container</Tab.Pane> },
+      { menuItem: 'Visiting', render: () => <Tab.Pane as='div' attached='false'>
+          <div className='museum-visiting-plan'>
+            {this.state.institutionData.visitingPlan}
+          </div>
+        </Tab.Pane> },
     ];
 
     return (
@@ -92,7 +99,7 @@ class InstitutionDetail extends React.Component {
                   {this.state.institutionData.name}
                 </div>
                 <div className='secondary-info padding-bottom-medium'>
-                  {this.state.institutionData.city_id}, {this.state.institutionData.address}
+                  {this.state.institutionData.city.name}, {this.state.institutionData.address}
                 </div>
                 <div className='museum-description'>
                   {this.state.institutionData.description}

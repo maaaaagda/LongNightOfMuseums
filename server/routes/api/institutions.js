@@ -1,24 +1,49 @@
 const Institution = require('../../models/Institution');
 const City = require('../../models/City');
-
+const mongoose = require('mongoose');
 
 module.exports = (app) => {
   app.get('/api/institutions/:id', function (req, res) {
-    Institution.findById(req.params.id)
+    Institution
+      .aggregate([
+        { $match : { _id : mongoose.Types.ObjectId(req.params.id) } },
+        {
+          $lookup: {
+            from: "cities",
+            localField: "city_id",
+            foreignField: "_id",
+            as: "city"
+          }
+        },
+        {
+          $unwind: "$city"
+        }
+      ])
       .exec()
-      .then((institution) => {
+      .then((institutionList) => {
         res.status(200)
-          .json(institution)
+          .json(institutionList[0])
       })
       .catch(() => res.status(401)
         .json({
-          message:  "Institution not found"
+          message: "Institution not found"
         }));
   });
 
   app.get('/api/institutions', (req, res, next) => {
-    Institution.find()
-      .exec()
+    Institution.aggregate([
+      {
+        $lookup:{
+          from: "cities",
+          localField: "city_id",
+          foreignField: "_id",
+          as: "city"
+        }
+      },
+      {
+        $unwind:"$city"
+      }
+    ]).exec()
       .then((institutions) => res.json(institutions))
       .catch((err) => next(err));
   });
