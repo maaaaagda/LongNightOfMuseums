@@ -85,20 +85,33 @@ module.exports = (app) => {
       .then((institution) => {
         oldCityId = institution.city_id;
         institution.set(req.body);
-        let oldCityPromise = City.findById({_id: oldCityId});
-        let newCityPromise = City.findById({_id: newCityId});
-        return Promise.all([institution.save(), oldCityPromise, newCityPromise]);
+        if(oldCityId !== newCityId) {
+          let oldCityPromise = City.findById({_id: oldCityId});
+          let newCityPromise = City.findById({_id: newCityId});
+          return Promise.all([institution.save(), oldCityPromise, newCityPromise]);
+        } else {
+          return institution.save()
+        }
       })
       .then(results => {
-        let updatedInstitution = results[0];
-        let oldCity = results[1];
-        let newCity = results[2];
-        oldCity.institutions_count--;
-        newCity.institutions_count++;
-        return Promise.all([updatedInstitution, oldCity.save(), newCity.save()]);
+        if (Array.isArray(results)) {
+          let updatedInstitution = results[0];
+          let oldCity = results[1];
+          let newCity = results[2];
+          oldCity.institutions_count--;
+          newCity.institutions_count++;
+          return Promise.all([updatedInstitution, oldCity.save(), newCity.save()]);
+        } else {
+          return results
+        }
       })
       .then(results => {
-        let updatedInstitution = results[0];
+        let updatedInstitution;
+        if (Array.isArray(results)) {
+          updatedInstitution = results[0];
+        } else {
+          updatedInstitution = results;
+        }
         res.status(200)
           .json(updatedInstitution)
       })
