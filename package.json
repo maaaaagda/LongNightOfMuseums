@@ -75,9 +75,6 @@
     "webpack-dev-middleware": "^3.0.1",
     "webpack-hot-middleware": "^2.21.2",
     "webpack-merge": "^4.1.2",
-    "whatwg-fetch": "^2.0.3"
-  },
-  "devDependencies": {
     "babel-preset-react-hmre": "^1.1.1",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "less": "^2.7.3",
@@ -87,6 +84,9 @@
     "serviceworker-webpack-plugin": "^1.0.0-alpha02",
     "style-resources-loader": "^1.1.0",
     "validator": "^10.4.0",
-      "webpack-dev-server": "^3.1.4"
+    "webpack-dev-server": "^3.1.4"
+  },
+  "devDependencies": {
+
   }
 }
