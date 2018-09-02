@@ -8,7 +8,7 @@ const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const morgan = require('morgan');
 
-const config = require('../config/config');
+const config = require('../config/config.js');
 const server_config = require('./libs/config');
 const webpackConfig = require('../webpack.config');
 const JWTtoken = require('./libs/auth');
