@@ -7,11 +7,10 @@ const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const morgan = require('morgan');
-
-const config = require('../config/config.js');
 const server_config = require('./libs/config');
 const webpackConfig = require('../webpack.config');
 const JWTtoken = require('./libs/auth');
+const configDb = require('../config/config');
 
 const isDev = process.env.NODE_ENV !== 'production';
 const port  = process.env.PORT || server_config.PORT;
@@ -21,7 +20,7 @@ process.env['JWT_SECRET'] = 'shhhuwebubifoewjnfiqio789715';
 // ================================================================================================
 
 // Set up Mongoose
-mongoose.connect(isDev ? config.db_dev : config.db, { useNewUrlParser: true });
+mongoose.connect(isDev ? configDb.db_dev : configDb.db, { useNewUrlParser: true });
 mongoose.Promise = global.Promise;
 
 const app = express();
@@ -91,7 +90,6 @@ if (isDev) {
 }
 
 app.listen(port, server_config.HOST, (err) => {
-  console.log(process.env.PORT, port);
   if (err) {
     console.log(err);
   }
