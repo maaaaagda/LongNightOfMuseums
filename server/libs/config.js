@@ -4,7 +4,7 @@ switch (process.env.NODE_ENV) {
     module.exports = {
       BCRYPT_SALT: 12,
       PORT: 80,
-      HOST: 'longnightofmuseums.herokuapp.com',
+      HOST: '0.0.0.0',
       APP_URL: 'https://longnightofmuseums.herokuapp.com/'
     };
 

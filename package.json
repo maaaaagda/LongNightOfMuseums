@@ -10,10 +10,10 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "NODE_ENV=production webpack -p --progress --profile --colors && node server",
+    "start": "node server",
     "dev": "node server.js",
     "front": "webpack-dev-server --hot --inline",
-    "postinstall": "node semantic-ui-fix.js"
+    "postinstall": "node semantic-ui-fix.js && webpack -p --progress --profile --colors"
   },
   "engines": {
     "node": ">=6"

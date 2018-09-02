@@ -90,7 +90,8 @@ if (isDev) {
   });
 }
 
-app.listen(process.env.PORT || 80, (err) => {
+app.listen(port, server_config.HOST, (err) => {
+  console.log(process.env.PORT, port);
   if (err) {
     console.log(err);
   }
