@@ -90,7 +90,7 @@ if (isDev) {
   });
 }
 
-app.listen(port, server_config.HOST, (err) => {
+app.listen(port, (err) => {
   if (err) {
     console.log(err);
   }
