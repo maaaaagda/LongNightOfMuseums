@@ -1,10 +1,22 @@
+switch (process.env.NODE_ENV) {
+  case 'prod':
+  case 'production':
+    module.exports = {
+      BCRYPT_SALT: 12,
+      PORT: 443,
+      HOST: 'longnightofmuseums.herokuapp.com',
+      APP_URL: 'https://longnightofmuseums.herokuapp.com/'
+    };
 
-const PORT = 8080;
-const HOST = '0.0.0.0';
+    break;
 
-module.exports = {
-  BCRYPT_SALT: 12,
-  PORT: PORT,
-  HOST: HOST,
-  APP_URL: 'http://' + HOST + ':' + PORT + '/'
-};
+  case 'dev':
+  case 'development':
+  default:
+    module.exports = {
+      BCRYPT_SALT: 12,
+      PORT: 8080,
+      HOST: '0.0.0.0',
+      APP_URL: 'http://0.0.0.0:8080/'
+    };
+}
