@@ -120,7 +120,7 @@ class EditInstitution extends React.Component {
   }
   hideModalSuccess () {
     this.setState({ modal: '' }, () => {
-      history.push('/institutions');
+      history.push('/admin/institutions');
     });
   }
 
@@ -129,7 +129,7 @@ class EditInstitution extends React.Component {
       <div className='jumbotron-top-small'>
         <Segment.Group horizontal>
           <Segment textAlign='left'><h1> Edit institution </h1></Segment>
-          <Segment textAlign='right' as={Link} to={"/institutions"}>
+          <Segment textAlign='right' as={Link} to={"/admin/institutions"}>
             <Button color='black'>
               Go back to all institutions
             </Button>

@@ -39,30 +39,30 @@ render((
       <App>
         <Switch>
           <Route exact path="/" component={Home}/>
-          <Route path="/institutions/new" render={() => (
+          <Route path="/admin/institutions/new" render={() => (
             !store.getState().admin.isLoggedIn ? (
               <Redirect to="/login"/> ) : (<NewInstitution />
             ))}/>/>
-          <Route path="/institutions/:institutionId" render={(props) => (
+          <Route path="/admin/institutions/:institutionId" render={(props) => (
             !store.getState().admin.isLoggedIn ? (
-              (<InstitutionDetail {...props}/>) ) : (<EditInstitution {...props} />
+              <Redirect to="/login"/> ) : (<EditInstitution {...props} />
             ))}/>
-          <Route path="/institutions" render={() => (
+          <Route path="/admin/institutions" render={() => (
             !store.getState().admin.isLoggedIn ? (
               <Redirect to="/login"/> ) : (<Institutions />
             ))}/>
-          <Route path="/cities" render={() => (
+          <Route path="/admin/cities" render={() => (
             !store.getState().admin.isLoggedIn ? (
               <Redirect to="/login"/> ) : (<CitiesList />
             ))}/>
           <Route path="/login" component={Login}/>
           <Route path="/remindpassword" component={RemindPassword}/>
           <Route path="/resetpassword/:adminId/:recoveryString/" component={ResetPassword}/>
-          <Route path="/admins/new" render={() => (
+          <Route path="/admin/admins/new" render={() => (
             !store.getState().admin.isLoggedIn ? (
               <Redirect to="/login"/> ) : (<NewAdmin />
             ))}/>
-          <Route path="/admins" render={() => (
+          <Route path="/admin/admins" render={() => (
             !store.getState().admin.isLoggedIn ? (
               <Redirect to="/login"/> ) : (<Admins />
             ))}/>

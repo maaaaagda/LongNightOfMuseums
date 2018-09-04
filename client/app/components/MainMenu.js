@@ -53,7 +53,7 @@ class MainMenu extends Component {
               <Menu.Item as={Link} to="/"  onClick={this.handleButtonClick}>
                 Home
               </Menu.Item>
-              <Menu.Item as={Link} to="/institutions" onClick={this.handleButtonClick}>
+              <Menu.Item as={Link} to="/admin/institutions" onClick={this.handleButtonClick}>
                 Institutions
               </Menu.Item>
               <Menu.Item as='div' onClick={this.handleButtonClick}>
@@ -68,10 +68,10 @@ class MainMenu extends Component {
               <Menu.Item as={Link} to={"#"} onClick={this.handleLogout}>
                 Logout
               </Menu.Item>
-              <Menu.Item as={Link} to={"/cities"} onClick={this.handleButtonClick}>
+              <Menu.Item as={Link} to={"/admin/cities"} onClick={this.handleButtonClick}>
                 Cities
               </Menu.Item>
-              <Menu.Item as={Link} to={"/admins"} onClick={this.handleButtonClick}>
+              <Menu.Item as={Link} to={"/admin/admins"} onClick={this.handleButtonClick}>
                 Administrators
               </Menu.Item>
             </Sidebar>

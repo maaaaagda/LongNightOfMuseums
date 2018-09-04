@@ -116,7 +116,7 @@ class AdminsList extends React.Component
           <div className='jumbotron-top-small'>
             <Segment.Group horizontal>
               <Segment textAlign='left'><h1> List of all administrators </h1></Segment>
-              <Segment textAlign='right' as={Link} to={"/admins/new"}>
+              <Segment textAlign='right' as={Link} to={"/admin/admins/new"}>
                 <Button color='black'>
                   Add new administrator
                 </Button>

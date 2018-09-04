@@ -94,7 +94,7 @@ class NewAdmin extends React.Component {
     }
     hideModalSuccess () {
       this.setState({ modal: '' });
-      history.push('/admins');
+      history.push('/admin/admins');
     }
     handleChange (e){
       this.setState({
@@ -107,7 +107,7 @@ class NewAdmin extends React.Component {
           <div className='jumbotron-top-small'>
             <Segment.Group horizontal>
               <Segment textAlign='left'><h1> New administrator </h1></Segment>
-              <Segment textAlign='right' as={Link} to={"/admins"}>
+              <Segment textAlign='right' as={Link} to={"/admin/admins"}>
                 <Button color='black'>
                   Go back
                 </Button>

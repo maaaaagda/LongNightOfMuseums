@@ -240,7 +240,7 @@ class Institutions extends React.Component {
                 <div className='vertical-center-outer'>
                   <Button basic color='red' onClick={this.ensureDeletingInstitution.bind(this, institution._id, institution.photos)}> Delete </Button>
                   <br/>
-                  <Button basic color='black' as={Link} to={`/institutions/${institution._id}`}> Edit </Button>
+                  <Button basic color='black' as={Link} to={`/admin/institutions/${institution._id}`}> Edit </Button>
                 </div>
               </Grid.Column>
             </Grid.Row>
@@ -257,7 +257,7 @@ class Institutions extends React.Component {
         <div className='jumbotron-padding-y-small'>
           <Segment.Group horizontal>
             <Segment textAlign='left'><h1> List of all institutions </h1></Segment>
-            <Segment textAlign='right' as={Link} to={"/institutions/new"}>
+            <Segment textAlign='right' as={Link} to={"/admin/institutions/new"}>
               <Button color='black'>
                 Add new institution
               </Button>

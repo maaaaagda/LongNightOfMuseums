@@ -80,7 +80,7 @@ class NewInstitution extends React.Component {
   }
   hideModalSuccess () {
     this.setState({ modal: '' }, () => {
-      history.push('/institutions');
+      history.push('/admin/institutions');
     });
   }
 
@@ -89,7 +89,7 @@ class NewInstitution extends React.Component {
       <div className='jumbotron-top-small'>
         <Segment.Group horizontal>
           <Segment textAlign='left'><h1> New institution </h1></Segment>
-          <Segment textAlign='right' as={Link} to={"/institutions"}>
+          <Segment textAlign='right' as={Link} to={"/admin/institutions"}>
             <Button color='black'>
               Go back to all institutions
             </Button>
