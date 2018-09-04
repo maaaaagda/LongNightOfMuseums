@@ -50,9 +50,16 @@ class Institutions extends React.Component {
   }
 
   componentDidMount() {
-    this.props.dispatch(load_institutions())
-      .then(() => {});
-    this.setState({cities: this.manageCitiesList(this.props.cities)});
+    if(this.props.institutions.length > 0) {
+      this.setState({cities: this.manageCitiesList(this.props.cities)});
+      this.filterSortInstitutions();
+    } else {
+      this.props.dispatch(load_institutions())
+        .then(() => {
+          this.setState({cities: this.manageCitiesList(this.props.cities)});
+          this.filterSortInstitutions();
+        });
+    }
   }
   componentDidUpdate() {
     if(this.props.cities.length > 0 && this.state.cities.length === 1) {
@@ -238,9 +245,21 @@ class Institutions extends React.Component {
               </Grid.Column>
               <Grid.Column mobile={5} tablet={3} computer={4}>
                 <div className='vertical-center-outer'>
-                  <Button basic color='red' onClick={this.ensureDeletingInstitution.bind(this, institution._id, institution.photos)}> Delete </Button>
-                  <br/>
-                  <Button basic color='black' as={Link} to={`/admin/institutions/${institution._id}`}> Edit </Button>
+                   <div className='museum-button'>
+                    <Button basic color='blue' as={Link} to={`/institutions/${institution._id}`}> View more </Button>
+                  </div>
+                  {this.props.isAdmin ? (
+                    <div className='museum-button'>
+                      <Button basic color='black' as={Link} to={`/admin/institutions/${institution._id}`}> Edit </Button>
+                    </div>
+                  ) : ""}
+                  {this.props.isAdmin ? (
+                    <div className='museum-button'>
+                      <Button basic color='red'
+                              onClick={this.ensureDeletingInstitution.bind(this, institution._id, institution.photos)}> Delete </Button>
+                    </div>
+                  ) : ""}
+
                 </div>
               </Grid.Column>
             </Grid.Row>
@@ -257,11 +276,14 @@ class Institutions extends React.Component {
         <div className='jumbotron-padding-y-small'>
           <Segment.Group horizontal>
             <Segment textAlign='left'><h1> List of all institutions </h1></Segment>
-            <Segment textAlign='right' as={Link} to={"/admin/institutions/new"}>
-              <Button color='black'>
-                Add new institution
-              </Button>
-            </Segment>
+            {this.props.isAdmin ? (
+              <Segment textAlign='right' as={Link} to={"/admin/institutions/new"}>
+                <Button color='black'>
+                  Add new institution
+                </Button>
+              </Segment>
+            ) : ""}
+
           </Segment.Group>
           <Form>
             <Form.Group widths='equal'>
@@ -306,7 +328,8 @@ class Institutions extends React.Component {
 function mapStateToProps (state) {
   return {
     institutions: state.institutions,
-    cities: state.cities
+    cities: state.cities,
+    isAdmin: state.admin.isLoggedIn
   }
 }
 

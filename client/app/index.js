@@ -28,10 +28,12 @@ import InstitutionDetail from './components/Institutions/InstitutionDetail';
 import CitiesList from "./components/Cities/CitiesList";
 import {load_cities} from "./store/actions/cityActions";
 import Redirect from "react-router-dom/es/Redirect";
+import {load_institutions} from "./store/actions/institutionActions";
 const store = configureStore();
 
 store.dispatch(restoreUserIfLogged());
 store.dispatch(load_cities());
+store.dispatch(load_institutions());
 
 render((
   <Provider store={store}>
@@ -39,6 +41,11 @@ render((
       <App>
         <Switch>
           <Route exact path="/" component={Home}/>
+          <Route path="/login" component={Login}/>
+          <Route path="/remindpassword" component={RemindPassword}/>
+          <Route path="/resetpassword/:adminId/:recoveryString/" render={(props) => (<ResetPassword {...props}/>)}/>
+          <Route path="/institutions/:institutionId" component={InstitutionDetail}/>
+          <Route path="/institutions" component={Institutions}/>
           <Route path="/admin/institutions/new" render={() => (
             !store.getState().admin.isLoggedIn ? (
               <Redirect to="/login"/> ) : (<NewInstitution />
@@ -55,9 +62,6 @@ render((
             !store.getState().admin.isLoggedIn ? (
               <Redirect to="/login"/> ) : (<CitiesList />
             ))}/>
-          <Route path="/login" component={Login}/>
-          <Route path="/remindpassword" component={RemindPassword}/>
-          <Route path="/resetpassword/:adminId/:recoveryString/" component={ResetPassword}/>
           <Route path="/admin/admins/new" render={() => (
             !store.getState().admin.isLoggedIn ? (
               <Redirect to="/login"/> ) : (<NewAdmin />

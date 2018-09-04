@@ -90,6 +90,9 @@ class MainMenu extends Component {
               <Menu.Item as={Link} to="/"  onClick={this.handleButtonClick}>
                 Home
               </Menu.Item>
+              <Menu.Item as={Link} to="/institutions" onClick={this.handleButtonClick}>
+                Institutions
+              </Menu.Item>
               <Menu.Item as={Link} to='#' onClick={this.handleButtonClick}>
                 My routes
               </Menu.Item>

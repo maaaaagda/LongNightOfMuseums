@@ -1,9 +1,10 @@
 import ImageGallery from 'react-image-gallery';
 import React from 'react';
-import { Grid, Tab } from 'semantic-ui-react';
+import {Button, Grid, Tab} from 'semantic-ui-react';
 import {load_institution} from "../../store/actions/institutionActions";
 import CustomModal from "../Helpers/Modals";
 import connect from "react-redux/es/connect/connect";
+import {Link} from "react-router-dom";
 
 class InstitutionDetail extends React.Component {
 
@@ -20,7 +21,7 @@ class InstitutionDetail extends React.Component {
         longitude: '',
         city_id: '',
         photos:  [],
-        visitingPlan: '',
+        visiting_plan: '',
         city: {
           name: ''
         }
@@ -32,22 +33,30 @@ class InstitutionDetail extends React.Component {
   }
   componentDidMount() {
     this.setState({institutionId: this.props.match.params.institutionId}, () => {
-      this.props.dispatch(load_institution(this.state.institutionId))
-        .then((res) => {
-          this.setState({institutionData: res.data})
-        })
-        .catch((err) => {
-          let errorModal = (
-            <CustomModal
-              modalType='simple'
-              header='Fetching data failed'
-              content={(err.response && err.response.data && err.response.data.message) ?
-                err.response.data.message
-                : 'Something went wrong, unable to fetch institution data'}
-              hideModal={this.hideModal}
-            />);
-          this.showModal(errorModal);
+      if(this.props.institutions.length > 0) {
+        let institutionData = this.props.institutions.find(institution => {
+          return institution._id === this.state.institutionId
         });
+        this.setState({institutionData: institutionData})
+      } else {
+        this.props.dispatch(load_institution(this.state.institutionId))
+          .then((res) => {
+            this.setState({institutionData: res.data})
+          })
+          .catch((err) => {
+            let errorModal = (
+              <CustomModal
+                modalType='simple'
+                header='Fetching data failed'
+                content={(err.response && err.response.data && err.response.data.message) ?
+                  err.response.data.message
+                  : 'Something went wrong, unable to fetch institution data'}
+                hideModal={this.hideModal}
+              />);
+            this.showModal(errorModal);
+          });
+      }
+
     });
   }
   showModal(modal) {
@@ -84,7 +93,7 @@ class InstitutionDetail extends React.Component {
       { menuItem: 'Map', render: () => <Tab.Pane as='div' attached='false'>Map container</Tab.Pane> },
       { menuItem: 'Visiting', render: () => <Tab.Pane as='div' attached='false'>
           <div className='museum-visiting-plan'>
-            {this.state.institutionData.visitingPlan}
+            {this.state.institutionData.visiting_plan}
           </div>
         </Tab.Pane> },
     ];
@@ -92,6 +101,15 @@ class InstitutionDetail extends React.Component {
     return (
       <div className={'main-container'}>
         <Grid>
+          <Grid.Row>
+            <div className='jumbotron-padding-small'>
+              <Link to={this.props.isAdmin ? "/admin/institutions" : "/institutions"}>
+                <Button color='black'>
+                  Go back to all institutions
+                </Button>
+              </Link>
+            </div>
+          </Grid.Row>
           <Grid.Row>
             <Grid.Column largeScreen={5} widescreen={8} mobile={16}>
               <div className='jumbotron-padding-small'>
@@ -119,4 +137,11 @@ class InstitutionDetail extends React.Component {
   }
 }
 
-export default connect(null)(InstitutionDetail);
+function mapStateToProps (state) {
+  return {
+    isAdmin: state.admin.isLoggedIn,
+    institutions: state.institutions
+  }
+}
+
+export default connect(mapStateToProps)(InstitutionDetail);
