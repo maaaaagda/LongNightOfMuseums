@@ -1,17 +1,16 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import {load_institutions, delete_institution, delete_institution_photos} from "../../store/actions/institutionActions";
-import {Card, Image, Grid, Button, Segment} from 'semantic-ui-react';
 import {Link} from "react-router-dom";
-import CustomModal from "../Helpers/Modals";
-import {Icon} from "semantic-ui-react";
-import moment from 'moment';
+import {Button, Container, Grid, Image, Card, Checkbox} from "semantic-ui-react";
+import React from "react";
+import connect from "react-redux/es/connect/connect";
+import {load_institutions} from "../../store/actions/institutionActions";
+import moment from "moment";
 import InstitutionsFilterOrder from "./InstitutionsFilterOrder";
 
-class Institutions extends React.Component {
+
+class InstitutionsOverview extends React.Component {
+
   constructor(props) {
     super(props);
-
     this.state = {
       isFormLoading: false,
       modal: '',
@@ -21,12 +20,10 @@ class Institutions extends React.Component {
       institutions: [],
       originalInstitutions: []
     };
-    this.hideModal = this.hideModal.bind(this);
     this.handleCitySelectChange = this.handleCitySelectChange.bind(this);
     this.handleOrderBySelectChange = this.handleOrderBySelectChange.bind(this);
     this.handleSearchByInstitutionName = this.handleSearchByInstitutionName.bind(this);
   }
-
   componentDidMount() {
     if(this.props.institutions.length > 0) {
       this.filterSortInstitutions();
@@ -112,63 +109,6 @@ class Institutions extends React.Component {
       this.filterSortInstitutions()
     })
   }
-  ensureDeletingInstitution(id, photos) {
-    let photosIds = photos.map(photo => {
-      return photo.id
-    });
-
-    let confirmModal = (
-      <CustomModal
-        modalType='confirm'
-        header='Remove institution'
-        content='Are you sure you want to delete chosen institution?'
-        hideModal={this.hideModal}
-        performAction={() => {this.deleteInstitution(id, photosIds)}}
-      />
-    );
-    this.showModal(confirmModal);
-  }
-  showModal(modal) {
-    this.setState({ modal: modal });
-  }
-  hideModal() {
-    this.setState({ modal: '' })
-  }
-  deleteInstitution(id, photosIds) {
-    this.props.dispatch(delete_institution_photos(photosIds))
-      .then(() => {
-        return  this.props.dispatch(delete_institution(id));
-      })
-      .then(() => {
-        let successModal = (
-          <CustomModal
-            modalType='simple'
-            header='Operation completed successfully'
-            content='Institution deleted successfully.'
-            hideModal={this.hideModal}
-          />);
-        this.showModal(successModal);
-      })
-      .catch((err) => {
-        let errorModal = (
-          <CustomModal
-            modalType='simple'
-            header='Operation failed'
-            content={(err.response && err.response.data && err.response.data.message)? err.response.data.message : 'Something went wrong, unable to delete selected institution'}
-            hideModal={this.hideModal}
-          />);
-        this.showModal(errorModal);
-      })
-  }
-  renderImage(institution) {
-    let image;
-    if(institution.photos.length > 0) {
-      image = <Image src={"/api/institutionsphotos/" + institution.photos[0].id} fluid />
-    } else {
-      image = <Icon name='university' size={'huge'}/>;
-    }
-    return image;
-  }
   renderInstitutionsList() {
     let resultList = [];
     this.state.institutions.map((institution, index) => {
@@ -176,12 +116,7 @@ class Institutions extends React.Component {
         <Card fluid key={index} className='institution-card'>
           <Grid celled='internally'>
             <Grid.Row>
-              <Grid.Column tablet={7} computer={4} only='computer tablet'>
-                  <div className={"jumbotron-fully-centered"}>
-                    {this.renderImage(institution)}
-                  </div>
-              </Grid.Column>
-              <Grid.Column mobile={11} tablet={6} computer={8}>
+             <Grid.Column mobile={11} tablet={6} computer={12}>
                 <Card.Content>
                   <Card.Header>
                     <h2>{institution.name}</h2>
@@ -197,21 +132,12 @@ class Institutions extends React.Component {
               </Grid.Column>
               <Grid.Column mobile={5} tablet={3} computer={4}>
                 <div className='vertical-center-outer'>
-                   <div className='museum-button'>
+                  <div className='museum-button'>
                     <Button basic color='blue' as={Link} to={`/institutions/${institution._id}`}> View more </Button>
                   </div>
-                  {this.props.isAdmin ? (
-                    <div className='museum-button'>
-                      <Button basic color='black' as={Link} to={`/admin/institutions/${institution._id}`}> Edit </Button>
-                    </div>
-                  ) : ""}
-                  {this.props.isAdmin ? (
-                    <div className='museum-button'>
-                      <Button basic color='red'
-                              onClick={this.ensureDeletingInstitution.bind(this, institution._id, institution.photos)}> Delete </Button>
-                    </div>
-                  ) : ""}
-
+                  <div className='museum-button'>
+                    <Checkbox />
+                  </div>
                 </div>
               </Grid.Column>
             </Grid.Row>
@@ -222,42 +148,43 @@ class Institutions extends React.Component {
     });
     return resultList.length === 0 && this.state.originalInstitutions.length > 0 ? <div className='jumbotron-fully-centered'><h3>No search results</h3></div> : resultList;
   }
-  render() {
+  render (){
     return (
-      <div className={'main-container'}>
-        <div className='jumbotron-padding-y-small'>
-          <Segment.Group horizontal>
-            <Segment textAlign='left'><h1> List of all institutions </h1></Segment>
-            {this.props.isAdmin ? (
-              <Segment textAlign='right' as={Link} to={"/admin/institutions/new"}>
-                <Button color='black'>
-                  Add new institution
-                </Button>
-              </Segment>
-            ) : ""}
-
-          </Segment.Group>
-          <InstitutionsFilterOrder
-            handleCitySelectChange={this.handleCitySelectChange}
-            handleOrderBySelectChange={this.handleOrderBySelectChange}
-            handleSearchByInstitutionName={this.handleSearchByInstitutionName}
-          />
-          <div className='institution-container'>
-            {this.renderInstitutionsList()}
-          </div>
-          {this.state.modal}
-        </div>
+      <div className={'main-container jumbotron-padding-small'}>
+        <Grid>
+           <Grid.Row>
+            <Grid.Column largeScreen={10} widescreen={8} mobile={16} className="p-0">
+              <div className='w-100'>
+                <InstitutionsFilterOrder
+                  handleCitySelectChange={this.handleCitySelectChange}
+                  handleOrderBySelectChange={this.handleOrderBySelectChange}
+                  handleSearchByInstitutionName={this.handleSearchByInstitutionName}
+                />
+              </div>
+              <Container className={'footer-photo p-0'}>
+                <Image src={require('../../assets/footer_picture_2.jpg')} size={'huge'} centered/>
+              </Container>
+            </Grid.Column>
+            <Grid.Column largeScreen={6} widescreen={8} mobile={16}>
+              <p> Select all institutions you want to visit and generate the optimal sightseeing path.</p>
+              {/*<label>Select each institution from the list <Checkbox /></label>*/}
+              <div className='institution-container'>
+                {this.renderInstitutionsList()}
+              </div>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+        {this.state.modal}
       </div>
-    )
+    );
   }
 }
-
 
 function mapStateToProps (state) {
   return {
-    institutions: state.institutions,
-    isAdmin: state.admin.isLoggedIn
+    isAdmin: state.admin.isLoggedIn,
+    institutions: state.institutions
   }
 }
 
-export default connect(mapStateToProps)(Institutions);
+export default connect(mapStateToProps)(InstitutionsOverview);
