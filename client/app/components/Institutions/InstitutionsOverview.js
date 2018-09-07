@@ -1,5 +1,5 @@
 import {Link} from "react-router-dom";
-import {Button, Container, Grid, Image, Card, Checkbox} from "semantic-ui-react";
+import {Button, Container, Grid, Image, Card, Checkbox, Icon} from "semantic-ui-react";
 import React from "react";
 import connect from "react-redux/es/connect/connect";
 import {load_institutions} from "../../store/actions/institutionActions";
@@ -109,6 +109,15 @@ class InstitutionsOverview extends React.Component {
       this.filterSortInstitutions()
     })
   }
+  renderImage(institution) {
+    let image;
+    if(institution.photos.length > 0) {
+      image = <Image src={"/api/institutionsphotos/" + institution.photos[0].id} fluid />
+    } else {
+      image = <Icon name='university' size={'huge'}/>;
+    }
+    return image;
+  }
   renderInstitutionsList() {
     let resultList = [];
     this.state.institutions.map((institution, index) => {
@@ -116,7 +125,12 @@ class InstitutionsOverview extends React.Component {
         <Card fluid key={index} className='institution-card'>
           <Grid celled='internally'>
             <Grid.Row>
-             <Grid.Column mobile={11} tablet={6} computer={12}>
+              <Grid.Column mobile={4} tablet={4} computer={4}>
+                <div className={"jumbotron-fully-centered"}>
+                  {this.renderImage(institution)}
+                </div>
+              </Grid.Column>
+             <Grid.Column mobile={7} tablet={7} computer={8}>
                 <Card.Content>
                   <Card.Header>
                     <h2>{institution.name}</h2>
@@ -130,7 +144,7 @@ class InstitutionsOverview extends React.Component {
                   </Card.Description>
                 </Card.Content>
               </Grid.Column>
-              <Grid.Column mobile={5} tablet={3} computer={4}>
+              <Grid.Column mobile={5} tablet={5} computer={4}>
                 <div className='vertical-center-outer'>
                   <div className='museum-button'>
                     <Button basic color='blue' as={Link} to={`/institutions/${institution._id}`}> View more </Button>
@@ -153,7 +167,7 @@ class InstitutionsOverview extends React.Component {
       <div className={'main-container jumbotron-padding-small'}>
         <Grid>
            <Grid.Row>
-            <Grid.Column largeScreen={10} widescreen={8} mobile={16} className="p-0">
+            <Grid.Column largeScreen={10} widescreen={8} mobile={16}>
               <div className='w-100'>
                 <InstitutionsFilterOrder
                   handleCitySelectChange={this.handleCitySelectChange}
@@ -161,9 +175,23 @@ class InstitutionsOverview extends React.Component {
                   handleSearchByInstitutionName={this.handleSearchByInstitutionName}
                 />
               </div>
-              <Container className={'footer-photo p-0'}>
-                <Image src={require('../../assets/footer_picture_2.jpg')} size={'huge'} centered/>
-              </Container>
+              <div className={'black p-0 w-100'}>
+                <p className='text-white'> Map container </p>
+                <p className='text-white'> Map container </p>
+                <p className='text-white'> Map container </p>
+                <p className='text-white'> Map container </p>
+                <p className='text-white'> Map container </p>
+                <p className='text-white'> Map container </p>
+                <p className='text-white'> Map container </p>
+                <p className='text-white'> Map container </p>
+                <p className='text-white'> Map container </p>
+                <p className='text-white'> Map container </p>
+                <p className='text-white'> Map container </p>
+                <p className='text-white'> Map container </p>
+                <p className='text-white'> Map container </p>
+                <p className='text-white'> Map container </p>
+              </div>
+              <br/>
             </Grid.Column>
             <Grid.Column largeScreen={6} widescreen={8} mobile={16}>
               <p> Select all institutions you want to visit and generate the optimal sightseeing path.</p>

@@ -181,6 +181,9 @@
 .p-0 {
   padding: 0 !important;
 }
+.p-right-only {
+  padding: 0 10px 0 0;
+}
 .institution-container {
   height: calc(~"0.6 * @{contentHeight}");
   padding: 3px;
@@ -193,4 +196,25 @@
 
 .black {
   background-color: black;
+}
+
+.main-photo {
+  background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.2)), url("~file-loader?name=images/[name].[ext]!../assets/backbround_photo.JPG");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  height: @contentHeight;
+  min-height: 700px;
+  background-color: white;
+
+}
+
+.huge-title {
+  color:  @secondaryColor;
+  font-size: 150px + 1vmax;
+  margin: 0;
+}
+
+.text-white {
+  color: @secondaryColor;
 }
