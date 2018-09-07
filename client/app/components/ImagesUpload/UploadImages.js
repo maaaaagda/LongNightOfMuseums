@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import '../../styles/photo_upload.less';
-import UploadIcon from './../../assets/UploadIcon.svg';
+import UploadIcon from '../../assets/upload-icon.svg';
 import {Icon} from "semantic-ui-react";
 
 class ReactImageUploadComponent extends React.Component {
