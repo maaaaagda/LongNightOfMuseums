@@ -194,11 +194,20 @@ class InstitutionsOverview extends React.Component {
               <br/>
             </Grid.Column>
             <Grid.Column largeScreen={6} widescreen={8} mobile={16}>
-              <p> Select all institutions you want to visit and generate the optimal sightseeing path.</p>
-              {/*<label>Select each institution from the list <Checkbox /></label>*/}
+              <div className='ui form'>
+              <div className='field'>
+                <label> Select all institutions you want to visit and generate the optimal sightseeing
+                  path.</label>
+                {/*<label>Select each institution from the list <Checkbox /></label>*/}
+              </div>
+              </div>
               <div className='institution-container'>
                 {this.renderInstitutionsList()}
               </div>
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row>
+            <Grid.Column largeScreen={10} widescreen={8} mobile={16}>
             </Grid.Column>
           </Grid.Row>
         </Grid>
