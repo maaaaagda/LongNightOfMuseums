@@ -5,7 +5,7 @@ import connect from "react-redux/es/connect/connect";
 import {load_institutions} from "../../store/actions/institutionActions";
 import moment from "moment";
 import InstitutionsFilterOrder from "./InstitutionsFilterOrder";
-
+import Map from "../Map/Map";
 
 class InstitutionsOverview extends React.Component {
 
@@ -187,25 +187,8 @@ class InstitutionsOverview extends React.Component {
               <br/>
             </Grid.Column>
             <Grid.Column largeScreen={8} widescreen={8} mobile={16}>
-              <div className={'black p-0 w-100'}>
-                <p className='text-white'> Map container </p>
-                <p className='text-white'> Map container </p>
-                <p className='text-white'> Map container </p>
-                <p className='text-white'> Map container </p>
-                <p className='text-white'> Map container </p>
-                <p className='text-white'> Map container </p>
-                <p className='text-white'> Map container </p>
-                <p className='text-white'> Map container </p>
-                <p className='text-white'> Map container </p>
-                <p className='text-white'> Map container </p>
-                <p className='text-white'> Map container </p>
-                <p className='text-white'> Map container </p>
-                <p className='text-white'> Map container </p>
-                <p className='text-white'> Map container </p>
-                <p className='text-white'> Map container </p>
-                <p className='text-white'> Map container </p>
-                <p className='text-white'> Map container </p>
-                <p className='text-white'> Map container </p>
+              <div className={'map p-0 w-100'}>
+                <Map/>
               </div>
             </Grid.Column>
           </Grid.Row>
