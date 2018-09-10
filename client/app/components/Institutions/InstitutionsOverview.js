@@ -167,7 +167,7 @@ class InstitutionsOverview extends React.Component {
       <div className={'main-container jumbotron-padding-small'}>
         <Grid>
            <Grid.Row>
-            <Grid.Column largeScreen={10} widescreen={8} mobile={16}>
+            <Grid.Column largeScreen={8} widescreen={8} mobile={16}>
               <div className='w-100'>
                 <InstitutionsFilterOrder
                   handleCitySelectChange={this.handleCitySelectChange}
@@ -175,6 +175,18 @@ class InstitutionsOverview extends React.Component {
                   handleSearchByInstitutionName={this.handleSearchByInstitutionName}
                 />
               </div>
+              <div className='ui form'>
+                <div className='field'>
+                  <label> Select all institutions you want to visit and generate the optimal sightseeing
+                    path.</label>
+                </div>
+              </div>
+              <div className='institution-container'>
+                {this.renderInstitutionsList()}
+              </div>
+              <br/>
+            </Grid.Column>
+            <Grid.Column largeScreen={8} widescreen={8} mobile={16}>
               <div className={'black p-0 w-100'}>
                 <p className='text-white'> Map container </p>
                 <p className='text-white'> Map container </p>
@@ -190,19 +202,10 @@ class InstitutionsOverview extends React.Component {
                 <p className='text-white'> Map container </p>
                 <p className='text-white'> Map container </p>
                 <p className='text-white'> Map container </p>
-              </div>
-              <br/>
-            </Grid.Column>
-            <Grid.Column largeScreen={6} widescreen={8} mobile={16}>
-              <div className='ui form'>
-              <div className='field'>
-                <label> Select all institutions you want to visit and generate the optimal sightseeing
-                  path.</label>
-                {/*<label>Select each institution from the list <Checkbox /></label>*/}
-              </div>
-              </div>
-              <div className='institution-container'>
-                {this.renderInstitutionsList()}
+                <p className='text-white'> Map container </p>
+                <p className='text-white'> Map container </p>
+                <p className='text-white'> Map container </p>
+                <p className='text-white'> Map container </p>
               </div>
             </Grid.Column>
           </Grid.Row>
