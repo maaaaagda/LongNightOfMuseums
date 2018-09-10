@@ -35,7 +35,7 @@ class Login extends React.Component {
     this.props.dispatch(login(loginData))
       .then(() => {
         this.setState({isFormLoading: false}, () => {
-          history.push('/institutions')
+          history.push('/admin/institutions')
         })
       })
       .catch(() => {

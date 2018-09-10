@@ -7,11 +7,11 @@ const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const morgan = require('morgan');
+const bodyParser = require('body-parser');
 const server_config = require('./libs/config');
 const webpackConfig = require('../webpack.config');
 const JWTtoken = require('./libs/auth');
 const configDb = require('../config/config');
-
 const isDev = process.env.NODE_ENV !== 'production';
 const port  = process.env.PORT || server_config.PORT;
 process.env['JWT_SECRET'] = 'shhhuwebubifoewjnfiqio789715';
@@ -24,8 +24,8 @@ mongoose.connect(isDev ? configDb.db_dev : configDb.db, { useNewUrlParser: true 
 mongoose.Promise = global.Promise;
 
 const app = express();
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(bodyParser.json({limit: "50mb"}));
+app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
 app.use(morgan('dev'));
 
 app.all('/api/*', function(req, res, next) {
@@ -33,7 +33,9 @@ app.all('/api/*', function(req, res, next) {
     || req.url === '/api/login'
     || req.url === '/api/remindpassword'
     || req.url ==='/api/resetpassword'
-    || (req.url === '/api/cities' && req.method === 'GET')) {
+    || (req.url === '/api/cities' && req.method === 'GET')
+    || ((req.url.indexOf('/api/institutions') >= 0) && req.method === 'GET')
+    || req.url.indexOf('/api/institutionsphotos') >= 0){
     return next();
   }
   if (!req.headers.authorization) {

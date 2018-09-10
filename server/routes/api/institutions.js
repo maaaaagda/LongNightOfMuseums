@@ -1,23 +1,49 @@
 const Institution = require('../../models/Institution');
 const City = require('../../models/City');
+const mongoose = require('mongoose');
 
 module.exports = (app) => {
   app.get('/api/institutions/:id', function (req, res) {
-    Institution.findById(req.params.id)
+    Institution
+      .aggregate([
+        { $match : { _id : mongoose.Types.ObjectId(req.params.id) } },
+        {
+          $lookup: {
+            from: "cities",
+            localField: "city_id",
+            foreignField: "_id",
+            as: "city"
+          }
+        },
+        {
+          $unwind: "$city"
+        }
+      ])
       .exec()
-      .then((institution) => {
+      .then((institutionList) => {
         res.status(200)
-          .json(institution)
+          .json(institutionList[0])
       })
-      .catch((err) => res.status(401)
+      .catch(() => res.status(401)
         .json({
-          message:  err || "Institution not found"
+          message: "Institution not found"
         }));
   });
 
   app.get('/api/institutions', (req, res, next) => {
-    Institution.find()
-      .exec()
+    Institution.aggregate([
+      {
+        $lookup:{
+          from: "cities",
+          localField: "city_id",
+          foreignField: "_id",
+          as: "city"
+        }
+      },
+      {
+        $unwind:"$city"
+      }
+    ]).exec()
       .then((institutions) => res.json(institutions))
       .catch((err) => next(err));
   });
@@ -84,20 +110,33 @@ module.exports = (app) => {
       .then((institution) => {
         oldCityId = institution.city_id;
         institution.set(req.body);
-        let oldCityPromise = City.findById({_id: oldCityId});
-        let newCityPromise = City.findById({_id: newCityId});
-        return Promise.all([institution.save(), oldCityPromise, newCityPromise]);
+        if(oldCityId !== newCityId) {
+          let oldCityPromise = City.findById({_id: oldCityId});
+          let newCityPromise = City.findById({_id: newCityId});
+          return Promise.all([institution.save(), oldCityPromise, newCityPromise]);
+        } else {
+          return institution.save()
+        }
       })
       .then(results => {
-        let updatedInstitution = results[0];
-        let oldCity = results[1];
-        let newCity = results[2];
-        oldCity.institutions_count--;
-        newCity.institutions_count++;
-        return Promise.all([updatedInstitution, oldCity.save(), newCity.save()]);
+        if (Array.isArray(results)) {
+          let updatedInstitution = results[0];
+          let oldCity = results[1];
+          let newCity = results[2];
+          oldCity.institutions_count--;
+          newCity.institutions_count++;
+          return Promise.all([updatedInstitution, oldCity.save(), newCity.save()]);
+        } else {
+          return results
+        }
       })
       .then(results => {
-        let updatedInstitution = results[0];
+        let updatedInstitution;
+        if (Array.isArray(results)) {
+          updatedInstitution = results[0];
+        } else {
+          updatedInstitution = results;
+        }
         res.status(200)
           .json(updatedInstitution)
       })

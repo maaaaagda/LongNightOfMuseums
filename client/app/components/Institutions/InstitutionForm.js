@@ -4,7 +4,7 @@ import {Button, Form, Icon, Select, TextArea} from "semantic-ui-react";
 import {ValidationForm, ValidationInput} from "../Helpers/FormElementsWithValidation";
 import {required} from "../Helpers/FormValidationRules";
 import PropTypes from "prop-types";
-
+import ImageUploader from '../ImagesUpload/UploadImages';
 
 class InstitutionForm extends React.Component {
   constructor(props) {
@@ -18,17 +18,22 @@ class InstitutionForm extends React.Component {
       latitude: this.props.institutionData.latitude || '',
       longitude: this.props.institutionData.longitude || '',
       city: this.props.institutionData.city_id || '',
+      photos: this.props.institutionData.photos || [],
+      photosFiles: [],
       cities: [],
       visitingPlan: this.props.institutionData.visitingPlan || '',
       currentStep: 1,
       buttonPreviousDisabled: true,
-      buttonNextSave: ''
+      buttonNextSave: '',
+      numberOfSteps: 4
     };
     this.ensureSavingInstitution = this.ensureSavingInstitution.bind(this);
     this.goToTheNextStep = this.goToTheNextStep.bind(this);
     this.goToThePreviousStep = this.goToThePreviousStep.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleCitySelectChange = this.handleCitySelectChange.bind(this);
+    this.onDrop = this.onDrop.bind(this);
+    this.deleteAlreadySavedPicture = this.deleteAlreadySavedPicture.bind(this);
   }
 
   componentDidMount() {
@@ -43,7 +48,7 @@ class InstitutionForm extends React.Component {
         <Icon name='right arrow' />
       </Button>
     );
-    this.setState({buttonNextSave: buttonNext, cities: this.manageCitiesList(this.props.cities)})
+    this.setState({buttonNextSave: buttonNext, cities: this.manageCitiesList(this.props.cities)});
   }
   componentWillReceiveProps(nextProps) {
       this.setState({
@@ -55,7 +60,8 @@ class InstitutionForm extends React.Component {
         city: nextProps.institutionData.city_id,
         latitude: nextProps.institutionData.latitude || '',
         longitude: nextProps.institutionData.longitude || '',
-        visitingPlan: nextProps.institutionData.visiting_plan || ''
+        visitingPlan: nextProps.institutionData.visiting_plan || '',
+        photos: nextProps.institutionData.photos || [],
       }, () => {
         this.setState({cities: this.manageCitiesList(nextProps.cities)})
       });
@@ -77,7 +83,7 @@ class InstitutionForm extends React.Component {
     return citiesSelect;
   }
   ensureSavingInstitution(e) {
-    e.preventDefault();
+     e.preventDefault();
     this.form.validateAll();
     if (this.isFormValid(this.form)) {
       let institution_data = {
@@ -88,9 +94,15 @@ class InstitutionForm extends React.Component {
         description: this.state.description,
         visiting_plan: this.state.visitingPlan,
         latitude: this.state.latitude,
-        longitude: this.state.longitude
+        longitude: this.state.longitude,
+        photos: this.state.photos
       };
-      this.props.submitSaving(institution_data);
+      let institutionPhotos = new FormData();
+
+      this.state.photosFiles.forEach(photo => {
+        institutionPhotos.append('InstitutionPhoto', photo);
+      });
+      this.props.submitSaving(institutionPhotos, institution_data);
     }
   }
 
@@ -113,6 +125,19 @@ class InstitutionForm extends React.Component {
       }
     });
     return isFormValid;
+  }
+
+  onDrop(picture) {
+    this.setState({
+      photosFiles: picture
+    });
+  }
+
+  deleteAlreadySavedPicture(id) {
+    let photos = this.state.photos.filter(photo => {
+      return photo.id !== id;
+    });
+    this.setState({photos: photos})
   }
 
   renderGeneralInfoStep() {
@@ -206,6 +231,24 @@ class InstitutionForm extends React.Component {
     )
   }
 
+  renderPhotosStep() {
+    return <div>
+      <ImageUploader
+        withIcon={true}
+        withPreview={true}
+        withLabel={true}
+        buttonText='Choose images'
+        name='InstitutionPhoto'
+        onChange={this.onDrop}
+        imgExtension={['.jpg', '.png']}
+        maxFileSize={5242880}
+        defaultImages={this.state.photosFiles}
+        alreadySavedPictures={this.state.photos}
+        deleteAlreadySavedPicture={this.deleteAlreadySavedPicture}
+      />
+    </div>
+  }
+
   renderFormStep() {
     let step = 1;
     switch (this.state.currentStep) {
@@ -218,6 +261,10 @@ class InstitutionForm extends React.Component {
       case 3:
         step = this.renderVisitingPlanStep();
         break;
+      case 4:
+        step = this.renderPhotosStep();
+        break;
+
     }
     return step;
   }
@@ -242,7 +289,7 @@ class InstitutionForm extends React.Component {
   }
 
   handleCurrentStepChange() {
-    if (this.state.currentStep !== 3) {
+    if (this.state.currentStep !== this.state.numberOfSteps) {
       let buttonNext = (
         <Button
           icon labelPosition='right'

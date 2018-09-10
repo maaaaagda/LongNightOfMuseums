@@ -1,15 +1,15 @@
 import * as types from './actionsTypes';
 import axios from 'axios';
 
-export function create_institution(institution) {
+export function create_institution(institutionData) {
   return dispatch => {
-    return axios.post('/api/institutions', institution)
+    return axios.post('/api/institutions', institutionData)
       .then(() => {
-        dispatch(create_institution_success(institution))
+        dispatch(create_institution_success(institutionData))
       })
       .catch(err => {
         throw err;
-      })
+      });
   }
 }
 
@@ -35,7 +35,11 @@ export function load_institutions_success(institutions) {
 
 export function load_institution(id) {
   return dispatch => {
-    return axios.get(`/api/institutions/${id}`);
+    return axios.get(`/api/institutions/${id}`)
+      .then()
+      .catch(err => {
+        throw err;
+      })
   }
 }
 
@@ -72,3 +76,24 @@ export function update_institution(id, institutionData) {
 export function update_institution_success(institution) {
   return {type:  types.UPDATE_INSTITUTION_SUCCESS, payload: institution}
 }
+
+export function upload_institution_photos(institutionPhotos) {
+  return dispatch => {
+    return axios.post('/api/uploadinstitutionphotos', institutionPhotos)
+      .then()
+      .catch(err => {
+        throw err;
+      })
+  }
+}
+
+export function delete_institution_photos(institutionPhotosIds) {
+  return dispatch => {
+    return axios.put('/api/deleteinstitutionphotos', {photosIds: institutionPhotosIds})
+      .then()
+      .catch(err => {
+        throw err;
+      })
+  }
+}
+

@@ -4,7 +4,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const helpers = require('./helpers');
-const path = require('path');
 const NODE_ENV = process.env.NODE_ENV;
 const isProd = NODE_ENV === 'production';
 
@@ -85,12 +84,30 @@ module.exports = {
       {
         test: /\.less$/,
         include: [helpers.root('client'), /node_modules/],
-        use: ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader?sourceMap!postcss-loader!less-loader?sourceMap' }),
-        //loaders: ExtractTextPlugin.extract('style-loader', 'css-loader!less-loader', {publicPath: '../'})
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                sourceMap: true
+              }
+            },
+            {
+              loader: 'postcss-loader'
+            },
+            {
+              loader: 'less-loader',
+              options: {
+                sourceMap: true
+              }
+            }
+          ]
+        })
       },
       {
         test: /\.css$/,
-        include: helpers.root('client'),
+        include: [helpers.root('client'), /node_modules\/react-images-upload/, /node_modules\/react-image-gallery/],
         use: ExtractTextPlugin.extract({
           fallback: "style-loader",
           use: [

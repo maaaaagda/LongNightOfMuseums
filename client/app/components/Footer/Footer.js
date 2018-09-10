@@ -20,12 +20,10 @@ const Footer = () => (
               </Container>
             </Grid.Row>
             <Grid.Row>
-              <Container>
                 <div className={'footer-info'}>
                   <h5>Contact</h5>
                   <p>longnightofmuseums@culture.com</p>
                 </div>
-              </Container>
             </Grid.Row>
           </Grid>
         </Grid.Column>
