@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {Button, Form, Icon, Select, TextArea} from "semantic-ui-react";
 import {ValidationForm, ValidationInput} from "../Helpers/FormElementsWithValidation";
-import {required} from "../Helpers/FormValidationRules";
+import {required, latitude, longitude} from "../Helpers/FormValidationRules";
 import PropTypes from "prop-types";
 import ImageUploader from '../ImagesUpload/UploadImages';
 
@@ -176,7 +176,6 @@ class InstitutionForm extends React.Component {
           label='Address'
           onChange={this.handleChange}
           value={this.state.address}
-          required
           validations={[required]}
         />
         <Form.Group widths='equal'>
@@ -184,10 +183,9 @@ class InstitutionForm extends React.Component {
             id='form-input-latitude'
             name='latitude'
             label='Latitude'
-            required
             onChange={this.handleChange}
             value={this.state.latitude}
-            validations={[required]}
+            validations={[required, latitude]}
           />
           <ValidationInput
             id='form-input-longitude'
@@ -196,7 +194,7 @@ class InstitutionForm extends React.Component {
             onChange={this.handleChange}
             value={this.state.longitude}
             required
-            validations={[required]}
+            validations={[required, longitude]}
           />
         </Form.Group>
       </div>
