@@ -5,7 +5,7 @@ module.exports = (app) => {
     City.find()
       .exec()
       .then((cities) => {
-        res.json(cities);
+        res.send(cities);
       })
       .catch((err) => {
         res.status(401)

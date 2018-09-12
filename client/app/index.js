@@ -39,8 +39,8 @@ store.dispatch(load_institutions());
 render((
   <Provider store={store}>
     <Router history={history}>
-      <App>
-        <ScrollToTop>
+      <ScrollToTop>
+        <App>
           <Switch>
             <Route exact path="/" component={Home}/>
             <Route path="/login" component={Login}/>
@@ -74,8 +74,8 @@ render((
               ))}/>
             <Route component={NotFound}/>
           </Switch>
-        </ScrollToTop>
-      </App>
+        </App>
+      </ScrollToTop>
     </Router>
   </Provider>
 ), document.getElementById('app'));

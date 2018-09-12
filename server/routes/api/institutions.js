@@ -44,7 +44,16 @@ module.exports = (app) => {
         $unwind:"$city"
       }
     ]).exec()
-      .then((institutions) => res.json(institutions))
+      .then((institutions) => {
+        let formatted = institutions.map(institution => {
+          institution.latitude = parseFloat(institution.latitude.toString());
+          institution.longitude = parseFloat(institution.longitude.toString());
+          institution.city.latitude = parseFloat(institution.city.latitude.toString());
+          institution.city.longitude = parseFloat(institution.city.longitude.toString());
+          return institution;
+        });
+        res.send(formatted)
+      })
       .catch((err) => next(err));
   });
 

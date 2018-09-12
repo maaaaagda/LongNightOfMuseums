@@ -6,8 +6,8 @@ const InstitutionSchema = new mongoose.Schema({
   created_at: Date,
   visiting_plan: String,
   address: String,
-  longitude: String,
-  latitude: String,
+  longitude: mongoose.Schema.Types.Decimal128,
+  latitude: mongoose.Schema.Types.Decimal128,
   photos: Array,
   website: String,
   city_id: mongoose.Schema.ObjectId
