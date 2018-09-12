@@ -241,6 +241,7 @@ class Institutions extends React.Component {
             handleCitySelectChange={this.handleCitySelectChange}
             handleOrderBySelectChange={this.handleOrderBySelectChange}
             handleSearchByInstitutionName={this.handleSearchByInstitutionName}
+            allCities={true}
           />
           <div className='institution-container'>
             {this.renderInstitutionsList()}

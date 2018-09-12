@@ -18,7 +18,8 @@ class InstitutionsOverview extends React.Component {
       orderBy: 'InstitutionNameAsc',
       searchByName: '',
       institutions: [],
-      originalInstitutions: []
+      originalInstitutions: [],
+      mapInstitutions: []
     };
     this.handleCitySelectChange = this.handleCitySelectChange.bind(this);
     this.handleOrderBySelectChange = this.handleOrderBySelectChange.bind(this);
@@ -45,7 +46,7 @@ class InstitutionsOverview extends React.Component {
     let fromCity = this.getInstitutionsFromGivenCity(this.state.city, this.state.originalInstitutions);
     let filteredByName = this.getInstitutionsFilteredByName(this.state.searchByName, fromCity);
     let ordered = this.getOrderedInstitutions(this.state.orderBy, filteredByName);
-    this.setState({institutions: ordered});
+    this.setState({institutions: ordered, mapInstitutions: ordered});
   }
   getInstitutionsFromGivenCity(value, institutions) {
     if(value === 'allCities') {
@@ -173,6 +174,7 @@ class InstitutionsOverview extends React.Component {
                   handleCitySelectChange={this.handleCitySelectChange}
                   handleOrderBySelectChange={this.handleOrderBySelectChange}
                   handleSearchByInstitutionName={this.handleSearchByInstitutionName}
+                  allCities={false}
                 />
               </div>
               <div className='ui form'>
@@ -187,8 +189,10 @@ class InstitutionsOverview extends React.Component {
               <br/>
             </Grid.Column>
             <Grid.Column largeScreen={8} widescreen={8} mobile={16}>
-              <div className={'map p-0 w-100'}>
-                <Map/>
+              <div className={'map w-100'}>
+                <Map
+                    institutions={this.state.mapInstitutions}
+                />
               </div>
             </Grid.Column>
           </Grid.Row>

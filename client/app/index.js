@@ -29,6 +29,7 @@ import CitiesList from "./components/Cities/CitiesList";
 import {load_cities} from "./store/actions/cityActions";
 import Redirect from "react-router-dom/es/Redirect";
 import {load_institutions} from "./store/actions/institutionActions";
+import ScrollToTop from "./components/Helpers/ScrollToTop";
 const store = configureStore();
 
 store.dispatch(restoreUserIfLogged());
@@ -39,39 +40,41 @@ render((
   <Provider store={store}>
     <Router history={history}>
       <App>
-        <Switch>
-          <Route exact path="/" component={Home}/>
-          <Route path="/login" component={Login}/>
-          <Route path="/remindpassword" component={RemindPassword}/>
-          <Route path="/resetpassword/:adminId/:recoveryString/" render={(props) => (<ResetPassword {...props}/>)}/>
-          <Route path="/institutions/:institutionId" component={InstitutionDetail}/>
-          <Route path="/institutions" component={Institutions}/>
-          <Route path="/admin/institutions/new" render={() => (
-            !store.getState().admin.isLoggedIn ? (
-              <Redirect to="/login"/> ) : (<NewInstitution />
-            ))}/>/>
-          <Route path="/admin/institutions/:institutionId" render={(props) => (
-            !store.getState().admin.isLoggedIn ? (
-              <Redirect to="/login"/> ) : (<EditInstitution {...props} />
-            ))}/>
-          <Route path="/admin/institutions" render={() => (
-            !store.getState().admin.isLoggedIn ? (
-              <Redirect to="/login"/> ) : (<Institutions />
-            ))}/>
-          <Route path="/admin/cities" render={() => (
-            !store.getState().admin.isLoggedIn ? (
-              <Redirect to="/login"/> ) : (<CitiesList />
-            ))}/>
-          <Route path="/admin/admins/new" render={() => (
-            !store.getState().admin.isLoggedIn ? (
-              <Redirect to="/login"/> ) : (<NewAdmin />
-            ))}/>
-          <Route path="/admin/admins" render={() => (
-            !store.getState().admin.isLoggedIn ? (
-              <Redirect to="/login"/> ) : (<Admins />
-            ))}/>
-          <Route component={NotFound}/>
-        </Switch>
+        <ScrollToTop>
+          <Switch>
+            <Route exact path="/" component={Home}/>
+            <Route path="/login" component={Login}/>
+            <Route path="/remindpassword" component={RemindPassword}/>
+            <Route path="/resetpassword/:adminId/:recoveryString/" render={(props) => (<ResetPassword {...props}/>)}/>
+            <Route path="/institutions/:institutionId" component={InstitutionDetail}/>
+            <Route path="/institutions" component={Institutions}/>
+            <Route path="/admin/institutions/new" render={() => (
+              !store.getState().admin.isLoggedIn ? (
+                <Redirect to="/login"/>) : (<NewInstitution/>
+              ))}/>/>
+            <Route path="/admin/institutions/:institutionId" render={(props) => (
+              !store.getState().admin.isLoggedIn ? (
+                <Redirect to="/login"/>) : (<EditInstitution {...props} />
+              ))}/>
+            <Route path="/admin/institutions" render={() => (
+              !store.getState().admin.isLoggedIn ? (
+                <Redirect to="/login"/>) : (<Institutions/>
+              ))}/>
+            <Route path="/admin/cities" render={() => (
+              !store.getState().admin.isLoggedIn ? (
+                <Redirect to="/login"/>) : (<CitiesList/>
+              ))}/>
+            <Route path="/admin/admins/new" render={() => (
+              !store.getState().admin.isLoggedIn ? (
+                <Redirect to="/login"/>) : (<NewAdmin/>
+              ))}/>
+            <Route path="/admin/admins" render={() => (
+              !store.getState().admin.isLoggedIn ? (
+                <Redirect to="/login"/>) : (<Admins/>
+              ))}/>
+            <Route component={NotFound}/>
+          </Switch>
+        </ScrollToTop>
       </App>
     </Router>
   </Provider>

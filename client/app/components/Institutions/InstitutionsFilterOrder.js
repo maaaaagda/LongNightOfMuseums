@@ -44,19 +44,22 @@ class InstitutionsFilterOrder extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.props.cities.length > 0 && this.state.cities.length === 1) {
+    if (this.props.cities.length > 0 && (this.state.cities.length === 1 || this.state.cities.length === 0) ) {
       this.setState({cities: this.manageCitiesList(this.props.cities)});
     }
   }
 
   manageCitiesList(cities) {
     let citiesSelect = [];
-    let allCities = {
-      key: 'allCities',
-      text: 'All cities',
-      value: 'allCities'
-    };
-    citiesSelect.push(allCities);
+    if(this.props.allCities) {
+      let allCities = {
+        key: 'allCities',
+        text: 'All cities',
+        value: 'allCities'
+      };
+      citiesSelect.push(allCities);
+    }
+
     cities.map(city => {
       let result = {
         key: city._id,
