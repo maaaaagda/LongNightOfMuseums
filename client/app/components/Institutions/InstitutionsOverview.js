@@ -1,11 +1,11 @@
 import {Link} from "react-router-dom";
-import {Button, Container, Grid, Image, Card, Checkbox, Icon} from "semantic-ui-react";
+import {Button, Grid, Image, Card, Checkbox, Icon} from "semantic-ui-react";
 import React from "react";
 import connect from "react-redux/es/connect/connect";
 import {load_institutions} from "../../store/actions/institutionActions";
 import moment from "moment";
 import InstitutionsFilterOrder from "./InstitutionsFilterOrder";
-import Map from "../Map/Map";
+import MapComponent from "../Map/Map";
 
 class InstitutionsOverview extends React.Component {
 
@@ -190,8 +190,9 @@ class InstitutionsOverview extends React.Component {
             </Grid.Column>
             <Grid.Column largeScreen={8} widescreen={8} mobile={16}>
               <div className={'map w-100'}>
-                <Map
+                <MapComponent
                     institutions={this.state.mapInstitutions}
+                    institutionsToVisit={[]} //this.state.mapInstitutions when choosing inst to visit implemented
                 />
               </div>
             </Grid.Column>
