@@ -5,7 +5,7 @@ import connect from "react-redux/es/connect/connect";
 import {load_institutions} from "../../store/actions/institutionActions";
 import moment from "moment";
 import InstitutionsFilterOrder from "./InstitutionsFilterOrder";
-import MapComponent from "../Map/Map";
+import MapContainer from "../Map/Map";
 
 class InstitutionsOverview extends React.Component {
 
@@ -19,7 +19,8 @@ class InstitutionsOverview extends React.Component {
       searchByName: '',
       institutions: [],
       originalInstitutions: [],
-      mapInstitutions: []
+      mapInstitutions: [],
+      institutionsToVisit: []
     };
     this.handleCitySelectChange = this.handleCitySelectChange.bind(this);
     this.handleOrderBySelectChange = this.handleOrderBySelectChange.bind(this);
@@ -37,7 +38,11 @@ class InstitutionsOverview extends React.Component {
   }
   componentDidUpdate() {
     if(this.props.institutions.length > 0 && this.state.originalInstitutions.length !== this.props.institutions.length ) {
-      this.setState({originalInstitutions: this.props.institutions, institutions: this.props.institutions}, () => {
+      let original = this.props.institutions.map(inst => {
+        inst.checked = false;
+        return inst;
+      });
+      this.setState({originalInstitutions: original, institutions: this.props.institutions}, () => {
         this.filterSortInstitutions();
       })
     }
@@ -45,8 +50,9 @@ class InstitutionsOverview extends React.Component {
   filterSortInstitutions() {
     let fromCity = this.getInstitutionsFromGivenCity(this.state.city, this.state.originalInstitutions);
     let filteredByName = this.getInstitutionsFilteredByName(this.state.searchByName, fromCity);
+    let mapInstitutions = this.getOrderedInstitutions("InstitutionNameAsc", JSON.parse(JSON.stringify(filteredByName)));
     let ordered = this.getOrderedInstitutions(this.state.orderBy, filteredByName);
-    this.setState({institutions: ordered, mapInstitutions: ordered});
+    this.setState({institutions: ordered, mapInstitutions});
   }
   getInstitutionsFromGivenCity(value, institutions) {
     if(value === 'allCities') {
@@ -110,6 +116,35 @@ class InstitutionsOverview extends React.Component {
       this.filterSortInstitutions()
     })
   }
+  handleChange(id) {
+    let institutions = JSON.parse(JSON.stringify(this.state.institutions));
+    let originalInstitutions = JSON.parse(JSON.stringify(this.state.originalInstitutions));
+    let updatedInstitutions = [];
+    let updatedOriginalInstitutions = [];
+    let institutionsToVisit = [];
+    institutions.forEach(inst => {
+      if(inst._id === id){
+        inst.checked = !inst.checked;
+      }
+      updatedInstitutions.push(inst);
+      if(inst.checked) {
+        institutionsToVisit.push(inst);
+      }
+    });
+    originalInstitutions.forEach(inst => {
+      if(inst._id === id){
+        inst.checked = !inst.checked;
+      }
+      updatedOriginalInstitutions.push(inst);
+    });
+
+    let orderedMapInstitutions = this.getOrderedInstitutions("InstitutionNameAsc", updatedInstitutions)
+    this.setState({institutions: orderedMapInstitutions,
+      mapInstitutions: updatedInstitutions,
+      institutionsToVisit,
+      originalInstitutions: updatedOriginalInstitutions
+    })
+  }
   renderImage(institution) {
     let image;
     if(institution.photos.length > 0) {
@@ -151,7 +186,10 @@ class InstitutionsOverview extends React.Component {
                     <Button basic color='blue' as={Link} to={`/institutions/${institution._id}`}> View more </Button>
                   </div>
                   <div className='museum-button'>
-                    <Checkbox />
+                    <Checkbox
+                      id={'institution-to-visit-' + index}
+                      checked={institution.checked}
+                      onChange={() => this.handleChange( institution._id)}/>
                   </div>
                 </div>
               </Grid.Column>
@@ -190,8 +228,8 @@ class InstitutionsOverview extends React.Component {
             </Grid.Column>
             <Grid.Column largeScreen={8} widescreen={8} mobile={16}>
               <div className={'map w-100'}>
-                <MapComponent
-                    institutions={this.state.mapInstitutions}
+                <MapContainer
+                    allInstitutions={this.state.mapInstitutions}
                     institutionsToVisit={[]} //this.state.mapInstitutions when choosing inst to visit implemented
                 />
               </div>
