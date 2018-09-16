@@ -19,8 +19,7 @@ class InstitutionsOverview extends React.Component {
       searchByName: '',
       institutions: [],
       originalInstitutions: [],
-      mapInstitutions: [],
-      institutionsToVisit: []
+      mapInstitutions: []
     };
     this.handleCitySelectChange = this.handleCitySelectChange.bind(this);
     this.handleOrderBySelectChange = this.handleOrderBySelectChange.bind(this);
@@ -121,16 +120,13 @@ class InstitutionsOverview extends React.Component {
     let originalInstitutions = JSON.parse(JSON.stringify(this.state.originalInstitutions));
     let updatedInstitutions = [];
     let updatedOriginalInstitutions = [];
-    let institutionsToVisit = [];
     institutions.forEach(inst => {
       if(inst._id === id){
         inst.checked = !inst.checked;
       }
       updatedInstitutions.push(inst);
-      if(inst.checked) {
-        institutionsToVisit.push(inst);
-      }
     });
+
     originalInstitutions.forEach(inst => {
       if(inst._id === id){
         inst.checked = !inst.checked;
@@ -138,10 +134,9 @@ class InstitutionsOverview extends React.Component {
       updatedOriginalInstitutions.push(inst);
     });
 
-    let orderedMapInstitutions = this.getOrderedInstitutions("InstitutionNameAsc", updatedInstitutions)
+    let orderedMapInstitutions = this.getOrderedInstitutions("InstitutionNameAsc", updatedInstitutions);
     this.setState({institutions: orderedMapInstitutions,
       mapInstitutions: updatedInstitutions,
-      institutionsToVisit,
       originalInstitutions: updatedOriginalInstitutions
     })
   }
@@ -230,7 +225,6 @@ class InstitutionsOverview extends React.Component {
               <div className={'map w-100'}>
                 <MapContainer
                     allInstitutions={this.state.mapInstitutions}
-                    institutionsToVisit={[]} //this.state.mapInstitutions when choosing inst to visit implemented
                 />
               </div>
             </Grid.Column>
