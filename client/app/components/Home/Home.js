@@ -7,9 +7,13 @@ class Home extends React.Component {
     super(props);
     this.state = {
       visibleTitle: false
-    }
+    };
+    this.seeMore = this.seeMore.bind(this);
   }
-
+  seeMore() {
+    let topPosOfDiv = document.getElementById('institutions-overview').getBoundingClientRect().top;
+    window.scrollBy({top: topPosOfDiv - 70, behavior: 'smooth'});
+  }
   componentDidMount () {
     this.setState({visibleTitle: true});
   }
@@ -17,7 +21,7 @@ class Home extends React.Component {
   render() {
     return (
       <div>
-        <div className='container-black'>
+        <div id='home-container' className='container-black'>
           <div className={'jumbotron'}>
             <Transition visible={this.state.visibleTitle} animation='scale' duration={5000}>
               <Container textAlign={'center'}>
@@ -26,8 +30,14 @@ class Home extends React.Component {
               </Container>
             </Transition>
           </div>
+          <div className='see-more' onClick={this.seeMore}>
+            <div className="arrow arrow-bottom arrow-up"></div>
+            <div className="arrow arrow-bottom arrow-down"></div>
+          </div>
         </div>
-        <InstitutionsOverview/>
+        <div id='institutions-overview'>
+          <InstitutionsOverview/>
+        </div>
       </div>
     )
   }

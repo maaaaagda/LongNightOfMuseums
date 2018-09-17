@@ -61,7 +61,7 @@
 
 .container-black {
   background-color: @primaryColor;
-  min-height: @contentHeight;
+  height: @contentHeight;
   position: relative;
 }
 
@@ -195,7 +195,7 @@
 }
 
 .black {
-  background-color: black;
+  background-color: @primaryColor;
 }
 
 .main-photo {
@@ -226,4 +226,50 @@
 
 .map.w-100 > div > div{
   position: static !important;
+}
+
+.photo-tab {
+  position: relative;
+  min-height: 500px;
+}
+
+
+@keyframes arrow-animation {
+  0%  {border-color: @secondaryColor; top: 0px}
+  100% {border-color: @primaryColor; top: 50px}
+}
+
+
+.arrow {
+  display: inline-block;
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-top: 7px solid @secondaryColor;
+  border-right: 7px solid @secondaryColor;
+}
+
+.arrow-bottom {
+  transform: rotate(135deg);
+}
+
+.see-more {
+  height: 100px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+}
+.see-more:hover {
+  cursor: pointer;
+}
+
+.arrow-up {
+  z-index: 1;
+  animation: arrow-animation 1.5s linear infinite;
+}
+
+.arrow-down {
+  z-index: 2;
+  animation: arrow-animation 1.5s linear 0.75s infinite;
 }

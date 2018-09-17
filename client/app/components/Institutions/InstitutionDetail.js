@@ -1,6 +1,6 @@
 import ImageGallery from 'react-image-gallery';
 import React from 'react';
-import {Button, Grid, Tab} from 'semantic-ui-react';
+import {Button, Grid, Icon, Tab} from 'semantic-ui-react';
 import {load_institution} from "../../store/actions/institutionActions";
 import CustomModal from "../Helpers/Modals";
 import connect from "react-redux/es/connect/connect";
@@ -69,14 +69,24 @@ class InstitutionDetail extends React.Component {
     let images = this.state.institutionData.photos.map(photo => {
       return {original: photo.path}
     });
-    return <ImageGallery
-      items={images}
-      showThumbnails={false}
-      showPlayButton={false}
-      autoPlay={true}
-      slideInterval={10000}
-      showBullets={true}
-    />
+    if(images.length > 0) {
+      return <ImageGallery
+        items={images}
+        showThumbnails={false}
+        showPlayButton={false}
+        autoPlay={true}
+        slideInterval={10000}
+        showBullets={true}
+      />
+    } else {
+      return <div className="photo-tab">
+        <div className='text-center jumbotron-fully-centered'>
+          <Icon name='university' size={'huge'}/>
+          <h3>No photos available</h3>
+        </div>
+      </div>
+    }
+
   }
 
   render() {
@@ -125,7 +135,7 @@ class InstitutionDetail extends React.Component {
               </div>
             </Grid.Column>
             <Grid.Column largeScreen={11} widescreen={8} mobile={16}>
-              <div className='jumbotron-padding-small'>
+              <div className='jumbotron-padding-small h-100'>
                 <Tab menu={{ secondary: true, pointing: true }} panes={panes} />
               </div>
             </Grid.Column>
