@@ -235,7 +235,7 @@
 
 
 @keyframes arrow-animation {
-  0%  {border-color: @secondaryColor; top: 0px}
+  0%  {border-color: @secondaryColor; top: 0}
   100% {border-color: @primaryColor; top: 50px}
 }
 
@@ -243,8 +243,8 @@
 .arrow {
   display: inline-block;
   position: absolute;
-  width: 30px;
-  height: 30px;
+  width: @arrowAnimationSize;
+  height: @arrowAnimationSize;
   border-top: 7px solid @secondaryColor;
   border-right: 7px solid @secondaryColor;
 }
@@ -257,9 +257,9 @@
   height: 100px;
   position: absolute;
   bottom: 0;
-  width: 100%;
-  text-align: center;
+  left: calc(~"50vw - 0.75 * @{arrowAnimationSize}");
 }
+
 .see-more:hover {
   cursor: pointer;
 }
@@ -272,4 +272,15 @@
 .arrow-down {
   z-index: 2;
   animation: arrow-animation 1.5s linear 0.75s infinite;
+}
+
+
+.cities-container {
+  height: calc(~"0.6 * @{contentHeight}");
+  padding: 3px;
+  overflow-y: auto;
+}
+
+.button-100 {
+  width: 100px;
 }

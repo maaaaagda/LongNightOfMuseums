@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {load_institutions, delete_institution, delete_institution_photos} from "../../store/actions/institutionActions";
-import {Card, Image, Grid, Button, Segment} from 'semantic-ui-react';
+import {Card, Image, Grid, Button, Segment,  Loader, Dimmer} from 'semantic-ui-react';
 import {Link} from "react-router-dom";
 import CustomModal from "../Helpers/Modals";
 import {Icon} from "semantic-ui-react";
@@ -19,7 +19,8 @@ class Institutions extends React.Component {
       orderBy: 'InstitutionNameAsc',
       searchByName: '',
       institutions: [],
-      originalInstitutions: []
+      originalInstitutions: [],
+      loadingData: false
     };
     this.hideModal = this.hideModal.bind(this);
     this.handleCitySelectChange = this.handleCitySelectChange.bind(this);
@@ -31,9 +32,11 @@ class Institutions extends React.Component {
     if(this.props.institutions.length > 0) {
       this.filterSortInstitutions();
     } else {
+      this.setState({loadingData: true});
       this.props.dispatch(load_institutions())
         .then(() => {
           this.filterSortInstitutions();
+          this.setState({loadingData: false})
         });
     }
   }
@@ -220,7 +223,18 @@ class Institutions extends React.Component {
       );
       resultList.push(result);
     });
-    return resultList.length === 0 && this.state.originalInstitutions.length > 0 ? <div className='jumbotron-fully-centered'><h3>No search results</h3></div> : resultList;
+    let noSearchResults =  <div className='jumbotron-fully-centered'><h3>No search results</h3></div>;
+    if(this.state.loadingData) {
+      return <div className='jumbotron-fully-centered'>
+        <Dimmer active inverted>
+          <Loader inverted>Loading...</Loader>
+        </Dimmer>
+      </div>
+    }
+    if(resultList.length === 0){
+      return noSearchResults;
+    }
+    return resultList;
   }
   render() {
     return (

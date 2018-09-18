@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {Table, Button, Segment} from 'semantic-ui-react';
+import {Table, Button, Segment, Dimmer, Loader} from 'semantic-ui-react';
 import {delete_admin, load_admins} from "../../store/actions/adminActions";
 import {Link} from "react-router-dom";
 import CustomModal from '../Helpers/Modals';
@@ -12,13 +12,21 @@ class AdminsList extends React.Component
       super(props);
       this.state = {
         isFormLoading: false,
-        modal: ''
+        modal: '',
+        loadingData: false
       };
       this.hideModal = this.hideModal.bind(this);
     }
 
     componentDidMount() {
-      this.props.dispatch(load_admins());
+      if(this.props.admins.length === 0) {
+        this.setState({loadingData: true});
+        this.props.dispatch(load_admins())
+          .then(() => {
+            this.setState({loadingData: false})
+          })
+      }
+
     }
     ensureDeletingUser(id) {
      let confirmModal = (
@@ -85,8 +93,7 @@ class AdminsList extends React.Component
     }
 
     renderAdminTable () {
-      let adminTable = this.props.admins.length !== 0 ?
-        (
+      let adminTable = (
           <div className={'table-container'}>
             <Table selectable size='large'>
               <Table.Header>
@@ -95,7 +102,7 @@ class AdminsList extends React.Component
                   <Table.HeaderCell>Last name</Table.HeaderCell>
                   <Table.HeaderCell>Date joined</Table.HeaderCell>
                   <Table.HeaderCell>E-mail</Table.HeaderCell>
-                  <Table.HeaderCell></Table.HeaderCell>
+                  <Table.HeaderCell/>
                 </Table.Row>
               </Table.Header>
               <Table.Body>
@@ -103,33 +110,39 @@ class AdminsList extends React.Component
               </Table.Body>
             </Table>
           </div>
-        )
-        :
-        <div> No data available </div>;
-
+        );
+      if(this.state.loadingData){
+        return <div className='jumbotron-fully-centered'>
+          <Dimmer active inverted>
+            <Loader inverted>Loading...</Loader>
+          </Dimmer>
+        </div>
+      }
+      if(this.props.admins.length === 0 ) {
+        return <div className='jumbotron-fully-centered'> No data available </div>;
+      }
       return adminTable;
     }
 
-    render()
-    {
-        return (
-          <div className='jumbotron-top-small'>
-            <Segment.Group horizontal>
-              <Segment textAlign='left'><h1> List of all administrators </h1></Segment>
-              <Segment textAlign='right' as={Link} to={"/admin/admins/new"}>
-                <Button color='black'>
-                  Add new administrator
-                </Button>
-              </Segment>
-            </Segment.Group>
-            <br/>
-            { this.renderAdminTable() }
-            {this.state.modal}
-          </div>
-
-        )
-    }
-
+  render() {
+    return (
+      <div className={'main-container'}>
+        <div className='jumbotron-padding-y-small'>
+          <Segment.Group horizontal>
+            <Segment textAlign='left'><h1> List of all administrators </h1></Segment>
+            <Segment textAlign='right' as={Link} to={"/admin/admins/new"}>
+              <Button color='black'>
+                Add new administrator
+              </Button>
+            </Segment>
+          </Segment.Group>
+          <br/>
+          {this.renderAdminTable()}
+          {this.state.modal}
+        </div>
+      </div>
+    )
+  }
 
 }
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {create_city, delete_city, load_cities, update_city} from "../../store/actions/cityActions";
-import {Button, Segment, Table, Popup, Icon} from "semantic-ui-react";
+import {Button, Segment, Table, Popup, Icon, Dimmer, Loader} from "semantic-ui-react";
 import CustomModal from "../Helpers/Modals";
 import CityCreateEdit from "./CityCreateEdit";
 
@@ -9,7 +9,8 @@ class CitiesList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      modal: ''
+      modal: '',
+      loadingData: false
     };
     this.hideModal = this.hideModal.bind(this);
     this.ensureSavingCity = this.ensureSavingCity.bind(this);
@@ -18,7 +19,13 @@ class CitiesList extends React.Component {
   }
 
   componentDidMount() {
-    this.props.dispatch(load_cities())
+    if(this.props.cities.length === 0) {
+      this.setState({loadingData: true});
+      this.props.dispatch(load_cities())
+        .then(() => {
+          this.setState({loadingData: false})
+        })
+    }
   }
 
   ensureDeletingCity(id, cityName) {
@@ -165,15 +172,17 @@ class CitiesList extends React.Component {
         <Table.Row key={i}>
           <Table.Cell>{city.name}</Table.Cell>
           <Table.Cell textAlign='center'>{city.institutions_count}</Table.Cell>
-          <Table.Cell>
+          <Table.Cell textAlign="right">
             <Button
               basic
               color='red'
+              className='button-100'
               onClick={() => this.ensureDeletingCity(city._id, city.name)}
               disabled={city.institutions_count != 0}>
               Remove
             </Button>
             <Button
+              className='button-100'
               basic color='black'
               onClick={() => {this.openUpdateCityForm(city._id, city.name)}}
             >
@@ -188,10 +197,9 @@ class CitiesList extends React.Component {
   }
 
   renderCityTable() {
-    let cityTable = this.props.cities.length !== 0 ?
-      (
+    let cityTable = (
         <div className={'table-container'}>
-          <Table selectable size='large'>
+          <Table selectable size='large' unstackable={true}>
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>Name</Table.HeaderCell>
@@ -211,27 +219,38 @@ class CitiesList extends React.Component {
             </Table.Body>
           </Table>
         </div>
-      )
-      :
-      <div> No data available </div>;
-
+      );
+    if(this.state.loadingData){
+      return <div className='jumbotron-fully-centered'>
+        <Dimmer active inverted>
+          <Loader inverted>Loading...</Loader>
+        </Dimmer>
+      </div>
+    }
+    if(this.props.cities.length === 0 ) {
+      return <div className='jumbotron-fully-centered'> No data available </div>;
+    }
     return cityTable;
   }
 
   render() {
     return (
-      <div className='jumbotron-top-small'>
-        <Segment.Group horizontal>
-          <Segment textAlign='left'><h1> List of all cities </h1></Segment>
-          <Segment textAlign='right'>
-            <Button color='black' onClick={this.openNewCityForm}>
-              Add new city
-            </Button>
-          </Segment>
-        </Segment.Group>
-        <br/>
-        {this.renderCityTable()}
-        {this.state.modal}
+      <div className={'main-container'}>
+        <div className='jumbotron-padding-y'>
+          <Segment.Group horizontal>
+            <Segment textAlign='left'><h1> List of all cities </h1></Segment>
+            <Segment textAlign='right'>
+              <Button color='black' onClick={this.openNewCityForm}>
+                Add new city
+              </Button>
+            </Segment>
+          </Segment.Group>
+          <br/>
+          <div className='cities-container'>
+            {this.renderCityTable()}
+            {this.state.modal}
+          </div>
+        </div>
       </div>
 
     )
