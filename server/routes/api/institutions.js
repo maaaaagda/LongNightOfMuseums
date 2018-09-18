@@ -20,9 +20,15 @@ module.exports = (app) => {
         }
       ])
       .exec()
-      .then((institutionList) => {
-        res.status(200)
-          .json(institutionList[0])
+      .then((institutions) => {
+        let formatted = institutions.map(institution => {
+          institution.latitude = parseFloat(institution.latitude.toString());
+          institution.longitude = parseFloat(institution.longitude.toString());
+          institution.city.latitude = parseFloat(institution.city.latitude.toString());
+          institution.city.longitude = parseFloat(institution.city.longitude.toString());
+          return institution;
+        });
+        res.send(formatted[0])
       })
       .catch(() => res.status(401)
         .json({

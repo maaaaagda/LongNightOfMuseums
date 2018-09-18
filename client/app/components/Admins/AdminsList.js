@@ -95,7 +95,7 @@ class AdminsList extends React.Component
     renderAdminTable () {
       let adminTable = (
           <div className={'table-container'}>
-            <Table selectable size='large'>
+            <Table selectable size='large' unstackable={true}>
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell>Name</Table.HeaderCell>

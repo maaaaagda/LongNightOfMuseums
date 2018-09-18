@@ -5,6 +5,7 @@ import {load_institution} from "../../store/actions/institutionActions";
 import CustomModal from "../Helpers/Modals";
 import connect from "react-redux/es/connect/connect";
 import {Link} from "react-router-dom";
+import MapContainer from "../Map/Map"
 
 class InstitutionDetail extends React.Component {
 
@@ -79,7 +80,7 @@ class InstitutionDetail extends React.Component {
         showBullets={true}
       />
     } else {
-      return <div className="photo-tab">
+      return <div className="tab-content">
         <div className='text-center jumbotron-fully-centered'>
           <Icon name='university' size={'huge'}/>
           <h3>No photos available</h3>
@@ -100,7 +101,13 @@ class InstitutionDetail extends React.Component {
             {this.renderPhotoGallery()}
           </Tab.Pane>
       },
-      { menuItem: 'Map', render: () => <Tab.Pane as='div' attached='false'>Map container</Tab.Pane> },
+      { menuItem: 'Map', render: () => <Tab.Pane as='div' attached='false'>
+          <div className="tab-content">
+            <div className={'map'}>
+              <MapContainer allInstitutions={[this.state.institutionData]}/>
+            </div>
+          </div>
+        </Tab.Pane> },
       { menuItem: 'Visiting', render: () => <Tab.Pane as='div' attached='false'>
           <div className='museum-visiting-plan'>
             {this.state.institutionData.visiting_plan}
