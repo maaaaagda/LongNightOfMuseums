@@ -1,6 +1,7 @@
 const Institution = require('../../models/Institution');
 const City = require('../../models/City');
 const mongoose = require('mongoose');
+let photosController = require('../../controllers/photos_controller');
 
 module.exports = (app) => {
   app.get('/api/institutions/:id', function (req, res) {
@@ -66,17 +67,24 @@ module.exports = (app) => {
   app.delete('/api/institutions/:id', function (req, res) {
     Institution.findOneAndRemove({ _id: req.params.id })
       .exec()
-      .then((institution) => {
+      .then(institution => {
         if (institution) {
-          return City.findById({_id: institution.city_id});
+          let photosIds = institution.photos;
+          return Promise.all([institution, photosController.deletePhotos(photosIds)]);
         } else {
           return Promise.reject('Institution not found')
         }
-
+      })
+      .then(([institution, ]) => {
+        return City.findById({_id: institution.city_id});
       })
       .then((city) => {
-        city.institutions_count--;
-        return city.save();
+        if(city) {
+          city.institutions_count--;
+          return city.save();
+        } else {
+          return Promise.reject('City connected to institution not found')
+        }
       })
       .then(() => {
         res.status(200)

@@ -212,7 +212,7 @@ class InstitutionsOverview extends React.Component {
               </div>
               <div className='ui form'>
                 <div className='field'>
-                  <label> Select all institutions you want to visit and generate the optimal sightseeing
+                  <label> Select all institutions you wish to visit and generate the optimal sightseeing. Start and end of the route is set to the city centre
                     path.</label>
                 </div>
               </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {load_institutions, delete_institution, delete_institution_photos} from "../../store/actions/institutionActions";
+import {load_institutions, delete_institution} from "../../store/actions/institutionActions";
 import {Card, Image, Grid, Button, Segment,  Loader, Dimmer} from 'semantic-ui-react';
 import {Link} from "react-router-dom";
 import CustomModal from "../Helpers/Modals";
@@ -115,18 +115,14 @@ class Institutions extends React.Component {
       this.filterSortInstitutions()
     })
   }
-  ensureDeletingInstitution(id, photos) {
-    let photosIds = photos.map(photo => {
-      return photo.id
-    });
-
-    let confirmModal = (
+  ensureDeletingInstitution(id) {
+      let confirmModal = (
       <CustomModal
         modalType='confirm'
         header='Remove institution'
         content='Are you sure you want to delete chosen institution?'
         hideModal={this.hideModal}
-        performAction={() => {this.deleteInstitution(id, photosIds)}}
+        performAction={() => {this.deleteInstitution(id)}}
       />
     );
     this.showModal(confirmModal);
@@ -137,11 +133,8 @@ class Institutions extends React.Component {
   hideModal() {
     this.setState({ modal: '' })
   }
-  deleteInstitution(id, photosIds) {
-    this.props.dispatch(delete_institution_photos(photosIds))
-      .then(() => {
-        return  this.props.dispatch(delete_institution(id));
-      })
+  deleteInstitution(id) {
+    this.props.dispatch(delete_institution(id))
       .then(() => {
         let successModal = (
           <CustomModal
@@ -211,7 +204,7 @@ class Institutions extends React.Component {
                   {this.props.isAdmin ? (
                     <div className='museum-button'>
                       <Button basic color='red'
-                              onClick={this.ensureDeletingInstitution.bind(this, institution._id, institution.photos)}> Delete </Button>
+                              onClick={this.ensureDeletingInstitution.bind(this, institution._id)}> Delete </Button>
                     </div>
                   ) : ""}
 
