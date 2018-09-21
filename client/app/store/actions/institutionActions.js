@@ -4,9 +4,9 @@ import axios from 'axios';
 export function create_institution(institutionData) {
   return dispatch => {
     return axios.post('/api/institutions', institutionData)
-      .then(() => {
-        dispatch(create_institution_success(institutionData))
-      })
+      .then((res) => {
+      dispatch(create_institution_success(res.data))
+    })
       .catch(err => {
         throw err;
       });

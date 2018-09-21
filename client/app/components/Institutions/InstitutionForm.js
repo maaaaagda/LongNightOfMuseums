@@ -83,26 +83,25 @@ class InstitutionForm extends React.Component {
     return citiesSelect;
   }
   ensureSavingInstitution(e) {
-     e.preventDefault();
+    e.preventDefault();
     this.form.validateAll();
     if (this.isFormValid(this.form)) {
-      let institution_data = {
-        name: this.state.name,
-        website: this.state.website,
-        city_id: this.state.city,
-        address: this.state.address,
-        description: this.state.description,
-        visiting_plan: this.state.visitingPlan,
-        latitude: this.state.latitude,
-        longitude: this.state.longitude,
-        photos: this.state.photos
-      };
-      let institutionPhotos = new FormData();
+
+      let institutionData = new FormData();
+      institutionData.append('name', this.state.name);
+      institutionData.append('website', this.state.website);
+      institutionData.append('city_id', this.state.city);
+      institutionData.append('address', this.state.address);
+      institutionData.append('description', this.state.description);
+      institutionData.append('visiting_plan', this.state.visitingPlan);
+      institutionData.append('latitude', this.state.latitude);
+      institutionData.append('longitude', this.state.longitude);
+      institutionData.append('photos', JSON.stringify(this.state.photos));
 
       this.state.photosFiles.forEach(photo => {
-        institutionPhotos.append('InstitutionPhoto', photo);
+        institutionData.append('InstitutionPhoto', photo);
       });
-      this.props.submitSaving(institutionPhotos, institution_data);
+      this.props.submitSaving(institutionData);
     }
   }
 

@@ -1,7 +1,25 @@
 const Institution = require('../../models/Institution');
-const City = require('../../models/City');
 const mongoose = require('mongoose');
 let photosController = require('../../controllers/photos_controller');
+const _ = require('lodash');
+
+
+const multer = require('multer');
+
+const Storage = multer.diskStorage({
+  destination: function(req, file, callback) {
+    callback(null, __dirname.replace('server/routes/api', '') + 'client/public/InstitutionsImages');
+  },
+  filename: function(req, file, callback) {
+    callback(null, file.fieldname + "_" + Date.now() + "." + file.mimetype.split('image/').pop()) ;
+  }
+});
+
+const upload = multer({
+  storage: Storage
+});
+
+
 
 module.exports = (app) => {
   app.get('/api/institutions/:id', function (req, res) {
@@ -69,21 +87,12 @@ module.exports = (app) => {
       .exec()
       .then(institution => {
         if (institution) {
-          let photosIds = institution.photos;
-          return Promise.all([institution, photosController.deletePhotos(photosIds)]);
+          let photosIds = institution.photos.map(photo => {
+            return photo.id
+          });
+          return photosController.deletePhotos(photosIds);
         } else {
           return Promise.reject('Institution not found')
-        }
-      })
-      .then(([institution, ]) => {
-        return City.findById({_id: institution.city_id});
-      })
-      .then((city) => {
-        if(city) {
-          city.institutions_count--;
-          return city.save();
-        } else {
-          return Promise.reject('City connected to institution not found')
         }
       })
       .then(() => {
@@ -99,23 +108,44 @@ module.exports = (app) => {
       });
   });
 
-  app.post('/api/institutions', (req, res) => {
+  app.post('/api/institutions', upload.array('InstitutionPhoto', 50), (req, res) => {
+    let imagesLinks = req.files.map(image => {
+      return {
+        path: '/api/institutionsphotos/' + image.path.split('/').pop(),
+        name: image.originalname,
+        id: image.path.split('/').pop()
+      };
+    });
     let institution_data = req.body;
     institution_data['created_at'] = Date.now();
+    institution_data.photos = imagesLinks;
     let institution = new Institution(institution_data);
     institution.save()
       .then((institution) => {
-        return City.findById({_id: institution.city_id});
+        let id = institution._id;
+        return Institution
+          .aggregate([
+            { $match : { _id : mongoose.Types.ObjectId(id) } },
+            {
+              $lookup: {
+                from: "cities",
+                localField: "city_id",
+                foreignField: "_id",
+                as: "city"
+              }
+            },
+            {
+              $unwind: "$city"
+            }
+          ]).exec();
       })
-      .then((city) => {
-        city.institutions_count++;
-        return city.save();
-      })
-      .then(() => {
-        res.status(200)
-          .json({
-            success: true
-          });
+      .then((institutions) => {
+        let formatted = Object.assign({}, institutions[0]);
+        formatted.latitude = parseFloat(formatted.latitude.toString());
+        formatted.longitude = parseFloat(formatted.longitude.toString());
+        formatted.city.latitude = parseFloat(formatted.city.latitude.toString());
+        formatted.city.longitude = parseFloat(formatted.city.longitude.toString());
+        res.json(formatted);
       })
       .catch(function (err) {
         res.status(401)
@@ -125,48 +155,65 @@ module.exports = (app) => {
       });
   });
 
-  app.put('/api/institutions/:id', function (req, res) {
-    let oldCityId;
-    let newCityId = req.body.city_id;
+  app.put('/api/institutions/:id', upload.array('InstitutionPhoto', 50), (req, res) => {
+    let oldPhotos;
+    let newPhotos;
+    let imagesLinks = req.files.map(image => {
+      return {
+        path: '/api/institutionsphotos/' + image.path.split('/').pop(),
+        name: image.originalname,
+        id: image.path.split('/').pop()
+      };
+    });
+
     Institution.findById(req.params.id)
       .exec()
       .then((institution) => {
-        oldCityId = institution.city_id;
-        institution.set(req.body);
-        if(oldCityId !== newCityId) {
-          let oldCityPromise = City.findById({_id: oldCityId});
-          let newCityPromise = City.findById({_id: newCityId});
-          return Promise.all([institution.save(), oldCityPromise, newCityPromise]);
+       if (institution) {
+         oldPhotos = institution.photos;
+         newPhotos = JSON.parse(req.body.photos);
+         let institutionData = req.body;
+         institutionData.photos = [...newPhotos, ...imagesLinks];
+         return institution.set(req.body).save();
         } else {
-          return institution.save()
+          return Promise.reject('Institution not found')
         }
       })
-      .then(results => {
-        if (Array.isArray(results)) {
-          let updatedInstitution = results[0];
-          let oldCity = results[1];
-          let newCity = results[2];
-          oldCity.institutions_count--;
-          newCity.institutions_count++;
-          return Promise.all([updatedInstitution, oldCity.save(), newCity.save()]);
-        } else {
-          return results
-        }
+      .then(() => {
+        let photosToDelete = _.differenceWith(oldPhotos, newPhotos, _.isEqual);
+        let photosIds = photosToDelete.map(photo => {
+          return photo.id
+        });
+        let institutionWithCity = Institution
+          .aggregate([
+            { $match : { _id : mongoose.Types.ObjectId(req.params.id) } },
+            {
+              $lookup: {
+                from: "cities",
+                localField: "city_id",
+                foreignField: "_id",
+                as: "city"
+              }
+            },
+            {
+              $unwind: "$city"
+            }
+          ]).exec();
+        return Promise.all([institutionWithCity, photosController.deletePhotos(photosIds)]);
       })
-      .then(results => {
-        let updatedInstitution;
-        if (Array.isArray(results)) {
-          updatedInstitution = results[0];
-        } else {
-          updatedInstitution = results;
-        }
-        res.status(200)
-          .json(updatedInstitution)
+      .then(([institutions, ]) => {
+        let formatted = Object.assign({}, institutions[0]);
+        formatted.latitude = parseFloat(formatted.latitude.toString());
+        formatted.longitude = parseFloat(formatted.longitude.toString());
+        formatted.city.latitude = parseFloat(formatted.city.latitude.toString());
+        formatted.city.longitude = parseFloat(formatted.city.longitude.toString());
+        res.json(formatted);
       })
       .catch(function (err) {
+        console.log(err);
         res.status(401)
           .json({
-            message: err || "Could not updateinstitution."
+            message: err || "Could not update institution."
           })
       });
   });

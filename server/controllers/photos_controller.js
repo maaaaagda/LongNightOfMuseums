@@ -3,7 +3,7 @@ const multer = require('multer');
 
 const Storage = multer.diskStorage({
   destination: function(req, file, callback) {
-    callback(null, __dirname.replace('server/routes/api', '') + 'client/public/InstitutionsImages');
+    callback(null, __dirname.replace('server/controllers', '') + 'client/public/InstitutionsImages');
   },
   filename: function(req, file, callback) {
     callback(null, file.fieldname + "_" + Date.now() + "." + file.mimetype.split('image/').pop()) ;

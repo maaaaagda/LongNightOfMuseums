@@ -1,11 +1,34 @@
 const City = require('../../models/City');
+const Institution = require('../../models/Institution');
 
 module.exports = (app) => {
   app.get('/api/cities', (req, res) => {
-    City.find()
-      .exec()
+
+  City.aggregate([
+      {
+        $lookup: {
+          from: "institutions",
+          localField: "_id",
+          foreignField: "city_id",
+          as: "institutions"
+        }
+      },
+    {
+      $project: {
+        name: 1,
+        longitude: 1,
+        latitude: 1,
+        institutions_count: { $size:"$institutions" }}
+    }
+    ])
+    .exec()
       .then((cities) => {
-        res.send(cities);
+        let formatted = cities.map(city => {
+          city.latitude = parseFloat(city.latitude.toString());
+          city.longitude = parseFloat(city.longitude.toString());
+          return city;
+        });
+        res.send(formatted);
       })
       .catch((err) => {
         res.status(401)

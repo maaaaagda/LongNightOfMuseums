@@ -2,10 +2,8 @@ import React from 'react';
 import {Button, Segment} from 'semantic-ui-react';
 import {Link} from "react-router-dom";
 import {
-  delete_institution_photos,
   load_institution,
-  update_institution,
-  upload_institution_photos
+  update_institution
 } from "../../store/actions/institutionActions";
 import history from '../../helpers/history';
 import CustomModal from '../Helpers/Modals';
@@ -18,10 +16,8 @@ class EditInstitution extends React.Component {
     this.state = {
       modal: '',
       institutionData: {},
-      institutionPhotos:[],
       isFormLoading: true,
-      institutionId: '',
-      photosIdsToDelete: []
+      institutionId: ''
     };
     this.submitForm = this.submitForm.bind(this);
     this.showModal = this.showModal.bind(this);
@@ -52,25 +48,9 @@ class EditInstitution extends React.Component {
     });
   }
 
-  getPhotosToDelete(newPhotos) {
-    let photosIdsToDelete = this.state.institutionData.photos
-      .filter(photo => {
-      return !newPhotos.includes(photo.id)
-    }).map(photo => {
-      return photo.id
-      });
-    this.setState({photosIdsToDelete});
-  }
-
   submitForm() {
     this.setState({isFormLoading: true});
-    Promise.all([this.props.dispatch(upload_institution_photos(this.state.institutionPhotos)),
-      this.props.dispatch(delete_institution_photos(this.state.photosIdsToDelete))])
-      .then((res) => {
-        let institutionData = Object.assign({}, this.state.institutionData);
-        institutionData.photos = [...this.state.institutionData.photos, ...res[0].data];
-        return this.props.dispatch(update_institution(this.state.institutionId, institutionData))
-      })
+    this.props.dispatch(update_institution(this.state.institutionId, this.state.institutionData))
      .then(() => {
         this.setState({isFormLoading: false});
         let successModal = (
@@ -96,7 +76,7 @@ class EditInstitution extends React.Component {
         this.showModal(errorModal);
       })
   }
-  submitSaving(institutionPhotos, institutionData) {
+  submitSaving(institutionData) {
     let customModal = (
       <CustomModal
         modalType='confirm'
@@ -106,8 +86,7 @@ class EditInstitution extends React.Component {
         performAction={this.submitForm}
       />
     );
-    this.getPhotosToDelete(institutionData.photos);
-    this.setState({institutionData: institutionData, institutionPhotos: institutionPhotos}, () => {
+    this.setState({institutionData: institutionData}, () => {
       this.showModal(customModal);
     });
   }

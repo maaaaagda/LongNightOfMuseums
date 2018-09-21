@@ -31,8 +31,8 @@ class Home extends React.Component {
             </Transition>
           </div>
           <div className='see-more' onClick={this.seeMore}>
-              <div className="arrow arrow-bottom arrow-up"/>
-              <div className="arrow arrow-bottom arrow-down"/>
+              <div className="arrow-see-more arrow-bottom arrow-up"/>
+              <div className="arrow-see-more arrow-bottom arrow-down"/>
           </div>
         </div>
         <div id='institutions-overview'>
