@@ -134,8 +134,10 @@ class Institutions extends React.Component {
     this.setState({ modal: '' })
   }
   deleteInstitution(id) {
+    this.setState({loadingData: true});
     this.props.dispatch(delete_institution(id))
       .then(() => {
+        this.setState({loadingData: false});
         let successModal = (
           <CustomModal
             modalType='simple'
@@ -146,6 +148,7 @@ class Institutions extends React.Component {
         this.showModal(successModal);
       })
       .catch((err) => {
+        this.setState({loadingData: false});
         let errorModal = (
           <CustomModal
             modalType='simple'

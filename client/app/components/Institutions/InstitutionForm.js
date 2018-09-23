@@ -175,6 +175,7 @@ class InstitutionForm extends React.Component {
           label='Address'
           onChange={this.handleChange}
           value={this.state.address}
+          required
           validations={[required]}
         />
         <Form.Group widths='equal'>
@@ -184,6 +185,7 @@ class InstitutionForm extends React.Component {
             label='Latitude'
             onChange={this.handleChange}
             value={this.state.latitude}
+            required
             validations={[required, latitude]}
           />
           <ValidationInput

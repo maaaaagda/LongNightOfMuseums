@@ -38,16 +38,16 @@ class CitiesList extends React.Component {
     );
     this.showModal(confirmModal);
   }
-  ensureSavingCity(cityName, id) {
+  ensureSavingCity(city, id) {
     let confirmModal;
     if(id) {
       confirmModal = (
         <CustomModal
           modalType='confirm'
           header='Update city name'
-          content={`Are you sure you want to update city name to '${cityName}'?`}
+          content={`Are you sure you want to update city '${city.name}'?`}
           hideModal={this.hideModal}
-          performAction={() => {this.updateCity(id, cityName)}}
+          performAction={() => {this.updateCity(id, city)}}
         />
       );
     } else {
@@ -55,18 +55,20 @@ class CitiesList extends React.Component {
         <CustomModal
           modalType='confirm'
           header='New city'
-          content={`Are you sure you want to save city '${cityName}'?`}
+          content={`Are you sure you want to save city '${city.name}'?`}
           hideModal={this.hideModal}
-          performAction={() => {this.createNewCity(cityName)}}
+          performAction={() => {this.createNewCity(city)}}
         />
       );
     }
 
     this.showModal(confirmModal);
   }
-  updateCity(id, cityName) {
-    this.props.dispatch(update_city(id, cityName))
+  updateCity(id, city) {
+    this.setState({loadingData: true});
+    this.props.dispatch(update_city(id, city))
       .then(() => {
+        this.setState({loadingData: false});
         let successModal = (
           <CustomModal
             modalType='simple'
@@ -77,19 +79,22 @@ class CitiesList extends React.Component {
         this.showModal(successModal);
       })
       .catch((err) => {
+        this.setState({loadingData: false});
         let errorModal = (
           <CustomModal
             modalType='simple'
             header='Operation failed'
-            content={err.response.data.message || 'Something went wrong, unable to delete selected city'}
+            content={err.response.data.message || 'Something went wrong, unable to update selected city'}
             hideModal={this.hideModal}
           />);
         this.showModal(errorModal);
       })
   }
-  createNewCity(cityName) {
-    this.props.dispatch(create_city(cityName))
+  createNewCity(city) {
+    this.setState({loadingData: true});
+    this.props.dispatch(create_city(city))
       .then(() => {
+        this.setState({loadingData: false});
         let successModal = (
           <CustomModal
             modalType='simple'
@@ -100,11 +105,12 @@ class CitiesList extends React.Component {
         this.showModal(successModal);
       })
       .catch((err) => {
+        this.setState({loadingData: false});
         let errorModal = (
           <CustomModal
             modalType='simple'
             header='Operation failed'
-            content={err.response.data.message || 'Something went wrong, unable to delete selected city'}
+            content={err.response.data.message || 'Something went wrong, unable to create new city'}
             hideModal={this.hideModal}
           />);
         this.showModal(errorModal);
@@ -120,14 +126,13 @@ class CitiesList extends React.Component {
     );
     this.showModal(addCityModal);
   }
-  openUpdateCityForm(id, cityName) {
+  openUpdateCityForm(cityData) {
     let updateCityModal = (
       <CityCreateEdit
         hideModal={this.hideModal}
         headerName={'Update city'}
         handleSubmit={this.ensureSavingCity}
-        cityName={cityName}
-        cityId={id}
+        cityData={cityData}
       />
     );
     this.showModal(updateCityModal);
@@ -140,8 +145,10 @@ class CitiesList extends React.Component {
   }
 
   deleteCity(id) {
+    this.setState({loadingData: true});
     this.props.dispatch(delete_city(id))
       .then(() => {
+        this.setState({loadingData: false});
         let successModal = (
           <CustomModal
             modalType='simple'
@@ -152,6 +159,7 @@ class CitiesList extends React.Component {
         this.showModal(successModal);
       })
       .catch((err) => {
+        this.setState({loadingData: false});
         let errorModal = (
           <CustomModal
             modalType='simple'
@@ -182,7 +190,7 @@ class CitiesList extends React.Component {
             <Button
               className='button-100'
               basic color='black'
-              onClick={() => {this.openUpdateCityForm(city._id, city.name)}}
+              onClick={() => {this.openUpdateCityForm(city)}}
             >
               Edit
             </Button>
