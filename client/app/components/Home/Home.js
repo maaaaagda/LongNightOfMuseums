@@ -1,6 +1,7 @@
 import {Container, Icon, Transition} from "semantic-ui-react";
 import React from "react";
 import InstitutionsOverview from '../Institutions/InstitutionsOverview';
+import MyRoutes from '../Routes/Routes';
 
 class Home extends React.Component {
   constructor (props) {
@@ -37,6 +38,9 @@ class Home extends React.Component {
         </div>
         <div id='institutions-overview'>
           <InstitutionsOverview/>
+        </div>
+        <div>
+          <MyRoutes/>
         </div>
       </div>
     )
