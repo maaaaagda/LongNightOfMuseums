@@ -7,5 +7,6 @@ export default {
   },
   institutions: [],
   admins: [],
-  cities: []
+  cities: [],
+  routes: []
 }

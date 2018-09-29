@@ -30,11 +30,13 @@ import {load_cities} from "./store/actions/cityActions";
 import Redirect from "react-router-dom/es/Redirect";
 import {load_institutions} from "./store/actions/institutionActions";
 import ScrollToTop from "./components/Helpers/ScrollToTop";
+import {get_routes} from "./store/actions/routes";
 const store = configureStore();
 
 store.dispatch(restoreUserIfLogged());
 store.dispatch(load_cities());
 store.dispatch(load_institutions());
+store.dispatch(get_routes());
 
 render((
   <Provider store={store}>

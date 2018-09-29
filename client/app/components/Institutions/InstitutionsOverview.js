@@ -8,6 +8,7 @@ import InstitutionsFilterOrder from "./InstitutionsFilterOrder";
 import MapContainer from "../Map/Map";
 import {ValidationForm, ValidationInput} from "../Helpers/FormElementsWithValidation";
 import {required} from "../Helpers/FormValidationRules";
+import {get_routes} from "../../store/actions/routes";
 
 class InstitutionsOverview extends React.Component {
 
@@ -30,6 +31,7 @@ class InstitutionsOverview extends React.Component {
     this.handleSearchByInstitutionName = this.handleSearchByInstitutionName.bind(this);
     this.handleRouteNameChange = this.handleRouteNameChange.bind(this);
     this.showGetRouteNameModal = this.showGetRouteNameModal.bind(this);
+    this.getSavedRoutes = this.getSavedRoutes.bind(this);
     this.onRouteSave = this.onRouteSave.bind(this);
   }
   componentDidMount() {
@@ -59,6 +61,9 @@ class InstitutionsOverview extends React.Component {
     let mapInstitutions = this.getOrderedInstitutions("InstitutionNameAsc", JSON.parse(JSON.stringify(filteredByName)));
     let ordered = this.getOrderedInstitutions(this.state.orderBy, filteredByName);
     this.setState({institutions: ordered, mapInstitutions});
+  }
+  getSavedRoutes() {
+    this.props.dispatch(get_routes());
   }
   getInstitutionsFromGivenCity(value, institutions) {
     if(value === 'allCities') {
@@ -155,6 +160,14 @@ class InstitutionsOverview extends React.Component {
   handleRouteNameChange(e) {
     this.setState({routeName: e.target.value})
   }
+  routeNameExists = (value) => {
+    let routeNameExists = this.props.routes.find(route => {
+      return route.routeName === value
+    });
+    if (routeNameExists) {
+      return `Given name already exists.`
+    }
+  };
   showGetRouteNameModal() {
     let modal = <Modal open={true} onClose={this.hideModal} size='small'>
       <Modal.Content>
@@ -170,7 +183,7 @@ class InstitutionsOverview extends React.Component {
               label='Route name'
               value={this.state.routeName}
               required
-              validations={[required]}
+              validations={[required, this.routeNameExists]}
               onChange={this.handleRouteNameChange}
             />
           </ValidationForm>
@@ -206,19 +219,24 @@ class InstitutionsOverview extends React.Component {
       let institutionsIds = this.getChosenInstitutions().map(inst => {
         return inst._id
       });
-      let routeData = [{
+      let routeData = {
         routeName: this.state.routeName,
         routeInstitutions: institutionsIds
-      }];
-      localStorage.setItem('sightseeingPath', JSON.stringify(routeData));
+      };
+      if(this.props.routes.length > 0) {
+        let routesCopy = JSON.parse(JSON.stringify(this.props.routes));
+        routesCopy.push(routeData);
+        localStorage.setItem('sightseeingPath', JSON.stringify(routesCopy));
+      } else {
+        localStorage.setItem('sightseeingPath', JSON.stringify([routeData]));
+      }
       this.hideModal();
+      this.getSavedRoutes()
     }
   }
-
   hideModal() {
     this.setState({ modal: '' })
   }
-
   renderImage(institution) {
     let image;
     if(institution.photos.length > 0) {
@@ -324,7 +342,8 @@ class InstitutionsOverview extends React.Component {
 function mapStateToProps (state) {
   return {
     isAdmin: state.admin.isLoggedIn,
-    institutions: state.institutions
+    institutions: state.institutions,
+    routes: state.routes
   }
 }
 
