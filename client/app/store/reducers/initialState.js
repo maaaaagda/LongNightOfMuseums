@@ -8,5 +8,5 @@ export default {
   institutions: [],
   admins: [],
   cities: [],
-  routes: []
+  routes: null
 }

@@ -1,7 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {Menu, Grid, Dimmer, Loader} from 'semantic-ui-react'
-import {get_routes} from "../../store/actions/routes";
+import {Menu, Grid, Dimmer, Loader, Segment} from 'semantic-ui-react'
 
 class Routes extends React.Component {
     constructor(props) {
@@ -14,7 +13,7 @@ class Routes extends React.Component {
         this.renderRouteList = this.renderRouteList.bind(this);
     }
     componentDidUpdate() {
-      if(!this.state.activeRoute && this.props.routes.length > 0) {
+      if(!this.state.activeRoute && this.props.routes && this.props.routes.length > 0) {
         this.setState({activeRoute: this.props.routes[0].routeName})
       }
     }
@@ -41,9 +40,10 @@ class Routes extends React.Component {
             return propInst._id === instId
           });
           if (institution) {
-            return <div key={index}>
-              {index + 1} {institution.name} {institution.address}
-            </div>
+            return <Segment key={index}>
+              <h3>{index + 1}. {institution.name} </h3>
+              {institution.city.name}, {institution.address}
+            </Segment>
           } else {
             return <div key={index}>Unknown institution</div>
           }
@@ -64,11 +64,11 @@ class Routes extends React.Component {
           {this.props.routes ?
             <Grid>
               <Grid.Column width={4}>
-                <Menu pointing secondary vertical>
+                <Menu pointing secondary vertical fluid>
                   {this.renderMenuItems()}
                 </Menu>
               </Grid.Column>
-              <Grid.Column stretched width={12}>
+              <Grid.Column width={12}>
                 {this.renderRouteList()}
               </Grid.Column>
             </Grid>
