@@ -19,11 +19,16 @@ class CitiesList extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({loadingData: true});
-    this.props.dispatch(load_cities())
-      .then(() => {
-        this.setState({loadingData: false})
-      })
+    if (this.props.cities.length === 0) {
+      this.setState({loadingData: true});
+      this.props.dispatch(load_cities())
+        .then(() => {
+          this.setState({loadingData: false})
+        })
+        .catch(() => {
+          this.setState({loadingData: false})
+        })
+    }
   }
 
   ensureDeletingCity(id, cityName) {

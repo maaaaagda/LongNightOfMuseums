@@ -34,7 +34,6 @@ import {get_routes} from "./store/actions/routes";
 const store = configureStore();
 
 store.dispatch(restoreUserIfLogged());
-store.dispatch(load_cities());
 store.dispatch(load_institutions());
 store.dispatch(get_routes());
 
