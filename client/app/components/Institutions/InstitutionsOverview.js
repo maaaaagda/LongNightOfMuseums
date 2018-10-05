@@ -326,9 +326,9 @@ class InstitutionsOverview extends React.Component {
             </Grid.Column>
             <Grid.Column largeScreen={8} widescreen={8} mobile={16}>
               <div className={'map w-100'} id='map'>
-                {/*<MapContainer*/}
-                    {/*allInstitutions={this.state.mapInstitutions}*/}
-                {/*/>*/}
+                <MapContainer
+                    allInstitutions={this.state.mapInstitutions}
+                />
               </div>
             </Grid.Column>
           </Grid.Row>
