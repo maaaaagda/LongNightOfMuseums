@@ -1,14 +1,36 @@
 const City = require('../../models/City');
+const mongoose = require('mongoose');
 
 module.exports = (app) => {
   app.get('/api/cities', (req, res) => {
-    City.find()
-      .exec()
+  City.aggregate([
+      {
+        $lookup: {
+          from: "institutions",
+          localField: "_id",
+          foreignField: "city_id",
+          as: "institutions"
+        }
+      },
+    {
+      $project: {
+        name: 1,
+        longitude: 1,
+        latitude: 1,
+        institutions_count: { $size:"$institutions" }}
+    }
+    ])
+    .exec()
       .then((cities) => {
-        res.send(cities);
+        let formatted = cities.map(city => {
+          city.latitude = parseFloat(city.latitude.toString());
+          city.longitude = parseFloat(city.longitude.toString());
+          return city;
+        });
+        res.send(formatted);
       })
       .catch((err) => {
-        res.status(401)
+        res.status(400)
           .json({
             message: err || "Something went wrong."
           })
@@ -16,14 +38,18 @@ module.exports = (app) => {
   });
 
   app.post('/api/cities', function (req, res) {
-    const city = new City({name: req.body.name});
-
+    let city = new City(req.body);
     city.save()
       .then((city) => {
-        res.json(city)
+        let formatted = Object.assign({}, city);
+        formatted.institutions_count = 0;
+        formatted.latitude = parseFloat(city.latitude.toString());
+        formatted.longitude = parseFloat(city.longitude.toString());
+        formatted.name = city.name.toString();
+        res.send(formatted)
       })
       .catch((err) => {
-        res.status(401)
+        res.status(400)
           .json({
             message: err || "Something went wrong."
           })
@@ -31,10 +57,26 @@ module.exports = (app) => {
   });
 
   app.delete('/api/cities/:id', function (req, res) {
-    City.findById(req.params.id)
+    City.aggregate([
+      {$match: {_id: mongoose.Types.ObjectId(req.params.id)}},
+      {
+        $lookup: {
+          from: "institutions",
+          localField: "_id",
+          foreignField: "city_id",
+          as: "institutions"
+        }
+      },
+      {
+        $project: {
+          institutions_count: {$size: "$institutions"}
+        }
+      }
+    ])
       .exec()
-      .then((city) => {
-        if (city) {
+      .then((cities) => {
+        if (cities[0]) {
+          let city = cities[0];
           if (city.institutions_count === 0) {
             return City.deleteOne({_id: city._id})
           } else {
@@ -44,13 +86,13 @@ module.exports = (app) => {
           return Promise.reject("City not found")
         }
       })
-      .then(() =>  {
-        res.status(200)
-          .json({
-            success: true})
+      .then(() => {
+        res.json({
+            success: true
+          })
       })
       .catch((err) => {
-        res.status(401)
+        res.status(400)
           .json({
             message: err || "Something went wrong..."
           })
@@ -85,14 +127,39 @@ module.exports = (app) => {
     City.findById(req.params.id)
       .exec()
       .then((city) => {
-        city.name = req.body.name;
+        city.set(req.body);
         return city.save()
       })
       .then((city) => {
-        res.json(city);
+       return City.aggregate([
+         {$match: {_id: mongoose.Types.ObjectId(city._id)}},
+          {
+            $lookup: {
+              from: "institutions",
+              localField: "_id",
+              foreignField: "city_id",
+              as: "institutions"
+            }
+          },
+          {
+            $project: {
+              name: 1,
+              longitude: 1,
+              latitude: 1,
+              institutions_count: { $size:"$institutions" }}
+          }
+        ])
+          .exec()
+      })
+      .then((cities) => {
+        let city = cities[0];
+        let formatted = Object.assign({}, city);
+        formatted.latitude = parseFloat(city.latitude.toString());
+        formatted.longitude = parseFloat(city.longitude.toString());
+        res.send(formatted);
       })
       .catch((err) => {
-        res.status(401)
+        res.status(400)
           .json({
             message: err || "Something went wrong."
           })

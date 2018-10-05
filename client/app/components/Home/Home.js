@@ -1,6 +1,7 @@
 import {Container, Icon, Transition} from "semantic-ui-react";
 import React from "react";
 import InstitutionsOverview from '../Institutions/InstitutionsOverview';
+import MyRoutes from '../Routes/Routes';
 
 class Home extends React.Component {
   constructor (props) {
@@ -9,6 +10,13 @@ class Home extends React.Component {
       visibleTitle: false
     };
     this.seeMore = this.seeMore.bind(this);
+  }
+  componentDidUpdate(){
+    if(this.props.location && this.props.location.state && this.props.location.state.scrollToComponent){
+      let component = this.props.location.state.scrollToComponent;
+      let topPosOfDiv = document.getElementById(component).getBoundingClientRect().top;
+      window.scrollBy({top: topPosOfDiv - 70, behavior: 'smooth'});
+    }
   }
   seeMore() {
     let topPosOfDiv = document.getElementById('institutions-overview').getBoundingClientRect().top;
@@ -31,12 +39,15 @@ class Home extends React.Component {
             </Transition>
           </div>
           <div className='see-more' onClick={this.seeMore}>
-              <div className="arrow arrow-bottom arrow-up"/>
-              <div className="arrow arrow-bottom arrow-down"/>
+              <div className="arrow-see-more arrow-bottom arrow-up"/>
+              <div className="arrow-see-more arrow-bottom arrow-down"/>
           </div>
         </div>
         <div id='institutions-overview'>
           <InstitutionsOverview/>
+        </div>
+        <div id='my-routes'>
+          <MyRoutes/>
         </div>
       </div>
     )

@@ -1,11 +1,14 @@
 import {Link} from "react-router-dom";
-import {Button, Grid, Image, Card, Checkbox, Icon} from "semantic-ui-react";
+import {Button, Grid, Image, Card, Checkbox, Icon, Modal, Header} from "semantic-ui-react";
 import React from "react";
 import connect from "react-redux/es/connect/connect";
 import {load_institutions} from "../../store/actions/institutionActions";
 import moment from "moment";
 import InstitutionsFilterOrder from "./InstitutionsFilterOrder";
 import MapContainer from "../Map/Map";
+import {ValidationForm, ValidationInput} from "../Helpers/FormElementsWithValidation";
+import {required} from "../Helpers/FormValidationRules";
+import {get_routes} from "../../store/actions/routes";
 
 class InstitutionsOverview extends React.Component {
 
@@ -19,11 +22,17 @@ class InstitutionsOverview extends React.Component {
       searchByName: '',
       institutions: [],
       originalInstitutions: [],
-      mapInstitutions: []
+      mapInstitutions: [],
+      routeName: ''
     };
+    this.hideModal = this.hideModal.bind(this);
     this.handleCitySelectChange = this.handleCitySelectChange.bind(this);
     this.handleOrderBySelectChange = this.handleOrderBySelectChange.bind(this);
     this.handleSearchByInstitutionName = this.handleSearchByInstitutionName.bind(this);
+    this.handleRouteNameChange = this.handleRouteNameChange.bind(this);
+    this.showGetRouteNameModal = this.showGetRouteNameModal.bind(this);
+    this.getSavedRoutes = this.getSavedRoutes.bind(this);
+    this.onRouteSave = this.onRouteSave.bind(this);
   }
   componentDidMount() {
     if(this.props.institutions.length > 0) {
@@ -52,6 +61,9 @@ class InstitutionsOverview extends React.Component {
     let mapInstitutions = this.getOrderedInstitutions("InstitutionNameAsc", JSON.parse(JSON.stringify(filteredByName)));
     let ordered = this.getOrderedInstitutions(this.state.orderBy, filteredByName);
     this.setState({institutions: ordered, mapInstitutions});
+  }
+  getSavedRoutes() {
+    this.props.dispatch(get_routes());
   }
   getInstitutionsFromGivenCity(value, institutions) {
     if(value === 'allCities') {
@@ -140,6 +152,95 @@ class InstitutionsOverview extends React.Component {
       originalInstitutions: updatedOriginalInstitutions
     })
   }
+  getChosenInstitutions(){
+    return this.state.mapInstitutions.filter(institution => {
+      return institution.checked
+    })
+  }
+  handleRouteNameChange(e) {
+    this.setState({routeName: e.target.value})
+  }
+  routeNameExists = (value) => {
+    if(this.props.routes){
+      let routeNameExists = this.props.routes.find(route => {
+        return route.routeName === value
+      });
+      if (routeNameExists) {
+        return `Given name already exists.`
+      }
+    }
+  };
+  showGetRouteNameModal() {
+    let modal = <Modal open={true} onClose={this.hideModal} size='small'>
+      <Modal.Content>
+        <Modal.Description>
+          <Header>Save visiting path</Header>
+          <ValidationForm
+            ref={form => {
+              this.form = form
+            }}>
+            <ValidationInput
+              name='routeName'
+              id='form-input-route-name'
+              label='Route name'
+              value={this.state.routeName}
+              required
+              validations={[required, this.routeNameExists]}
+              onChange={this.handleRouteNameChange}
+            />
+          </ValidationForm>
+        </Modal.Description>
+      </Modal.Content>
+      <Modal.Actions>
+        <Button color='black' onClick={this.hideModal}>Cancel</Button>
+        <Button
+          color='green'
+          inverted
+          onClick={this.onRouteSave}
+        >
+          Save
+        </Button>
+      </Modal.Actions>
+    </Modal>;
+    this.setState({modal})
+  }
+  isFormValid(form) {
+    let isFormValid = true;
+    let form_elems = form.state.byId;
+    Object.keys(form_elems).forEach(i => {
+      if (form_elems[i].error) {
+        isFormValid = false;
+      }
+    });
+    return isFormValid;
+  }
+  onRouteSave(e) {
+    e.preventDefault();
+    this.form.validateAll();
+    if (this.isFormValid(this.form)) {
+      let institutionsIds = this.getChosenInstitutions().map(inst => {
+        return inst._id
+      });
+      let routeData = {
+        routeName: this.state.routeName,
+        routeInstitutions: institutionsIds
+      };
+      if(this.props.routes && this.props.routes.length > 0) {
+        let routesCopy = JSON.parse(JSON.stringify(this.props.routes));
+        routesCopy.push(routeData);
+        localStorage.setItem('sightseeingPath', JSON.stringify(routesCopy));
+      } else {
+        localStorage.setItem('sightseeingPath', JSON.stringify([routeData]));
+      }
+      this.hideModal();
+      let topPosOfDiv = document.getElementById('my-routes').getBoundingClientRect().top;
+      window.scrollBy({top: topPosOfDiv - 70, behavior: 'smooth'});
+      this.getSavedRoutes()
+    }
+  }
+  hideModal() {
+    this.setState({ modal: '' })
+  }
   renderImage(institution) {
     let image;
     if(institution.photos.length > 0) {
@@ -212,17 +313,19 @@ class InstitutionsOverview extends React.Component {
               </div>
               <div className='ui form'>
                 <div className='field'>
-                  <label> Select all institutions you want to visit and generate the optimal sightseeing
-                    path.</label>
+                  <label> Select all institutions you wish to visit and generate the optimal sightseeing path. Start and end of the route is set to the city centre.</label>
                 </div>
               </div>
               <div className='institution-container'>
                 {this.renderInstitutionsList()}
               </div>
+              <div className='save-path-button'>
+                <Button fluid color='black' onClick={this.showGetRouteNameModal} disabled={this.getChosenInstitutions().length === 0}> Save path </Button>
+              </div>
               <br/>
             </Grid.Column>
             <Grid.Column largeScreen={8} widescreen={8} mobile={16}>
-              <div className={'map w-100'}>
+              <div className={'map w-100'} id='map'>
                 <MapContainer
                     allInstitutions={this.state.mapInstitutions}
                 />
@@ -243,7 +346,8 @@ class InstitutionsOverview extends React.Component {
 function mapStateToProps (state) {
   return {
     isAdmin: state.admin.isLoggedIn,
-    institutions: state.institutions
+    institutions: state.institutions,
+    routes: state.routes
   }
 }
 

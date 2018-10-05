@@ -1,9 +1,9 @@
 import * as types from './actionsTypes';
 import axios from 'axios';
 
-export function create_city(cityName) {
+export function create_city(city) {
   return dispatch => {
-    return axios.post('/api/cities', {name: cityName})
+    return axios.post('/api/cities', city)
       .then((res) => {
         dispatch(create_city_success(res.data))
       })
@@ -50,9 +50,9 @@ export function delete_city_success(id) {
 }
 
 
-export function update_city(id, cityName) {
+export function update_city(id, city) {
   return dispatch => {
-    return axios.put(`/api/cities/${id}`, {name: cityName})
+    return axios.put(`/api/cities/${id}`, city)
       .then((res) => {
         dispatch(update_city_success(res.data))
       })

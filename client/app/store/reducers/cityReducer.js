@@ -16,7 +16,7 @@ export default function cityReducer(state = initialState.cities, action) {
       });
 
     case types.LOAD_CITIES_SUCCESS:
-      return Object.assign([], action.payload);
+      return JSON.parse(JSON.stringify(action.payload));
 
     case types.DELETE_CITY_SUCCESS:
       return state.filter(city => city._id !== action.payload);

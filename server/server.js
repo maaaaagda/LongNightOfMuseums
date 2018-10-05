@@ -1,5 +1,4 @@
 const express = require('express');
-const fs = require('fs');
 const historyApiFallback = require('connect-history-api-fallback');
 const mongoose = require('mongoose');
 const path = require('path');
@@ -24,8 +23,10 @@ mongoose.connect(isDev ? configDb.db_dev : configDb.db, { useNewUrlParser: true 
 mongoose.Promise = global.Promise;
 
 const app = express();
+
+
 app.use(bodyParser.json({limit: "50mb"}));
-app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
+app.use(bodyParser.urlencoded({limit: "50mb", extended: false, parameterLimit:50000}));
 app.use(morgan('dev'));
 
 app.all('/api/*', function(req, res, next) {

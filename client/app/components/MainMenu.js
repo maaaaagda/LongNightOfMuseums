@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { connect } from "react-redux";
 import {logOutSuccess} from "../store/actions/loginActions";
 import history from "../helpers/history";
+import {withRouter} from 'react-router-dom';
 
 class MainMenu extends Component {
   constructor (props) {
@@ -14,6 +15,7 @@ class MainMenu extends Component {
       visibleTitle: false
     };
     this.handleLogout = this.handleLogout.bind(this);
+    this.scrollToComponent = this.scrollToComponent.bind(this);
   }
 
   handleButtonClick = () => this.setState({ visibleSideBar: !this.state.visibleSideBar });
@@ -28,6 +30,16 @@ class MainMenu extends Component {
     this.setState({ visibleSideBar: !this.state.visibleSideBar });
     history.push('/');
   }
+  scrollToComponent(component) {
+    if(this.props.location.pathname !== '/') {
+      this.setState({ visibleSideBar: false });
+      history.push({pathname: '/', state: {scrollToComponent: component}});
+    } else {
+      this.setState({ visibleSideBar: false });
+      let topPosOfDiv = document.getElementById(component).getBoundingClientRect().top;
+      window.scrollBy({top: topPosOfDiv - 70, behavior: 'smooth'});
+    }
+  }
 
   render() {
     const activeItem = this.state.activeItem;
@@ -39,7 +51,6 @@ class MainMenu extends Component {
             <Icon name='sidebar' size="big" inverted/>
           </Menu.Item>
         </Menu>
-        {this.props.isLoggedIn ? (
             <Sidebar
               as={Menu}
               fixed="left"
@@ -53,60 +64,36 @@ class MainMenu extends Component {
               <Menu.Item as={Link} to="/"  onClick={this.handleButtonClick}>
                 Home
               </Menu.Item>
-              <Menu.Item as={Link} to="/admin/institutions" onClick={this.handleButtonClick}>
+              <Menu.Item as={Link} to={this.props.isLoggedIn? "/admin/institutions" : "/institutions"} onClick={this.handleButtonClick}>
                 Institutions
               </Menu.Item>
-              <Menu.Item as='div' onClick={this.handleButtonClick}>
+              <Menu.Item as='a' onClick={() => this.scrollToComponent('my-routes')}>
                 My routes
               </Menu.Item>
-              <Menu.Item as='div' onClick={this.handleButtonClick}>
+              <Menu.Item as='a' onClick={() => this.scrollToComponent('map')}>
                 Map
               </Menu.Item>
-              <Menu.Item as='div' onClick={this.handleButtonClick}>
+              <Menu.Item as='a' onClick={() => this.scrollToComponent('footer')}>
                 Info
               </Menu.Item>
-              <Menu.Item as={Link} to={"#"} onClick={this.handleLogout}>
-                Logout
-              </Menu.Item>
-              <Menu.Item as={Link} to={"/admin/cities"} onClick={this.handleButtonClick}>
-                Cities
-              </Menu.Item>
-              <Menu.Item as={Link} to={"/admin/admins"} onClick={this.handleButtonClick}>
-                Administrators
-              </Menu.Item>
+              {this.props.isLoggedIn ? (
+                  <span>
+                    <Menu.Item as={Link} to={"/admin/cities"} onClick={this.handleButtonClick}>
+                      Cities
+                    </Menu.Item>
+                    <Menu.Item as={Link} to={"/admin/admins"} onClick={this.handleButtonClick}>
+                      Administrators
+                    </Menu.Item>
+                    <Menu.Item as={Link} to={"#"} onClick={this.handleLogout}>
+                      Logout
+                    </Menu.Item>
+                </span>
+                )
+                : <Menu.Item as={Link} to="/login"  onClick={this.handleButtonClick}>
+                  Login
+                </Menu.Item>
+              }
             </Sidebar>
-        ):
-          (
-            <Sidebar
-              as={Menu}
-              fixed="left"
-              animation='overlay'
-              inverted
-              onHide={this.handleSidebarHide}
-              vertical
-              visible={this.state.visibleSideBar}
-              width='wide'
-            >
-              <Menu.Item as={Link} to="/"  onClick={this.handleButtonClick}>
-                Home
-              </Menu.Item>
-              <Menu.Item as={Link} to="/institutions" onClick={this.handleButtonClick}>
-                Institutions
-              </Menu.Item>
-              <Menu.Item as={Link} to='#' onClick={this.handleButtonClick}>
-                My routes
-              </Menu.Item>
-              <Menu.Item as={Link} to='#' onClick={this.handleButtonClick}>
-                Map
-              </Menu.Item>
-              <Menu.Item as={Link} to='#' onClick={this.handleButtonClick}>
-                Info
-              </Menu.Item>
-              <Menu.Item as={Link} to={"/login"} onClick={this.handleButtonClick}>
-                Login
-              </Menu.Item>
-            </Sidebar>
-          )}
       </div>
     )
   }
@@ -118,4 +105,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps)(MainMenu);
+export default withRouter(connect(mapStateToProps)(MainMenu));

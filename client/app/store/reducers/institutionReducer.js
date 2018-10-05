@@ -16,7 +16,7 @@ export default function institutionReducer(state = initialState.institutions, ac
       });
 
     case types.LOAD_INSTITUTIONS_SUCCESS:
-      return Object.assign([], action.payload);
+      return JSON.parse(JSON.stringify(action.payload));
 
     case types.DELETE_INSTITUTION_SUCCESS:
       return state.filter(institution => institution._id !== action.payload);

@@ -1,12 +1,14 @@
 import * as types from './actionsTypes';
 import axios from 'axios';
+import {load_cities} from "./cityActions";
 
 export function create_institution(institutionData) {
   return dispatch => {
     return axios.post('/api/institutions', institutionData)
-      .then(() => {
-        dispatch(create_institution_success(institutionData))
-      })
+      .then((res) => {
+        dispatch(create_institution_success(res.data));
+        dispatch(load_cities())
+    })
       .catch(err => {
         throw err;
       });
@@ -48,7 +50,8 @@ export function delete_institution(id) {
   return dispatch => {
     return axios.delete(`/api/institutions/${id}`)
       .then(() => {
-        dispatch(delete_institution_success(id))
+        dispatch(delete_institution_success(id));
+        dispatch(load_cities())
       })
       .catch(err => {
         throw err;
@@ -65,7 +68,8 @@ export function update_institution(id, institutionData) {
   return dispatch => {
     return axios.put(`/api/institutions/${id}`, institutionData)
       .then((res) => {
-        dispatch(update_institution_success(res.data))
+        dispatch(update_institution_success(res.data));
+        dispatch(load_cities())
       })
       .catch(err => {
         throw err;
@@ -76,24 +80,3 @@ export function update_institution(id, institutionData) {
 export function update_institution_success(institution) {
   return {type:  types.UPDATE_INSTITUTION_SUCCESS, payload: institution}
 }
-
-export function upload_institution_photos(institutionPhotos) {
-  return dispatch => {
-    return axios.post('/api/uploadinstitutionphotos', institutionPhotos)
-      .then()
-      .catch(err => {
-        throw err;
-      })
-  }
-}
-
-export function delete_institution_photos(institutionPhotosIds) {
-  return dispatch => {
-    return axios.put('/api/deleteinstitutionphotos', {photosIds: institutionPhotosIds})
-      .then()
-      .catch(err => {
-        throw err;
-      })
-  }
-}
-

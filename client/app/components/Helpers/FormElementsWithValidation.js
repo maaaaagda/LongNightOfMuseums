@@ -3,7 +3,7 @@ import React from 'react';
 import {Form, Input} from 'semantic-ui-react';
 
 const CustomForm = ({ getValues, validate, validateAll, showError, hideError, children, size, loading, ...props }) => (
-  <Form size={size} loading={loading}{...props}>{children}</Form>
+  <Form size={size} loading={loading}{...props} >{children}</Form>
 );
 
 

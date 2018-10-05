@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {Button, Segment} from 'semantic-ui-react';
 import {Link} from "react-router-dom";
-import {create_institution, upload_institution_photos} from "../../store/actions/institutionActions";
+import {create_institution} from "../../store/actions/institutionActions";
 import history from '../../helpers/history';
 import CustomModal from '../Helpers/Modals';
 import InstitutionForm from './InstitutionForm';
@@ -25,12 +25,7 @@ class NewInstitution extends React.Component {
 
   submitForm() {
     this.setState({isFormLoading: true});
-    this.props.dispatch(upload_institution_photos(this.state.institutionPhotos))
-      .then((res) => {
-        let institutionData = Object.assign({}, this.state.institutionData);
-        institutionData.photos = res.data;
-        return this.props.dispatch(create_institution(institutionData));
-      })
+    this.props.dispatch(create_institution(this.state.institutionData))
       .then(() => {
         this.setState({isFormLoading: false});
         let successModal = (
@@ -57,7 +52,7 @@ class NewInstitution extends React.Component {
       })
 
   }
-  submitSaving(institutionPhotos, institutionData) {
+  submitSaving(institutionData) {
     let customModal = (
       <CustomModal
         modalType='confirm'
@@ -67,7 +62,7 @@ class NewInstitution extends React.Component {
         performAction={this.submitForm}
       />
     );
-    this.setState({institutionPhotos: institutionPhotos, institutionData: institutionData}, () => {
+    this.setState({institutionData: institutionData}, () => {
       this.showModal(customModal);
     });
     }
