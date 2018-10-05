@@ -3,7 +3,7 @@ import { Grid, Image, Container} from 'semantic-ui-react'
 
 const Footer = () => (
   <footer className={'main-container'}>
-    <Grid celled={'internally'} inverted>
+    <Grid celled={'internally'} inverted id='footer'>
       <Grid.Row stretched>
         <Grid.Column largeScreen={4} widescreen={3} mobile={16}>
           <Container className={'footer-about'}>

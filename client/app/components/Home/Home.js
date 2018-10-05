@@ -11,6 +11,13 @@ class Home extends React.Component {
     };
     this.seeMore = this.seeMore.bind(this);
   }
+  componentDidUpdate(){
+    if(this.props.location && this.props.location.state && this.props.location.state.scrollToComponent){
+      let component = this.props.location.state.scrollToComponent;
+      let topPosOfDiv = document.getElementById(component).getBoundingClientRect().top;
+      window.scrollBy({top: topPosOfDiv - 70, behavior: 'smooth'});
+    }
+  }
   seeMore() {
     let topPosOfDiv = document.getElementById('institutions-overview').getBoundingClientRect().top;
     window.scrollBy({top: topPosOfDiv - 70, behavior: 'smooth'});
@@ -39,7 +46,7 @@ class Home extends React.Component {
         <div id='institutions-overview'>
           <InstitutionsOverview/>
         </div>
-        <div>
+        <div id='my-routes'>
           <MyRoutes/>
         </div>
       </div>

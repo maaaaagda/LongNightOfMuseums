@@ -31,6 +31,9 @@ class Routes extends React.Component {
       })
     }
     renderRouteList() {
+      if(!this.state.activeRoute && this.props.routes && this.props.routes.length > 0) {
+        this.setState({activeRoute: this.props.routes[0].routeName})
+      }
       let currentRoute =  this.props.routes.find(route => {
         return route.routeName === this.state.activeRoute
       });

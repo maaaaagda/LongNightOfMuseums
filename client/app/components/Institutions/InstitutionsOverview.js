@@ -161,11 +161,13 @@ class InstitutionsOverview extends React.Component {
     this.setState({routeName: e.target.value})
   }
   routeNameExists = (value) => {
-    let routeNameExists = this.props.routes.find(route => {
-      return route.routeName === value
-    });
-    if (routeNameExists) {
-      return `Given name already exists.`
+    if(this.props.routes){
+      let routeNameExists = this.props.routes.find(route => {
+        return route.routeName === value
+      });
+      if (routeNameExists) {
+        return `Given name already exists.`
+      }
     }
   };
   showGetRouteNameModal() {
@@ -223,7 +225,7 @@ class InstitutionsOverview extends React.Component {
         routeName: this.state.routeName,
         routeInstitutions: institutionsIds
       };
-      if(this.props.routes.length > 0) {
+      if(this.props.routes && this.props.routes.length > 0) {
         let routesCopy = JSON.parse(JSON.stringify(this.props.routes));
         routesCopy.push(routeData);
         localStorage.setItem('sightseeingPath', JSON.stringify(routesCopy));
@@ -231,6 +233,8 @@ class InstitutionsOverview extends React.Component {
         localStorage.setItem('sightseeingPath', JSON.stringify([routeData]));
       }
       this.hideModal();
+      let topPosOfDiv = document.getElementById('my-routes').getBoundingClientRect().top;
+      window.scrollBy({top: topPosOfDiv - 70, behavior: 'smooth'});
       this.getSavedRoutes()
     }
   }
@@ -321,7 +325,7 @@ class InstitutionsOverview extends React.Component {
               <br/>
             </Grid.Column>
             <Grid.Column largeScreen={8} widescreen={8} mobile={16}>
-              <div className={'map w-100'}>
+              <div className={'map w-100'} id='map'>
                 {/*<MapContainer*/}
                     {/*allInstitutions={this.state.mapInstitutions}*/}
                 {/*/>*/}
