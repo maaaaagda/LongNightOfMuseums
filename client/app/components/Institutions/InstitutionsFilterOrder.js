@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {Form} from "semantic-ui-react";
+import {load_cities} from "../../store/actions/cityActions";
 
 
 class InstitutionsFilterOrder extends React.Component {
@@ -41,6 +42,9 @@ class InstitutionsFilterOrder extends React.Component {
 
   componentDidMount() {
     this.setState({cities: this.manageCitiesList(this.props.cities)});
+    if (this.props.cities.length === 0) {
+      this.props.dispatch(load_cities());
+    }
   }
 
   componentDidUpdate() {

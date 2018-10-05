@@ -26,7 +26,6 @@ import NewInstitution from "./components/Institutions/NewInstitution";
 import EditInstitution from './components/Institutions/EditInstitution';
 import InstitutionDetail from './components/Institutions/InstitutionDetail';
 import CitiesList from "./components/Cities/CitiesList";
-import {load_cities} from "./store/actions/cityActions";
 import Redirect from "react-router-dom/es/Redirect";
 import {load_institutions} from "./store/actions/institutionActions";
 import ScrollToTop from "./components/Helpers/ScrollToTop";

@@ -39,7 +39,6 @@ class MainMenu extends Component {
       let topPosOfDiv = document.getElementById(component).getBoundingClientRect().top;
       window.scrollBy({top: topPosOfDiv - 70, behavior: 'smooth'});
     }
-
   }
 
   render() {
