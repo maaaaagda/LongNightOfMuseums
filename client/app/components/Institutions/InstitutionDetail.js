@@ -121,8 +121,14 @@ class InstitutionDetail extends React.Component {
           <Grid.Row>
             <div className='jumbotron-padding-small'>
               <Link to={this.props.isAdmin ? "/admin/institutions" : "/institutions"}>
-                <Button color='black'>
+                <Button
+                  icon
+                  labelPosition='left'
+                  secondary
+                  floated='left'
+                >
                   Go back to all institutions
+                  <Icon name='left arrow'/>
                 </Button>
               </Link>
             </div>

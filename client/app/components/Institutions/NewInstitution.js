@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {Button, Segment} from 'semantic-ui-react';
+import {Button, Icon, Segment, Grid} from 'semantic-ui-react';
 import {Link} from "react-router-dom";
 import {create_institution} from "../../store/actions/institutionActions";
 import history from '../../helpers/history';
@@ -81,15 +81,26 @@ class NewInstitution extends React.Component {
 
   render() {
     return (
+      <div>
+        <div className={'jumbotron-padding-small'}>
+          <Grid.Row>
+            <div>
+              <Link to={"/admin/institutions"}>
+                <Button
+                  icon
+                  labelPosition='left'
+                  secondary
+                  floated='left'
+                >
+                  Go back to all institutions
+                  <Icon name='left arrow'/>
+                </Button>
+              </Link>
+            </div>
+          </Grid.Row>
+        </div>
       <div className='jumbotron-top-small'>
-        <Segment.Group horizontal>
-          <Segment textAlign='left'><h1> New institution </h1></Segment>
-          <Segment textAlign='right' as={Link} to={"/admin/institutions"}>
-            <Button color='black'>
-              Go back to all institutions
-            </Button>
-          </Segment>
-        </Segment.Group>
+        <Segment textAlign='center'><h1> New institution </h1></Segment>
         <br/>
         <InstitutionForm
           submitSaving={this.submitSaving}
@@ -98,7 +109,7 @@ class NewInstitution extends React.Component {
         />
         {this.state.modal}
       </div>
-
+      </div>
     )
   }
 }

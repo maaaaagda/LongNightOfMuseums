@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {Form, Input, Button, Segment} from 'semantic-ui-react';
+import {Form, Input, Button, Segment, Icon, Grid} from 'semantic-ui-react';
 import {Link} from "react-router-dom";
 import {create_admin} from "../../store/actions/adminActions";
 import history from '../../helpers/history';
@@ -104,15 +104,26 @@ class NewAdmin extends React.Component {
 
     render() {
         return (
+          <div>
+            <div className={'jumbotron-padding-small'}>
+              <Grid.Row>
+                <div>
+                  <Link to={"/admin/admins"}>
+                    <Button
+                      icon
+                      labelPosition='left'
+                      secondary
+                      floated='left'
+                    >
+                      Go back to all administrators
+                      <Icon name='left arrow'/>
+                    </Button>
+                  </Link>
+                </div>
+              </Grid.Row>
+            </div>
           <div className='jumbotron-top-small'>
-            <Segment.Group horizontal>
-              <Segment textAlign='left'><h1> New administrator </h1></Segment>
-              <Segment textAlign='right' as={Link} to={"/admin/admins"}>
-                <Button color='black'>
-                  Go back
-                </Button>
-              </Segment>
-            </Segment.Group>
+             <Segment textAlign='center'><h1> New administrator </h1></Segment>
             <br/>
             <ValidationForm
               ref={form => { this.form = form }}
@@ -171,7 +182,7 @@ class NewAdmin extends React.Component {
             </ValidationForm>
             {this.state.modal}
           </div>
-
+          </div>
         )
     }
 

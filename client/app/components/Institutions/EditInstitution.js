@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Segment} from 'semantic-ui-react';
+import {Button, Icon, Segment, Grid} from 'semantic-ui-react';
 import {Link} from "react-router-dom";
 import {
   load_institution,
@@ -105,22 +105,34 @@ class EditInstitution extends React.Component {
 
   render() {
     return (
-      <div className='jumbotron-top-small'>
-        <Segment.Group horizontal>
-          <Segment textAlign='left'><h1> Edit institution </h1></Segment>
-          <Segment textAlign='right' as={Link} to={"/admin/institutions"}>
-            <Button color='black'>
-              Go back to all institutions
-            </Button>
-          </Segment>
-        </Segment.Group>
-        <br/>
-        <InstitutionForm
-          submitSaving={this.submitSaving}
-          institutionData={this.state.institutionData}
-          isFormLoading={this.state.isFormLoading}
-        />
-        {this.state.modal}
+      <div>
+        <div className={'jumbotron-padding-small'}>
+          <Grid.Row>
+            <div>
+              <Link to={"/admin/institutions"}>
+                <Button
+                  icon
+                  labelPosition='left'
+                  secondary
+                  floated='left'
+                >
+                  Go back to all institutions
+                  <Icon name='left arrow'/>
+                </Button>
+              </Link>
+            </div>
+          </Grid.Row>
+        </div>
+        <div className='jumbotron-top-small'>
+            <Segment textAlign='center'><h1> Edit institution </h1></Segment>
+          <br/>
+          <InstitutionForm
+            submitSaving={this.submitSaving}
+            institutionData={this.state.institutionData}
+            isFormLoading={this.state.isFormLoading}
+          />
+          {this.state.modal}
+        </div>
       </div>
 
     )
