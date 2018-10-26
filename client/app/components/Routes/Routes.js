@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {Menu, Grid, Dimmer, Loader, Segment} from 'semantic-ui-react'
+import {Menu, Grid, Dimmer, Loader, Segment, Button} from 'semantic-ui-react'
 
 class Routes extends React.Component {
     constructor(props) {
@@ -38,7 +38,7 @@ class Routes extends React.Component {
         return route.routeName === this.state.activeRoute
       });
       if (currentRoute && this.props.institutions.length > 0) {
-        return currentRoute.routeInstitutions.map((instId, index) => {
+        let formattedRoutes =  currentRoute.routeInstitutions.map((instId, index) => {
           let institution = this.props.institutions.find(propInst => {
             return propInst._id === instId
           });
@@ -47,10 +47,16 @@ class Routes extends React.Component {
               <h3>{index + 1}. {institution.name} </h3>
               {institution.city.name}, {institution.address}
             </Segment>
-          } else {
-            return <div key={index}>Unknown institution</div>
           }
-        })
+        });
+
+        return <div>
+          {formattedRoutes}
+          <div className='text-center'>
+            <Button basic color='red'>Delete</Button>
+            <Button basic color='blue'>View route</Button>
+          </div>
+        </div>
       } else {
         return <div className='jumbotron-fully-centered'>
           <Dimmer active inverted>
