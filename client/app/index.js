@@ -30,7 +30,7 @@ import CitiesList from "./components/Cities/CitiesList";
 import Redirect from "react-router-dom/es/Redirect";
 import {load_institutions} from "./store/actions/institutionActions";
 import ScrollToTop from "./components/Helpers/ScrollToTop";
-import {get_routes} from "./store/actions/routes";
+import {get_routes} from "./store/actions/routeActions";
 const store = configureStore();
 
 store.dispatch(restoreUserIfLogged());

@@ -14,31 +14,32 @@ class Routes extends React.Component {
     }
     componentDidUpdate() {
       if(!this.state.activeRoute && this.props.routes && this.props.routes.length > 0) {
-        this.setState({activeRoute: this.props.routes[0].routeName})
+        this.setState({activeRoute: this.props.routes[0]._id})
       }
     }
-    handleRouteChange (e, { name }) {
-      this.setState({ activeRoute: name })
+    handleRouteChange (e, { value }) {
+      this.setState({ activeRoute: value })
     }
     renderMenuItems() {
       return this.props.routes.map((route, index) => {
         return <Menu.Item
           key={index}
-          name={route.routeName}
-          active={this.state.activeRoute === route.routeName}
+          name={route.name}
+          value={route._id}
+          active={this.state.activeRoute === route._id}
           onClick={this.handleRouteChange}
         />
       })
     }
     renderRouteList() {
       if(!this.state.activeRoute && this.props.routes && this.props.routes.length > 0) {
-        this.setState({activeRoute: this.props.routes[0].routeName})
+        this.setState({activeRoute: this.props.routes[0]._id})
       }
       let currentRoute =  this.props.routes.find(route => {
-        return route.routeName === this.state.activeRoute
+        return route._id === this.state.activeRoute
       });
       if (currentRoute && this.props.institutions.length > 0) {
-        let formattedRoutes =  currentRoute.routeInstitutions.map((instId, index) => {
+        let formattedRoutes =  currentRoute.institutions.map((instId, index) => {
           let institution = this.props.institutions.find(propInst => {
             return propInst._id === instId
           });
@@ -90,8 +91,6 @@ class Routes extends React.Component {
         </div>
       )
     }
-
-
 }
 
 function mapStateToProps(state) {
