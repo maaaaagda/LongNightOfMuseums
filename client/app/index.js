@@ -35,7 +35,6 @@ const store = configureStore();
 
 store.dispatch(restoreUserIfLogged());
 store.dispatch(load_institutions());
-store.dispatch(get_routes());
 
 render((
   <Provider store={store}>

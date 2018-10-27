@@ -10,11 +10,16 @@ export function get_routes() {
         if(Array.isArray(routesIds)) {
           dispatch(get_routes_from_database(routesIds))
         } else {
-          localStorage.removeItem('sightseeingPath')
+          localStorage.removeItem('sightseeingPath');
+          dispatch(get_routes_success(null));
         }
       } catch (e) {
-        localStorage.removeItem('sightseeingPath')
+        console.log(e);
+        localStorage.removeItem('sightseeingPath');
+        dispatch(get_routes_success(null));
       }
+    } else {
+      dispatch(get_routes_success(null));
     }
   }
 }
@@ -26,11 +31,25 @@ export function get_routes_success(routes) {
 export function get_routes_from_database(routesIds) {
   return dispatch => {
     if(routesIds.length === 0 ) {
+      dispatch(get_routes_success(null));
       return []
     }
     return axios.put('/api/routes', {routesIds: routesIds})
       .then((res) => {
-        dispatch(get_routes_success(res.data))
+        dispatch(get_routes_success(res.data));
+        return res.data
+      })
+      .catch(err => {
+        throw err;
+      })
+  }
+}
+
+export function get_single_route_from_database(routeId) {
+  return dispatch => {
+    return axios.put('/api/routes', {routesIds: [routeId]})
+      .then((res) => {
+        return res.data
       })
       .catch(err => {
         throw err;

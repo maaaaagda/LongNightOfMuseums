@@ -35,6 +35,9 @@ class InstitutionsOverview extends React.Component {
     this.onRouteSave = this.onRouteSave.bind(this);
   }
   componentDidMount() {
+    if(this.props.routes.length === 0) {
+      this.props.dispatch(get_routes());
+    }
     if(this.props.institutions.length > 0) {
       this.filterSortInstitutions();
     } else {

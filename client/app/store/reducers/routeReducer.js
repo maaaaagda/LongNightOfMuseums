@@ -4,7 +4,7 @@ import initialState from './initialState'
 export default function routeReducer(state = initialState.routes, action) {
   switch (action.type) {
     case types.GET_ROUTES_SUCCESS:
-      if(action.payload.length === 0 ) {
+      if(!action.payload || action.payload.length === 0 ) {
         return null
       }
       return [...JSON.parse(JSON.stringify(action.payload))];
