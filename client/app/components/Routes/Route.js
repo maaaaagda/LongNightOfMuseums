@@ -130,9 +130,9 @@ class Route extends React.Component {
               </Grid.Column>
               <Grid.Column largeScreen={8} widescreen={8} mobile={16}>
                 <div className={'map w-100'} id='map'>
-                  {/*<MapContainer*/}
-                    {/*allInstitutions={this.state.allRouteInstitutions}*/}
-                  {/*/>*/}
+                  <MapContainer
+                    allInstitutions={this.state.allRouteInstitutions}
+                  />
                 </div>
               </Grid.Column>
             </Grid.Row>
