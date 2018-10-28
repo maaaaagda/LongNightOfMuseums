@@ -23,7 +23,7 @@ class Route extends React.Component {
 
     }
   componentDidMount() {
-    this.setState({routeId: this.props.match.params.routeId}, () => {
+    this.setState({routeId: '5bd596173690eb0adb9caf0f'}, () => {
       this.props.dispatch(get_single_route_from_database(this.state.routeId))
         .then((res) => {
           if(res && res.length > 0){

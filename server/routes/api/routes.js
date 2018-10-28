@@ -9,23 +9,21 @@ module.exports = (app) => {
       .catch((err) => next(err));
   });
 
-  app.delete('/api/routes/:id', function (req, res, next) {
+  app.delete('/api/routes/:id', function (req, res) {
     Route.findOneAndRemove({ _id: req.params.id })
       .exec()
-      .then((route) => {
-        if (route) {
-          res.status(200)
+      .then(() => {
+        res.status(200)
             .json({
               success: true})
-        } else {
-          res.status(401)
-            .json({
-              message: "Route not found"
-            })
-        }
-
+        
       })
-      .catch((err) => next(err));
+      .catch((err) => {
+        res.status(400)
+          .json({
+            message: err || "Something went wrong..."
+          })
+      });
   });
 
 

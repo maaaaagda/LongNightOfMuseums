@@ -74,3 +74,19 @@ export function create_route(routeData) {
 export function create_route_success(route) {
   return {type:  types.CREATE_ROUTE_SUCCESS, payload: route}
 }
+
+export function delete_route(routeId) {
+  return dispatch => {
+    return axios.delete('/api/routes/' + routeId)
+      .then(() => {
+        dispatch(delete_route_success(routeId));
+      })
+      .catch(err => {
+        throw err;
+      })
+  }
+}
+
+export function delete_route_success(routeId) {
+  return {type:  types.DELETE_ROUTE_SUCCESS, payload: routeId}
+}

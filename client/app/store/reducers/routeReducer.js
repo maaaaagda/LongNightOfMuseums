@@ -13,6 +13,11 @@ export default function routeReducer(state = initialState.routes, action) {
         return [...state, action.payload];
       }
       return [action.payload];
+    case types.DELETE_ROUTE_SUCCESS:
+      let filtered = state.filter(route => {
+        return route._id !== action.payload
+      });
+      return filtered.length === 0 ? null : filtered;
 
     default:
       return state;

@@ -229,7 +229,7 @@ class InstitutionsOverview extends React.Component {
         institutions: institutionsIds
       };
       this.props.dispatch(create_route(routeData))
-        .then((res) => {
+        .then(() => {
           if(this.props.routes && this.props.routes.length > 0) {
             let routesCopy = JSON.parse(JSON.stringify(this.props.routes.map(route => route._id)));
             localStorage.setItem('sightseeingPath', JSON.stringify(routesCopy));
@@ -237,7 +237,6 @@ class InstitutionsOverview extends React.Component {
           this.hideModal();
           let topPosOfDiv = document.getElementById('my-routes').getBoundingClientRect().top;
           window.scrollBy({top: topPosOfDiv - 70, behavior: 'smooth'});
-          this.getSavedRoutes()
         })
         .catch((err) => {
           this.hideModal();
