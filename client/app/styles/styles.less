@@ -291,3 +291,39 @@
   width: 100%;
   text-align: center;
 }
+
+
+
+@media only screen and (max-width: 1000px) {
+  .jumbotron-padding-y {
+    padding: 5% 5% 10% 5%;
+  }
+  .jumbotron-padding-y-small {
+    padding: 3% 5% 3% 5%;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  html {
+    font-size: 50%;
+  }
+  .footer-about {
+    font-size: 75%;
+    line-height: 140%;
+    padding: 10px+1vmin 10px 10+1vmin 10px;
+    overflow-y: auto;
+  }
+}
+
+@media only screen and (min-width: 500px) and (max-width: 1000px) {
+  html {
+    font-size: 75%;
+  }
+
+  .footer-about {
+    font-size: 90%;
+    line-height: 140%;
+    padding: 10px+1vmin 10px 10+1vmin 10px;
+    overflow-y: auto;
+  }
+}

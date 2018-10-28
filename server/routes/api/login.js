@@ -14,12 +14,13 @@ module.exports = (app) => {
       .then((results) => {
         let validPassword = results[0];
         let admin = results[1];
+        let data = {name: admin.name, role: admin.role};
         if(validPassword){
           res.status(200)
             .json({
               success: true,
               token: JWTtoken.createJWToken({
-                sessionData: {name: admin.name, role: 'administrator'},
+                sessionData: data,
                 maxAge: maxAge
               }),
               expirationTime: moment().add(maxAge, 'ms')

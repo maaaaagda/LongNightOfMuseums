@@ -4,10 +4,11 @@ import initialState from './initialState'
 export default function loginReducer(state = initialState.admin, action) {
   switch (action.type) {
     case types.LOGIN_SUCCESS:
+      let adminData = action.payload.data;
       let adminLoginSuccess = {
         isLoggedIn: true,
-        name: action.payload.sub.name,
-        role: action.payload.sub.role
+        name: adminData.name,
+        role: adminData.role
       };
       return Object.assign({}, adminLoginSuccess);
     case types.LOG_OUT_SUCCESS:

@@ -67,13 +67,15 @@ render((
                 <Redirect to="/login"/>) : (<CitiesList/>
               ))}/>
             <Route path="/admin/admins/new" render={() => (
-              !store.getState().admin.isLoggedIn ? (
-                <Redirect to="/login"/>) : (<NewAdmin/>
+              !store.getState().admin.isLoggedIn ?
+                <Redirect to="/login"/> : store.getState().admin.role !== "administrator" ?
+                <Redirect to="/admin/institutions"/> : (<NewAdmin/>
               ))}/>
             <Route path="/admin/admins" render={() => (
-              !store.getState().admin.isLoggedIn ? (
-                <Redirect to="/login"/>) : (<Admins/>
-              ))}/>
+              !store.getState().admin.isLoggedIn ?
+                <Redirect to="/login"/> : store.getState().admin.role !== "administrator" ?
+                <Redirect to="/admin/institutions"/> : <Admins/>
+              )}/>
             <Route component={NotFound}/>
           </Switch>
         </App>

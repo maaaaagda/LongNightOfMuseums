@@ -17,7 +17,8 @@ class NewAdmin extends React.Component {
           name: '',
           last_name: '',
           email: '',
-          address: ''
+          address: '',
+          role: ''
         };
       this.submitForm = this.submitForm.bind(this);
       this.showModal = this.showModal.bind(this);
