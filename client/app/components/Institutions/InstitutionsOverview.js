@@ -31,7 +31,6 @@ class InstitutionsOverview extends React.Component {
     this.handleSearchByInstitutionName = this.handleSearchByInstitutionName.bind(this);
     this.handleRouteNameChange = this.handleRouteNameChange.bind(this);
     this.showGetRouteNameModal = this.showGetRouteNameModal.bind(this);
-    this.getSavedRoutes = this.getSavedRoutes.bind(this);
     this.onRouteSave = this.onRouteSave.bind(this);
   }
   componentDidMount() {
@@ -65,9 +64,7 @@ class InstitutionsOverview extends React.Component {
     let ordered = this.getOrderedInstitutions(this.state.orderBy, filteredByName);
     this.setState({institutions: ordered, mapInstitutions});
   }
-  getSavedRoutes() {
-    this.props.dispatch(get_routes());
-  }
+
   getInstitutionsFromGivenCity(value, institutions) {
     if(value === 'allCities') {
       return institutions

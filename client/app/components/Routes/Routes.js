@@ -17,6 +17,11 @@ class Routes extends React.Component {
         this.viewRouteDetails = this.viewRouteDetails.bind(this);
         this.deleteRoute = this.deleteRoute.bind(this);
     }
+    componentDidMount() {
+      if(!this.state.activeRoute && this.props.routes && this.props.routes.length > 0) {
+        this.setState({activeRoute: this.props.routes[0]._id})
+      }
+    }
     componentDidUpdate() {
       if(!this.state.activeRoute && this.props.routes && this.props.routes.length > 0) {
         this.setState({activeRoute: this.props.routes[0]._id})
@@ -79,9 +84,6 @@ class Routes extends React.Component {
       history.push(`/routes/${this.state.activeRoute}`);
     }
     renderRoutes() {
-      if(!this.state.activeRoute && this.props.routes && this.props.routes.length > 0) {
-        this.setState({activeRoute: this.props.routes[0]._id})
-      }
       let currentRoute =  this.props.routes.find(route => {
         return route._id === this.state.activeRoute
       });

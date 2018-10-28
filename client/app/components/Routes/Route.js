@@ -23,7 +23,7 @@ class Route extends React.Component {
 
     }
   componentDidMount() {
-    this.setState({routeId: '5bd596173690eb0adb9caf0f'}, () => {
+    this.setState({routeId: this.props.match.params.routeId}, () => {
       this.props.dispatch(get_single_route_from_database(this.state.routeId))
         .then((res) => {
           if(res && res.length > 0){
@@ -38,13 +38,11 @@ class Route extends React.Component {
 
           } else {
             this.setState({loading: false, error: true});
-            console.log('did not found route')
           }
         })
         .catch(() => {
           this.setState({loading: false, error: true})
         });
-
     });
   }
   componentDidUpdate() {
