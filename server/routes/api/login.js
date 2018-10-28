@@ -10,14 +10,16 @@ module.exports = (app) => {
     Admin.findOne({ email: email})
       .then((admin) => (!admin) ? Promise.reject("Admininstrator not found.") : admin)
       .then((admin) => {
-        return bcrypt.compare(password, admin.password) })
-      .then((validPassword) => {
+        return Promise.all([bcrypt.compare(password, admin.password), admin])})
+      .then((results) => {
+        let validPassword = results[0];
+        let admin = results[1];
         if(validPassword){
           res.status(200)
             .json({
               success: true,
               token: JWTtoken.createJWToken({
-                sessionData: '',
+                sessionData: {name: admin.name, role: 'administrator'},
                 maxAge: maxAge
               }),
               expirationTime: moment().add(maxAge, 'ms')

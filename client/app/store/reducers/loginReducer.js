@@ -6,13 +6,15 @@ export default function loginReducer(state = initialState.admin, action) {
     case types.LOGIN_SUCCESS:
       let adminLoginSuccess = {
         isLoggedIn: true,
-        email: action.payload
+        name: action.payload.sub.name,
+        role: action.payload.sub.role
       };
       return Object.assign({}, adminLoginSuccess);
     case types.LOG_OUT_SUCCESS:
       let adminLogout = {
         isLoggedIn: false,
-        email: ''
+        name: '',
+        role: ''
       };
       return Object.assign({}, adminLogout);
     default:

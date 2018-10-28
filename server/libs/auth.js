@@ -41,7 +41,7 @@ const createJWToken = function (details)
   }
 
   let token = jwt.sign({
-    sub: details.sessionData.email
+    sub: details.sessionData
   }, process.env.JWT_SECRET, {
     expiresIn: details.maxAge,
     algorithm: 'HS256'

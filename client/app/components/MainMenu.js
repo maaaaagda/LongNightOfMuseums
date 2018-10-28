@@ -50,6 +50,17 @@ class MainMenu extends Component {
           <Menu.Item name='1' active={activeItem === '1'}  onClick={this.handleButtonClick} >
             <Icon name='sidebar' size="big" inverted/>
           </Menu.Item>
+          {this.props.isLoggedIn ? (
+            <Menu.Menu position='right'>
+              <Menu.Item className="p-0">
+                <p className='text-white'>{this.props.adminName}</p>
+              </Menu.Item>
+              <Menu.Item>
+                <Icon name='user circle' size='big' inverted/>
+              </Menu.Item>
+            </Menu.Menu>
+          ) : ""}
+
         </Menu>
             <Sidebar
               as={Menu}
@@ -81,9 +92,11 @@ class MainMenu extends Component {
                     <Menu.Item as={Link} to={"/admin/cities"} onClick={this.handleButtonClick}>
                       Cities
                     </Menu.Item>
-                    <Menu.Item as={Link} to={"/admin/admins"} onClick={this.handleButtonClick}>
-                      Administrators
-                    </Menu.Item>
+                    {this.props.adminRole === "administrator" ? (
+                      <Menu.Item as={Link} to={"/admin/admins"} onClick={this.handleButtonClick}>
+                        Administrators
+                      </Menu.Item>
+                    ) : ""}
                     <Menu.Item as={Link} to={"#"} onClick={this.handleLogout}>
                       Logout
                     </Menu.Item>
@@ -101,7 +114,9 @@ class MainMenu extends Component {
 
 function mapStateToProps(state) {
   return  {
-    isLoggedIn: state.admin.isLoggedIn
+    isLoggedIn: state.admin.isLoggedIn,
+    adminName: state.admin.name,
+    adminRole: state.admin.role
   }
 }
 
