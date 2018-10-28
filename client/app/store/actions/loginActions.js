@@ -14,7 +14,7 @@ export function loginSuccess(admin) {
 }
 
 export function logOutSuccess() {
-  localStorage.clear();
+  localStorage.removeItem('token');
   return {type: types.LOG_OUT_SUCCESS, payload: {}}
 }
 export function login(loginData) {

@@ -16,10 +16,11 @@ import Home from './components/Home/Home'
 import Login from './components/Admins/Login'
 import RemindPassword from './components/Admins/RemindPassword';
 import ResetPassword from './components/Admins/ResetPassword';
-import Admins from './components/Admins/AdminsList'
-import NewAdmin from './components/Admins/NewAdmin'
+import Admins from './components/Admins/AdminsList';
+import UserRoute from './components/Routes/Route';
+import NewAdmin from './components/Admins/NewAdmin';
 import './styles/styles.less';
-import './helpers/delayPromise'
+import './helpers/delayPromise';
 import history from './helpers/history';
 import {restoreUserIfLogged} from "./store/actions/loginActions";
 import NewInstitution from "./components/Institutions/NewInstitution";
@@ -29,12 +30,12 @@ import CitiesList from "./components/Cities/CitiesList";
 import Redirect from "react-router-dom/es/Redirect";
 import {load_institutions} from "./store/actions/institutionActions";
 import ScrollToTop from "./components/Helpers/ScrollToTop";
-import {get_routes} from "./store/actions/routes";
+import {load_cities} from "./store/actions/cityActions";
 const store = configureStore();
 
 store.dispatch(restoreUserIfLogged());
+store.dispatch(load_cities());
 store.dispatch(load_institutions());
-store.dispatch(get_routes());
 
 render((
   <Provider store={store}>
@@ -48,6 +49,7 @@ render((
             <Route path="/resetpassword/:adminId/:recoveryString/" render={(props) => (<ResetPassword {...props}/>)}/>
             <Route path="/institutions/:institutionId" component={InstitutionDetail}/>
             <Route path="/institutions" component={Institutions}/>
+            <Route path="/routes/:routeId" component={UserRoute}/>
             <Route path="/admin/institutions/new" render={() => (
               !store.getState().admin.isLoggedIn ? (
                 <Redirect to="/login"/>) : (<NewInstitution/>

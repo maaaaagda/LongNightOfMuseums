@@ -34,6 +34,7 @@ app.all('/api/*', function(req, res, next) {
     || req.url === '/api/login'
     || req.url === '/api/remindpassword'
     || req.url ==='/api/resetpassword'
+    || req.url.indexOf('/api/routes') >= 0
     || (req.url === '/api/cities' && req.method === 'GET')
     || ((req.url.indexOf('/api/institutions') >= 0) && req.method === 'GET')
     || req.url.indexOf('/api/institutionsphotos') >= 0){

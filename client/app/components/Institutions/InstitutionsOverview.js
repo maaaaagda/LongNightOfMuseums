@@ -8,7 +8,7 @@ import InstitutionsFilterOrder from "./InstitutionsFilterOrder";
 import MapContainer from "../Map/Map";
 import {ValidationForm, ValidationInput} from "../Helpers/FormElementsWithValidation";
 import {required} from "../Helpers/FormValidationRules";
-import {get_routes} from "../../store/actions/routes";
+import {create_route, get_routes} from "../../store/actions/routeActions";
 
 class InstitutionsOverview extends React.Component {
 
@@ -31,10 +31,12 @@ class InstitutionsOverview extends React.Component {
     this.handleSearchByInstitutionName = this.handleSearchByInstitutionName.bind(this);
     this.handleRouteNameChange = this.handleRouteNameChange.bind(this);
     this.showGetRouteNameModal = this.showGetRouteNameModal.bind(this);
-    this.getSavedRoutes = this.getSavedRoutes.bind(this);
     this.onRouteSave = this.onRouteSave.bind(this);
   }
   componentDidMount() {
+    if(this.props.routes.length === 0) {
+      this.props.dispatch(get_routes());
+    }
     if(this.props.institutions.length > 0) {
       this.filterSortInstitutions();
     } else {
@@ -62,9 +64,7 @@ class InstitutionsOverview extends React.Component {
     let ordered = this.getOrderedInstitutions(this.state.orderBy, filteredByName);
     this.setState({institutions: ordered, mapInstitutions});
   }
-  getSavedRoutes() {
-    this.props.dispatch(get_routes());
-  }
+
   getInstitutionsFromGivenCity(value, institutions) {
     if(value === 'allCities') {
       return institutions
@@ -222,20 +222,23 @@ class InstitutionsOverview extends React.Component {
         return inst._id
       });
       let routeData = {
-        routeName: this.state.routeName,
-        routeInstitutions: institutionsIds
+        name: this.state.routeName,
+        institutions: institutionsIds
       };
-      if(this.props.routes && this.props.routes.length > 0) {
-        let routesCopy = JSON.parse(JSON.stringify(this.props.routes));
-        routesCopy.push(routeData);
-        localStorage.setItem('sightseeingPath', JSON.stringify(routesCopy));
-      } else {
-        localStorage.setItem('sightseeingPath', JSON.stringify([routeData]));
-      }
-      this.hideModal();
-      let topPosOfDiv = document.getElementById('my-routes').getBoundingClientRect().top;
-      window.scrollBy({top: topPosOfDiv - 70, behavior: 'smooth'});
-      this.getSavedRoutes()
+      this.props.dispatch(create_route(routeData))
+        .then(() => {
+          if(this.props.routes && this.props.routes.length > 0) {
+            let routesCopy = JSON.parse(JSON.stringify(this.props.routes.map(route => route._id)));
+            localStorage.setItem('sightseeingPath', JSON.stringify(routesCopy));
+          }
+          this.hideModal();
+          let topPosOfDiv = document.getElementById('my-routes').getBoundingClientRect().top;
+          window.scrollBy({top: topPosOfDiv - 70, behavior: 'smooth'});
+        })
+        .catch((err) => {
+          this.hideModal();
+          console.log(err);
+        });
     }
   }
   hideModal() {
