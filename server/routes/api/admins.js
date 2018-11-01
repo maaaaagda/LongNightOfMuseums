@@ -13,14 +13,25 @@ module.exports = (app) => {
   app.get('/api/admins', (req, res, next) => {
     Admin.find()
       .exec()
-      .then((admins) => res.json(admins))
+      .then((admins) =>  {
+        let filtered = admins.map(admin => {
+          let adminCopy = JSON.parse(JSON.stringify(admin));
+          delete adminCopy.password;
+          return adminCopy
+        });
+        res.json(filtered)
+      })
       .catch((err) => next(err));
   });
 
   app.get('/api/admins/:id', (req, res, next) => {
     Admin.findById(req.params.id)
       .exec()
-      .then((admin) => res.json(admin))
+      .then((admin) => {
+        let adminCopy = JSON.parse(JSON.stringify(admin));
+        delete adminCopy.password;
+        res.json(adminCopy);
+      })
       .catch((err) => next(err));
   });
 
@@ -33,7 +44,7 @@ module.exports = (app) => {
             .json({
               success: true})
         } else {
-          res.status(401)
+          res.status(400)
             .json({
               message: "Administrator not found"
             })
@@ -41,6 +52,30 @@ module.exports = (app) => {
 
       })
       .catch((err) => next(err));
+  });
+
+  app.put('/api/admins/:id', function (req, res) {
+    Admin.findById(req.params.id)
+      .exec()
+      .then((admin) => {
+        if (admin) {
+          let adminData = {name: req.body.name, last_name: req.body.last_name, role: req.body.role, address: req.body.address};
+          admin.set(adminData);
+          return admin.save();
+        } else {
+          return Promise.reject("Administrator not found");
+        }
+
+      })
+      .then(admin => {
+        res.send(admin);
+      })
+      .catch((err) => {
+        res.status(400)
+          .json({
+            message: err || "Something went wrong."
+          })
+      });
   });
 
   app.post('/api/admins', (req, res) => {
@@ -90,7 +125,7 @@ module.exports = (app) => {
             success: true})
       })
       .catch((err) => {
-        res.status(401)
+        res.status(400)
           .json({
             message: err || "Validation failed. Given email and password aren't matching."
           })

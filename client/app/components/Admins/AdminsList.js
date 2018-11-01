@@ -5,6 +5,7 @@ import {delete_admin, load_admins} from "../../store/actions/adminActions";
 import {Link} from "react-router-dom";
 import CustomModal from '../Helpers/Modals';
 import moment from "moment";
+import history from "../../helpers/history";
 
 class AdminsList extends React.Component
 {
@@ -51,6 +52,9 @@ class AdminsList extends React.Component
     formatDate(date){
       return moment(date, moment.ISO_8601).format("DD.MM.YYYY  HH:mm")
     }
+    editAdmin(id) {
+      history.push({pathname: '/admin/admins/'+id});
+    }
 
     deleteUser(id) {
       this.props.dispatch(delete_admin(id))
@@ -87,9 +91,16 @@ class AdminsList extends React.Component
             <Table.Cell>{admin.email}</Table.Cell>
             <Table.Cell>{admin.role}</Table.Cell>
             <Table.Cell>
-              <Button basic color='red' onClick={() => this.ensureDeletingUser(admin._id)}>
-                Remove
-              </Button>
+              <div className='museum-button'>
+                <Button basic color='red' onClick={() => this.ensureDeletingUser(admin._id)}>
+                  Remove
+                </Button>
+              </div>
+              <div className='museum-button'>
+                <Button basic color='blue' onClick={() => this.editAdmin(admin._id)}>
+                  Edit
+                </Button>
+              </div>
             </Table.Cell>
           </Table.Row>
         );

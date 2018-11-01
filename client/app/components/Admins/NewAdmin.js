@@ -163,6 +163,16 @@ class NewAdmin extends React.Component {
                   validations={[required, email]}
                 />
                 <ValidationInput
+                  id='form-input-role'
+                  name='role'
+                  control={Input}
+                  label='Role'
+                  onChange={this.handleChange}
+                  value={this.state.role}
+                />
+              </Form.Group>
+              <Form.Group widths='equal'>
+                <ValidationInput
                   id='form-input-address'
                   name='address'
                   control={Input}

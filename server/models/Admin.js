@@ -15,7 +15,8 @@ const AdminSchema = new mongoose.Schema({
     type: Date,
     default: Date.now()
   },
-  role: String
+  role: String,
+  address: String
 });
 
 module.exports = mongoose.model('Administrator', AdminSchema);

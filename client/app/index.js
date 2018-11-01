@@ -19,6 +19,7 @@ import ResetPassword from './components/Admins/ResetPassword';
 import Admins from './components/Admins/AdminsList';
 import UserRoute from './components/Routes/Route';
 import NewAdmin from './components/Admins/NewAdmin';
+import EditAdmin from './components/Admins/EditAdmin';
 import './styles/styles.less';
 import './helpers/delayPromise';
 import history from './helpers/history';
@@ -71,6 +72,11 @@ render((
                 <Redirect to="/login"/> : store.getState().admin.role !== "administrator" ?
                 <Redirect to="/admin/institutions"/> : (<NewAdmin/>
               ))}/>
+            <Route path="/admin/admins/:adminId" render={(props) => (
+              !store.getState().admin.isLoggedIn ?
+                <Redirect to="/login"/> : store.getState().admin.role !== "administrator" ?
+                <Redirect to="/admin/institutions"/> : (<EditAdmin {...props}/>
+                ))}/>
             <Route path="/admin/admins" render={() => (
               !store.getState().admin.isLoggedIn ?
                 <Redirect to="/login"/> : store.getState().admin.role !== "administrator" ?
