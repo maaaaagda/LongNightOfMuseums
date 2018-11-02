@@ -137,7 +137,7 @@
 
 .museum-description {
   font-size: calc(~"7px + 1vmin");
-  max-height: calc(~"0.7 * @{contentHeight}");
+  max-height: calc(~"0.5 * @{contentHeight}");
   padding: 3px;
   margin: 0;
   text-align: justify;
@@ -292,7 +292,15 @@
   text-align: center;
 }
 
+.institution-form {
+  min-width: 50vw;
+}
 
+.tags-container {
+  margin-top: 5px;
+  max-height: 100px;
+  overflow-y: auto;
+}
 
 @media only screen and (max-width: 1000px) {
   .jumbotron-padding-y {
@@ -317,6 +325,13 @@
   .table-container {
     font-size: 50%;
   }
+
+  .institution-form {
+    min-width: 70vw;
+  }
+  .app-title {
+    font-size: 30px + 1vmin;
+  }
 }
 
 @media only screen and (min-width: 500px) and (max-width: 1000px) {
@@ -332,6 +347,13 @@
   }
 
   .table-container {
-    font-size: 75%;
+    font-size: 60%;
+  }
+
+  .institution-form {
+    min-width: 75vw;
+  }
+  .app-title {
+    font-size: 40px + 1vmin;
   }
 }

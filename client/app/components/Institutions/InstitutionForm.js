@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {Button, Form, Icon, Select, TextArea} from "semantic-ui-react";
+import {Button, Form, Icon, Select, TextArea, Input, Label} from "semantic-ui-react";
 import {ValidationForm, ValidationInput} from "../Helpers/FormElementsWithValidation";
 import {required, latitude, longitude} from "../Helpers/FormValidationRules";
 import PropTypes from "prop-types";
@@ -19,6 +19,8 @@ class InstitutionForm extends React.Component {
       longitude: this.props.institutionData.longitude || '',
       city: this.props.institutionData.city_id || '',
       photos: this.props.institutionData.photos || [],
+      tags: this.props.institutionData.tags || [],
+      currentTag: '',
       photosFiles: [],
       cities: [],
       visitingPlan: this.props.institutionData.visitingPlan || '',
@@ -34,6 +36,8 @@ class InstitutionForm extends React.Component {
     this.handleCitySelectChange = this.handleCitySelectChange.bind(this);
     this.onDrop = this.onDrop.bind(this);
     this.deleteAlreadySavedPicture = this.deleteAlreadySavedPicture.bind(this);
+    this.addTag = this.addTag.bind(this);
+    this.deleteTag = this.deleteTag.bind(this);
   }
 
   componentDidMount() {
@@ -62,6 +66,7 @@ class InstitutionForm extends React.Component {
         longitude: nextProps.institutionData.longitude || '',
         visitingPlan: nextProps.institutionData.visiting_plan || '',
         photos: nextProps.institutionData.photos || [],
+        tags: nextProps.institutionData.tags || []
       }, () => {
         this.setState({cities: this.manageCitiesList(nextProps.cities)})
       });
@@ -97,6 +102,7 @@ class InstitutionForm extends React.Component {
       institutionData.append('latitude', this.state.latitude);
       institutionData.append('longitude', this.state.longitude);
       institutionData.append('photos', JSON.stringify(this.state.photos));
+      institutionData.append('tags', JSON.stringify(this.state.tags));
 
       this.state.photosFiles.forEach(photo => {
         institutionData.append('InstitutionPhoto', photo);
@@ -137,6 +143,19 @@ class InstitutionForm extends React.Component {
       return photo.id !== id;
     });
     this.setState({photos: photos})
+  }
+
+  addTag() {
+   let tags = [...this.state.tags];
+   tags.push(this.state.currentTag);
+   this.setState({currentTag: '', tags})
+  }
+
+  deleteTag(i) {
+   let tags = [...this.state.tags];
+   tags.splice(i, 1);
+   this.setState({tags});
+
   }
 
   renderGeneralInfoStep() {
@@ -204,15 +223,40 @@ class InstitutionForm extends React.Component {
 
   renderDescriptionStep() {
     return (
-      <Form.Field
-        id='form-input-description'
-        name='description'
-        control={TextArea}
-        label='Description'
-        rows={15}
-        onChange={this.handleChange}
-        value={this.state.description}
-      />
+      <div>
+        <Form.Field
+          id='form-input-description'
+          name='description'
+          control={TextArea}
+          label='Description'
+          rows={10}
+          onChange={this.handleChange}
+          value={this.state.description}
+        />
+        <div className='field'>
+          <label>Tags</label>
+        <Input type='text'
+               icon='tags'
+               fluid
+               iconPosition='left'
+               name='currentTag'
+               value={this.state.currentTag}
+               onChange={this.handleChange}
+               action={ <Button type='submit' onClick={this.addTag}>Add tag</Button>}
+        >
+        </Input>
+        </div>
+        <div className='tags-container'>
+          <Label.Group color='teal'>
+            {this.state.tags.map((tag, i) => {
+              return <Label as='div' key={i}>
+                  {tag}
+                <Icon name='close' onClick={() => this.deleteTag(i)}/>
+              </Label>
+            })}
+          </Label.Group>
+        </div>
+      </div>
     )
   }
 
