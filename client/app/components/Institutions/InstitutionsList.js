@@ -162,9 +162,11 @@ class Institutions extends React.Component {
   renderImage(institution) {
     let image;
     if(institution.photos.length > 0) {
-      image = <Image src={"/api/institutionsphotos/" + institution.photos[0].id} fluid />
+      image = <div className={"thumbnail-photo"}>
+        <Image src={"/api/institutionsphotos/" + institution.photos[0].id} fluid />
+      </div>
     } else {
-      image = <Icon name='university' size={'huge'}/>;
+      image = <div className='jumbotron-fully-centered'> <Icon name='university' size={'huge'}/></div>;
     }
     return image;
   }
@@ -176,9 +178,7 @@ class Institutions extends React.Component {
           <Grid celled='internally'>
             <Grid.Row>
               <Grid.Column tablet={7} computer={4} only='computer tablet'>
-                  <div className={"jumbotron-fully-centered"}>
-                    {this.renderImage(institution)}
-                  </div>
+                  {this.renderImage(institution)}
               </Grid.Column>
               <Grid.Column mobile={11} tablet={6} computer={8}>
                 <Card.Content>

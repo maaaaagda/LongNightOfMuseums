@@ -16,13 +16,13 @@ const Footer = () => (
           <Grid celled={'internally'} inverted>
             <Grid.Row>
               <Container className={'footer-photo'}>
-                <Image src={require('../../assets/footer_picture_2.jpg')} size={'huge'} centered/>
+                <Image src={require('../../assets/footer_picture.jpg')} size={'huge'} centered/>
               </Container>
             </Grid.Row>
             <Grid.Row>
                 <div className={'footer-info'}>
                   <h5>Contact</h5>
-                  <p>longnightofmuseums@culture.com</p>
+                  <p>longnightofmuseums2018@gmail.com</p>
                 </div>
             </Grid.Row>
           </Grid>

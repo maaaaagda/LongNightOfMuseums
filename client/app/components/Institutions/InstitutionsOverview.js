@@ -247,9 +247,11 @@ class InstitutionsOverview extends React.Component {
   renderImage(institution) {
     let image;
     if(institution.photos.length > 0) {
-      image = <Image src={"/api/institutionsphotos/" + institution.photos[0].id} fluid />
+      image = <div className={"thumbnail-photo"}>
+        <Image src={"/api/institutionsphotos/" + institution.photos[0].id} fluid />
+      </div>
     } else {
-      image = <Icon name='university' size={'huge'}/>;
+      image = <div className='jumbotron-fully-centered'> <Icon name='university' size={'huge'}/></div>;
     }
     return image;
   }
@@ -260,12 +262,10 @@ class InstitutionsOverview extends React.Component {
         <Card fluid key={index} className='institution-card'>
           <Grid celled='internally'>
             <Grid.Row>
-              <Grid.Column mobile={4} tablet={4} computer={4}>
-                <div className={"jumbotron-fully-centered"}>
+              <Grid.Column tablet={7} computer={4} only='computer tablet'>
                   {this.renderImage(institution)}
-                </div>
               </Grid.Column>
-             <Grid.Column mobile={7} tablet={7} computer={8}>
+             <Grid.Column mobile={11} tablet={6} computer={8}>
                 <Card.Content>
                   <Card.Header>
                     <h2>{institution.name}</h2>
@@ -279,7 +279,7 @@ class InstitutionsOverview extends React.Component {
                   </Card.Description>
                 </Card.Content>
               </Grid.Column>
-              <Grid.Column mobile={5} tablet={5} computer={4}>
+              <Grid.Column mobile={5} tablet={3} computer={4}>
                 <div className='vertical-center-outer'>
                   <div className='museum-button'>
                     <Button basic color='blue' as={Link} to={`/institutions/${institution._id}`}> View more </Button>
