@@ -143,6 +143,12 @@ class InstitutionDetail extends React.Component {
                 <div className='secondary-info padding-bottom-medium'>
                   {this.state.institutionData.city.name}, {this.state.institutionData.address}
                 </div>
+                <div>
+                  <a target="_blank" href={this.state.institutionData.website}>
+                    {this.state.institutionData.website}
+                  </a>
+                </div>
+                <br/>
                 <div className='museum-description'>
                   {this.state.institutionData.description}
                 </div>

@@ -1,5 +1,5 @@
 import {Link} from "react-router-dom";
-import {Button, Grid, Image, Card, Checkbox, Icon, Modal, Header} from "semantic-ui-react";
+import {Button, Grid, Image, Card, Checkbox, Icon, Modal, Header, Label} from "semantic-ui-react";
 import React from "react";
 import connect from "react-redux/es/connect/connect";
 import {load_institutions} from "../../store/actions/institutionActions";
@@ -59,7 +59,7 @@ class InstitutionsOverview extends React.Component {
   }
   filterSortInstitutions() {
     let fromCity = this.getInstitutionsFromGivenCity(this.state.city, this.state.originalInstitutions);
-    let filteredByName = this.getInstitutionsFilteredByName(this.state.searchByName, fromCity);
+    let filteredByName = this.getInstitutionsFiltered(this.state.searchByName, fromCity);
     let mapInstitutions = this.getOrderedInstitutions("InstitutionNameAsc", JSON.parse(JSON.stringify(filteredByName)));
     let ordered = this.getOrderedInstitutions(this.state.orderBy, filteredByName);
     this.setState({institutions: ordered, mapInstitutions});
@@ -75,7 +75,7 @@ class InstitutionsOverview extends React.Component {
       return filteredInstitutions
     }
   }
-  getInstitutionsFilteredByName(value, institutions) {
+  getInstitutionsFiltered(value, institutions) {
     let filteredInstitutions = institutions.filter(institution => {
       return institution.name.toLowerCase().indexOf(value.toLowerCase()) >= 0;
     });
@@ -275,7 +275,15 @@ class InstitutionsOverview extends React.Component {
                   </Card.Meta>
                   <br/>
                   <Card.Description>
-                    <a>{institution.website}</a>
+                    <div className='tags-container'>
+                      <Label.Group color='teal'>
+                        {institution && Array.isArray(institution.tags) && institution.tags.map((tag, i) => {
+                          return <Label as='div' key={i}>
+                            {tag}
+                          </Label>
+                        })}
+                      </Label.Group>
+                    </div>
                   </Card.Description>
                 </Card.Content>
               </Grid.Column>
