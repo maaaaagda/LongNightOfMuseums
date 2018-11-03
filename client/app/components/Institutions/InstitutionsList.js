@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {load_institutions, delete_institution} from "../../store/actions/institutionActions";
-import {Card, Image, Grid, Button, Segment,  Loader, Dimmer} from 'semantic-ui-react';
+import {Card, Image, Grid, Button, Segment, Loader, Dimmer, Label} from 'semantic-ui-react';
 import {Link} from "react-router-dom";
 import CustomModal from "../Helpers/Modals";
 import {Icon} from "semantic-ui-react";
@@ -49,7 +49,7 @@ class Institutions extends React.Component {
   }
   filterSortInstitutions() {
     let fromCity = this.getInstitutionsFromGivenCity(this.state.city, this.state.originalInstitutions);
-    let filteredByName = this.getInstitutionsFilteredByName(this.state.searchByName, fromCity);
+    let filteredByName = this.getInstitutionsFiltered(this.state.searchByName, fromCity);
     let ordered = this.getOrderedInstitutions(this.state.orderBy, filteredByName);
     this.setState({institutions: ordered});
   }
@@ -63,11 +63,11 @@ class Institutions extends React.Component {
       return filteredInstitutions
     }
   }
-  getInstitutionsFilteredByName(value, institutions) {
-    let filteredInstitutions = institutions.filter(institution => {
-      return institution.name.toLowerCase().indexOf(value.toLowerCase()) >= 0;
+  getInstitutionsFiltered(value, institutions) {
+    return institutions.filter(institution => {
+      let institutionData = institution.name + JSON.stringify(institution.tags) + institution.address;
+      return institutionData.toLowerCase().indexOf(value.toLowerCase()) >= 0;
     });
-    return filteredInstitutions;
   }
   getOrderedInstitutions(value, institutions) {
     let orderedInstitutions;
@@ -162,9 +162,11 @@ class Institutions extends React.Component {
   renderImage(institution) {
     let image;
     if(institution.photos.length > 0) {
-      image = <Image src={"/api/institutionsphotos/" + institution.photos[0].id} fluid />
+      image = <div className={"thumbnail-photo"}>
+        <Image src={"/api/institutionsphotos/" + institution.photos[0].id} fluid />
+      </div>
     } else {
-      image = <Icon name='university' size={'huge'}/>;
+      image = <div className='jumbotron-fully-centered'> <Icon name='university' size={'huge'}/></div>;
     }
     return image;
   }
@@ -176,9 +178,7 @@ class Institutions extends React.Component {
           <Grid celled='internally'>
             <Grid.Row>
               <Grid.Column tablet={7} computer={4} only='computer tablet'>
-                  <div className={"jumbotron-fully-centered"}>
-                    {this.renderImage(institution)}
-                  </div>
+                  {this.renderImage(institution)}
               </Grid.Column>
               <Grid.Column mobile={11} tablet={6} computer={8}>
                 <Card.Content>
@@ -190,7 +190,15 @@ class Institutions extends React.Component {
                   </Card.Meta>
                   <br/>
                   <Card.Description>
-                    <a>{institution.website}</a>
+                    <div className='tags-container'>
+                      <Label.Group color='teal'>
+                        {institution && Array.isArray(institution.tags) && institution.tags.map((tag, i) => {
+                          return <Label as='div' key={i}>
+                            {tag}
+                          </Label>
+                        })}
+                      </Label.Group>
+                    </div>
                   </Card.Description>
                 </Card.Content>
               </Grid.Column>

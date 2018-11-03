@@ -82,9 +82,9 @@ class NewInstitution extends React.Component {
   render() {
     return (
       <div>
-        <div className={'jumbotron-padding-small'}>
+        <Grid>
           <Grid.Row>
-            <div>
+            <div className={'jumbotron-padding-small'}>
               <Link to={"/admin/institutions"}>
                 <Button
                   icon
@@ -98,17 +98,19 @@ class NewInstitution extends React.Component {
               </Link>
             </div>
           </Grid.Row>
-        </div>
-      <div className='jumbotron-top-small'>
-        <Segment textAlign='center'><h1> New institution </h1></Segment>
-        <br/>
-        <InstitutionForm
-          submitSaving={this.submitSaving}
-          institutionData={this.state.institutionData}
-          isFormLoading={this.state.isFormLoading}
-        />
-        {this.state.modal}
-      </div>
+          <Grid.Row>
+            <div className='jumbotron-top-small'>
+              <Segment textAlign='center'><h1> New institution </h1></Segment>
+              <br/>
+              <InstitutionForm
+                submitSaving={this.submitSaving}
+                institutionData={this.state.institutionData}
+                isFormLoading={this.state.isFormLoading}
+              />
+              {this.state.modal}
+            </div>
+          </Grid.Row>
+        </Grid>
       </div>
     )
   }

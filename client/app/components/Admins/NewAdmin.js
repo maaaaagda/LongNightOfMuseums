@@ -17,7 +17,8 @@ class NewAdmin extends React.Component {
           name: '',
           last_name: '',
           email: '',
-          address: ''
+          address: '',
+          role: ''
         };
       this.submitForm = this.submitForm.bind(this);
       this.showModal = this.showModal.bind(this);
@@ -161,6 +162,16 @@ class NewAdmin extends React.Component {
                   value={this.state.email}
                   validations={[required, email]}
                 />
+                <ValidationInput
+                  id='form-input-role'
+                  name='role'
+                  control={Input}
+                  label='Role'
+                  onChange={this.handleChange}
+                  value={this.state.role}
+                />
+              </Form.Group>
+              <Form.Group widths='equal'>
                 <ValidationInput
                   id='form-input-address'
                   name='address'

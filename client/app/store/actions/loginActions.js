@@ -47,7 +47,6 @@ export function restoreUserIfLogged () {
       if (timeNow <= expirationTime) {
         dispatch(loginSuccess(decodedToken))
       } else {
-        console.log('Session  expired');
         history.push('/');
         dispatch(logOutSuccess())
       }

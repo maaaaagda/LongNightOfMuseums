@@ -2,8 +2,7 @@ export default {
   admin: {
     isLoggedIn: false,
     name: '',
-    surname: '',
-    email: ''
+    role: ''
   },
   institutions: [],
   admins: [],

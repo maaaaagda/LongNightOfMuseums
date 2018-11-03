@@ -1,5 +1,5 @@
 import {Link} from "react-router-dom";
-import {Button, Grid, Image, Card, Checkbox, Icon, Modal, Header} from "semantic-ui-react";
+import {Button, Grid, Image, Card, Checkbox, Icon, Modal, Header, Label} from "semantic-ui-react";
 import React from "react";
 import connect from "react-redux/es/connect/connect";
 import {load_institutions} from "../../store/actions/institutionActions";
@@ -34,7 +34,7 @@ class InstitutionsOverview extends React.Component {
     this.onRouteSave = this.onRouteSave.bind(this);
   }
   componentDidMount() {
-    if(this.props.routes.length === 0) {
+    if(!this.props.routes || this.props.routes.length === 0) {
       this.props.dispatch(get_routes());
     }
     if(this.props.institutions.length > 0) {
@@ -59,7 +59,7 @@ class InstitutionsOverview extends React.Component {
   }
   filterSortInstitutions() {
     let fromCity = this.getInstitutionsFromGivenCity(this.state.city, this.state.originalInstitutions);
-    let filteredByName = this.getInstitutionsFilteredByName(this.state.searchByName, fromCity);
+    let filteredByName = this.getInstitutionsFiltered(this.state.searchByName, fromCity);
     let mapInstitutions = this.getOrderedInstitutions("InstitutionNameAsc", JSON.parse(JSON.stringify(filteredByName)));
     let ordered = this.getOrderedInstitutions(this.state.orderBy, filteredByName);
     this.setState({institutions: ordered, mapInstitutions});
@@ -75,7 +75,7 @@ class InstitutionsOverview extends React.Component {
       return filteredInstitutions
     }
   }
-  getInstitutionsFilteredByName(value, institutions) {
+  getInstitutionsFiltered(value, institutions) {
     let filteredInstitutions = institutions.filter(institution => {
       return institution.name.toLowerCase().indexOf(value.toLowerCase()) >= 0;
     });
@@ -247,9 +247,11 @@ class InstitutionsOverview extends React.Component {
   renderImage(institution) {
     let image;
     if(institution.photos.length > 0) {
-      image = <Image src={"/api/institutionsphotos/" + institution.photos[0].id} fluid />
+      image = <div className={"thumbnail-photo"}>
+        <Image src={"/api/institutionsphotos/" + institution.photos[0].id} fluid />
+      </div>
     } else {
-      image = <Icon name='university' size={'huge'}/>;
+      image = <div className='jumbotron-fully-centered'> <Icon name='university' size={'huge'}/></div>;
     }
     return image;
   }
@@ -260,12 +262,10 @@ class InstitutionsOverview extends React.Component {
         <Card fluid key={index} className='institution-card'>
           <Grid celled='internally'>
             <Grid.Row>
-              <Grid.Column mobile={4} tablet={4} computer={4}>
-                <div className={"jumbotron-fully-centered"}>
+              <Grid.Column tablet={7} computer={4} only='computer tablet'>
                   {this.renderImage(institution)}
-                </div>
               </Grid.Column>
-             <Grid.Column mobile={7} tablet={7} computer={8}>
+             <Grid.Column mobile={11} tablet={6} computer={8}>
                 <Card.Content>
                   <Card.Header>
                     <h2>{institution.name}</h2>
@@ -275,11 +275,19 @@ class InstitutionsOverview extends React.Component {
                   </Card.Meta>
                   <br/>
                   <Card.Description>
-                    <a>{institution.website}</a>
+                    <div className='tags-container'>
+                      <Label.Group color='teal'>
+                        {institution && Array.isArray(institution.tags) && institution.tags.map((tag, i) => {
+                          return <Label as='div' key={i}>
+                            {tag}
+                          </Label>
+                        })}
+                      </Label.Group>
+                    </div>
                   </Card.Description>
                 </Card.Content>
               </Grid.Column>
-              <Grid.Column mobile={5} tablet={5} computer={4}>
+              <Grid.Column mobile={5} tablet={3} computer={4}>
                 <div className='vertical-center-outer'>
                   <div className='museum-button'>
                     <Button basic color='blue' as={Link} to={`/institutions/${institution._id}`}> View more </Button>

@@ -1,4 +1,4 @@
-import {Container, Icon, Transition} from "semantic-ui-react";
+import {Container, Icon, Transition, Responsive} from "semantic-ui-react";
 import React from "react";
 import InstitutionsOverview from '../Institutions/InstitutionsOverview';
 import MyRoutes from '../Routes/Routes';
@@ -34,7 +34,15 @@ class Home extends React.Component {
             <Transition visible={this.state.visibleTitle} animation='scale' duration={5000}>
               <Container textAlign={'center'}>
                 <h1 className={'app-title'}>Long Night Of Museums</h1>
-                <h1><Icon inverted name='university' size={'huge'}/></h1>
+                <Responsive as='h1' maxWidth={500}>
+                  <Icon inverted name='university' size={'large'}/>
+                </Responsive>
+                <Responsive as='h1' minWidth={500} maxWidth={1000}>
+                  <Icon inverted name='university' size={'big'}/>
+                </Responsive>
+                <Responsive as='h1' minWidth={1000}>
+                  <Icon inverted name='university' size={'huge'}/>
+                </Responsive>
               </Container>
             </Transition>
           </div>

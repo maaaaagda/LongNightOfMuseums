@@ -19,6 +19,7 @@ import ResetPassword from './components/Admins/ResetPassword';
 import Admins from './components/Admins/AdminsList';
 import UserRoute from './components/Routes/Route';
 import NewAdmin from './components/Admins/NewAdmin';
+import EditAdmin from './components/Admins/EditAdmin';
 import './styles/styles.less';
 import './helpers/delayPromise';
 import history from './helpers/history';
@@ -67,13 +68,20 @@ render((
                 <Redirect to="/login"/>) : (<CitiesList/>
               ))}/>
             <Route path="/admin/admins/new" render={() => (
-              !store.getState().admin.isLoggedIn ? (
-                <Redirect to="/login"/>) : (<NewAdmin/>
+              !store.getState().admin.isLoggedIn ?
+                <Redirect to="/login"/> : store.getState().admin.role !== "administrator" ?
+                <Redirect to="/admin/institutions"/> : (<NewAdmin/>
               ))}/>
+            <Route path="/admin/admins/:adminId" render={(props) => (
+              !store.getState().admin.isLoggedIn ?
+                <Redirect to="/login"/> : store.getState().admin.role !== "administrator" ?
+                <Redirect to="/admin/institutions"/> : (<EditAdmin {...props}/>
+                ))}/>
             <Route path="/admin/admins" render={() => (
-              !store.getState().admin.isLoggedIn ? (
-                <Redirect to="/login"/>) : (<Admins/>
-              ))}/>
+              !store.getState().admin.isLoggedIn ?
+                <Redirect to="/login"/> : store.getState().admin.role !== "administrator" ?
+                <Redirect to="/admin/institutions"/> : <Admins/>
+              )}/>
             <Route component={NotFound}/>
           </Switch>
         </App>

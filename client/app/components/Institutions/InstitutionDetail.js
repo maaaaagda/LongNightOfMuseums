@@ -1,6 +1,6 @@
 import ImageGallery from 'react-image-gallery';
 import React from 'react';
-import {Button, Grid, Icon, Tab} from 'semantic-ui-react';
+import {Button, Grid, Icon, Label, Tab} from 'semantic-ui-react';
 import {load_institution} from "../../store/actions/institutionActions";
 import CustomModal from "../Helpers/Modals";
 import connect from "react-redux/es/connect/connect";
@@ -20,6 +20,7 @@ class InstitutionDetail extends React.Component {
         address: '',
         latitude: '',
         longitude: '',
+        tags: [],
         city_id: '',
         photos:  [],
         visiting_plan: '',
@@ -142,8 +143,27 @@ class InstitutionDetail extends React.Component {
                 <div className='secondary-info padding-bottom-medium'>
                   {this.state.institutionData.city.name}, {this.state.institutionData.address}
                 </div>
+                <div>
+                  <a target="_blank" href={this.state.institutionData.website}>
+                    {this.state.institutionData.website}
+                  </a>
+                </div>
+                <br/>
                 <div className='museum-description'>
                   {this.state.institutionData.description}
+                </div>
+                <br/>
+                <div className='museum-description'>
+                  { Array.isArray(this.state.institutionData.tags) && this.state.institutionData.tags.length > 0 && <b>Tags:</b> }
+                </div>
+                <div className='tags-container'>
+                  <Label.Group color='teal'>
+                    {this.state.institutionData.tags.map((tag, i) => {
+                      return <Label as='div' key={i}>
+                        {tag}
+                      </Label>
+                    })}
+                  </Label.Group>
                 </div>
               </div>
             </Grid.Column>

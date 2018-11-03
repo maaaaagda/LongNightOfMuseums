@@ -4,6 +4,8 @@ import {Table, Button, Segment, Dimmer, Loader} from 'semantic-ui-react';
 import {delete_admin, load_admins} from "../../store/actions/adminActions";
 import {Link} from "react-router-dom";
 import CustomModal from '../Helpers/Modals';
+import moment from "moment";
+import history from "../../helpers/history";
 
 class AdminsList extends React.Component
 {
@@ -47,6 +49,13 @@ class AdminsList extends React.Component
       this.setState({ modal: '' })
     }
 
+    formatDate(date){
+      return moment(date, moment.ISO_8601).format("DD.MM.YYYY  HH:mm")
+    }
+    editAdmin(id) {
+      history.push({pathname: '/admin/admins/'+id});
+    }
+
     deleteUser(id) {
       this.props.dispatch(delete_admin(id))
         .then(() => {
@@ -78,12 +87,20 @@ class AdminsList extends React.Component
           <Table.Row key={i}>
             <Table.Cell>{admin.name}</Table.Cell>
             <Table.Cell>{admin.last_name}</Table.Cell>
-            <Table.Cell>{admin.created_at}</Table.Cell>
+            <Table.Cell>{this.formatDate(admin.created_at)}</Table.Cell>
             <Table.Cell>{admin.email}</Table.Cell>
+            <Table.Cell>{admin.role}</Table.Cell>
             <Table.Cell>
-              <Button basic color='red' onClick={() => this.ensureDeletingUser(admin._id)}>
-                Remove
-              </Button>
+              <div className='museum-button'>
+                <Button basic color='red' onClick={() => this.ensureDeletingUser(admin._id)}>
+                  Remove
+                </Button>
+              </div>
+              <div className='museum-button'>
+                <Button basic color='blue' onClick={() => this.editAdmin(admin._id)}>
+                  Edit
+                </Button>
+              </div>
             </Table.Cell>
           </Table.Row>
         );
@@ -102,6 +119,7 @@ class AdminsList extends React.Component
                   <Table.HeaderCell>Last name</Table.HeaderCell>
                   <Table.HeaderCell>Date joined</Table.HeaderCell>
                   <Table.HeaderCell>E-mail</Table.HeaderCell>
+                  <Table.HeaderCell>Role </Table.HeaderCell>
                   <Table.HeaderCell/>
                 </Table.Row>
               </Table.Header>

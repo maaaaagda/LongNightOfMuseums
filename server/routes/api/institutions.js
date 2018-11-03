@@ -117,6 +117,14 @@ module.exports = (app) => {
       };
     });
     let institution_data = req.body;
+    let tags = [];
+    try {
+      let tagsList = JSON.parse(req.body.tags);
+      tags = Array.isArray(tagsList) ? tagsList : []
+    } catch (err) {
+
+    }
+    institution_data['tags'] = tags;
     institution_data['created_at'] = Date.now();
     institution_data.photos = imagesLinks;
     let institution = new Institution(institution_data);
@@ -174,7 +182,15 @@ module.exports = (app) => {
          newPhotos = JSON.parse(req.body.photos);
          let institutionData = req.body;
          institutionData.photos = [...newPhotos, ...imagesLinks];
-         return institution.set(req.body).save();
+         let tags = [];
+         try {
+           let tagsList = JSON.parse(req.body.tags);
+           tags = Array.isArray(tagsList) ? tagsList : []
+         } catch (err) {
+
+         }
+         institutionData['tags'] = tags;
+         return institution.set(institutionData).save();
         } else {
           return Promise.reject('Institution not found')
         }

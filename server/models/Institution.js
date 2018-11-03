@@ -9,6 +9,7 @@ const InstitutionSchema = new mongoose.Schema({
   longitude: mongoose.Schema.Types.Decimal128,
   latitude: mongoose.Schema.Types.Decimal128,
   photos: Array,
+  tags: Array,
   website: String,
   city_id: mongoose.Schema.ObjectId
 });
