@@ -76,10 +76,10 @@ class InstitutionsOverview extends React.Component {
     }
   }
   getInstitutionsFiltered(value, institutions) {
-    let filteredInstitutions = institutions.filter(institution => {
-      return institution.name.toLowerCase().indexOf(value.toLowerCase()) >= 0;
+    return institutions.filter(institution => {
+      let institutionData = institution.name + JSON.stringify(institution.tags) + institution.address;
+      return institutionData.toLowerCase().indexOf(value.toLowerCase()) >= 0;
     });
-    return filteredInstitutions;
   }
   getOrderedInstitutions(value, institutions) {
     let orderedInstitutions;
