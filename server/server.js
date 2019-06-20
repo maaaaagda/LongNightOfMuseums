@@ -13,7 +13,6 @@ const JWTtoken = require('./libs/auth');
 const configDb = require('../config/config');
 const isDev = process.env.NODE_ENV !== 'production';
 const port  = process.env.PORT || server_config.PORT;
-process.env['JWT_SECRET'] = 'shhhuwebubifoewjnfiqio789715';
 
 // Configuration
 // ================================================================================================
